@@ -3,4 +3,13 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <!--App Color-->
+    <color name="colorTheme">#442680</color>
+    <color name="colorTitle">#FAFAFA</color>
+    <color name="colorBackground">#F3F3F3</color>
+    <color name="colorText">#323232</color>
+    <color name="colorLine">#D6D7DC</color>
+    <color name="colorLinePart">#E1E1E1</color>
+    <color name="colorHint">#B4B4B4</color>
+    <color name="colorTextBack">#FAFAFA</color>
 </resources>

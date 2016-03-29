@@ -7,9 +7,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.xiaoyuan_volley.app.App;
-import com.xiaoyuan_volley.fragment.LoadingFragment;
-import com.xiaoyuan_volley.util.JsonUtils;
+import com.xbx.client.app.App;
+import com.xbx.client.utils.JsonUtils;
+import com.xbx.client.view.LoadingFragment;
 
 import java.io.UnsupportedEncodingException;
 
