@@ -25,9 +25,15 @@
     <dimen name="dp_eighteen">18dp</dimen>
     <dimen name="dp_nineteen">19dp</dimen>
     <dimen name="dp_twenty">20dp</dimen>
+    <dimen name="dp_twenty_eight">28dp</dimen>
     <dimen name="dp_twenty_one">21dp</dimen>
     <dimen name="dp_twenty_two">22dp</dimen>
+    <dimen name="dp_twenty_five">25dp</dimen>
+    <dimen name="dp_thirty">30dp</dimen>
     <dimen name="dp_forty_eight">48dp</dimen>
+    <dimen name="dp_sixty">60dp</dimen>
+    <dimen name="dp_seventy_four">74dp</dimen>
+    <dimen name="dp_ninety_three">93dp</dimen>
     <!-- 字体sp-->
     <dimen name="sp_ten">10sp</dimen>
     <dimen name="sp_eleven">11sp</dimen>

@@ -9,4 +9,12 @@
     <string name="login_code_hint">请填写四位验证码</string>
     <string name="login_code_get">获取验证码</string>
     <string name="login_code_minute">s</string>
+    <string name="login_pact_tip">登录即代表</string>
+    <string name="login_protocol">阅读并同意Zack协议</string>
+    <string name="login_name">登录</string>
+    <string name="main_guide">导游</string>
+    <string name="main_native">土著</string>
+    <string name="main_withTour">随游</string>
+    <string name="main_together">旅游</string>
+    <string name="main_bowen">博文</string>
 </resources>

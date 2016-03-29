@@ -4,5 +4,126 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:orientation="vertical">
-    <include layout="@layout/page_title"/>
+
+    <include layout="@layout/page_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_sixteen"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_one"
+            android:background="@color/colorLine" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorTextBack"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_forty_eight"
+
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/textView_Black"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_sixteen"
+                    android:text="@string/login_phone"
+                    android:textSize="@dimen/sp_fourteen" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_seventy_four"
+                    android:background="@null"
+                    android:hint="@string/login_phone_hint"
+                    android:textColorHint="@color/colorHint"
+                    android:textSize="@dimen/sp_twelve" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_one"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:layout_marginRight="@dimen/dp_sixteen"
+                android:background="@color/colorLine" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_forty_eight"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/textView_Black"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_sixteen"
+                    android:text="@string/login_code"
+                    android:textSize="@dimen/sp_fourteen" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_seventy_four"
+                    android:layout_marginRight="@dimen/dp_ninety_three"
+                    android:background="@null"
+                    android:hint="@string/login_code_hint"
+                    android:maxLength="4"
+                    android:textColorHint="@color/colorHint"
+                    android:textSize="@dimen/sp_twelve" />
+
+                <Button
+                    android:layout_width="@dimen/dp_ninety_three"
+                    android:layout_height="@dimen/dp_twenty_eight"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/dp_sixteen"
+                    android:background="@drawable/button_bg"
+                    android:text="@string/login_code_get"
+                    android:textColor="@color/colorTextBack"
+                    android:textSize="@dimen/sp_fourteen" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_one"
+            android:background="@color/colorLine" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:layout_marginTop="@dimen/dp_sixteen"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/textView_Black"
+                android:text="@string/login_pact_tip"
+                android:textSize="@dimen/sp_fourteen" />
+
+            <TextView
+                android:id="@+id/login_agreepact_tv"
+                style="@style/textView_Black"
+                android:text="@string/login_protocol"
+                android:textColor="@color/colorTheme"
+                android:textSize="@dimen/sp_fourteen" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/login_btn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_eight"
+            android:layout_margin="@dimen/dp_sixteen"
+            android:background="@drawable/button_bg"
+            android:text="@string/login_name"
+            android:textColor="@color/colorTitle"
+            android:textSize="@dimen/sp_seventeen" />
+    </LinearLayout>
 </LinearLayout>

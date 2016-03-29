@@ -1,8 +1,17 @@
 package com.xbx.client.adapter;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.SparseArray;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.xbx.client.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +26,14 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
     //每个Fragment对应的title的集合
     private final List<String> mFragmentsTitles = new ArrayList<>();
 
-    public MyViewPagerAdapter(FragmentManager fm) {
+    private Context context;
+
+
+    public MyViewPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
+        this.context = context;
     }
+
     /**
      * @param fragment      添加Fragment
      * @param fragmentTitle Fragment的标题，即TabLayout中对应Tab的标题
@@ -31,12 +45,12 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return null;
+        return mFragments.get(position);
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return mFragmentsTitles.size();
     }
 
     @Override
@@ -44,4 +58,20 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
         //得到对应position的Fragment的title
         return mFragmentsTitles.get(position);
     }
+
+    /**
+     * 自定义TabLayout title
+     *
+     * @param position
+     * @return
+     */
+    public View getTabView(int position) {
+        View view = LayoutInflater.from(context).inflate(R.layout.view_sxp_tab_title, null);
+        TextView tv = (TextView) view.findViewById(R.id.textView);
+        tv.setText(mFragmentsTitles.get(position));
+        ImageView img = (ImageView) view.findViewById(R.id.imageView);
+        img.setImageResource(R.drawable.tab_bg);
+        return view;
+    }
+
 }
