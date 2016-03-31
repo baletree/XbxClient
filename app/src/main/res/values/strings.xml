@@ -17,4 +17,18 @@
     <string name="main_withTour">随游</string>
     <string name="main_together">旅游</string>
     <string name="main_bowen">博文</string>
+    <string name="main_reserve">预约\n导游</string>
+    <string name="main_call">呼叫\n导游</string>
+    <string name="main_current_tip">你从哪出发</string>
+    <string name="main_destination_hint">输入目的地</string>
+    <string name="menu_order">我的订单</string>
+    <string name="menu_money">我的钱包</string>
+    <string name="menu_msg">消息中心</string>
+    <string name="menu_perferen">优惠活动</string>
+    <string name="menu_invite">邀请有奖</string>
+    <string name="menu_recruit">导游招募</string>
+    <string name="menu_setting">设置</string>
+    <string name="txt_cancel">取消</string>
+    <string name="search_hint">你要去哪儿</string>
+    <string name="search_null">搜索词不能为空</string>
 </resources>

@@ -44,7 +44,7 @@
                     android:background="@null"
                     android:hint="@string/login_phone_hint"
                     android:textColorHint="@color/colorHint"
-                    android:textSize="@dimen/sp_twelve" />
+                    android:textSize="@dimen/sp_fourteen" />
             </RelativeLayout>
 
             <View
@@ -75,7 +75,7 @@
                     android:hint="@string/login_code_hint"
                     android:maxLength="4"
                     android:textColorHint="@color/colorHint"
-                    android:textSize="@dimen/sp_twelve" />
+                    android:textSize="@dimen/sp_fourteen" />
 
                 <Button
                     android:layout_width="@dimen/dp_ninety_three"

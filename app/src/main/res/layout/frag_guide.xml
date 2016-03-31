@@ -2,20 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/collect_refresh_widget"
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/guide_map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/collect_rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </android.support.v4.widget.SwipeRefreshLayout>
-    <TextView
+        android:layout_height="match_parent"
+        android:clickable="true" />
+    <ImageView
+        android:id="@+id/guide_locatemy_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:text="导航一"
-        android:layout_centerInParent="true"/>
+        android:layout_marginBottom="@dimen/dp_twenty"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_above="@+id/guide_fuc_layout"
+        android:src="@mipmap/main_locself" />
+    <include
+        android:id="@+id/guide_locate_layout"
+        layout="@layout/frag_guide_locate"/>
+    <include
+        android:id="@+id/guide_center_layout"
+        layout="@layout/frag_guide_map"/>
+    <include
+        android:id="@+id/guide_fuc_layout"
+        layout="@layout/frag_guide_fuc"/>
 </RelativeLayout>

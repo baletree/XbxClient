@@ -1,11 +1,10 @@
 package com.xbx.client.ui.activity;
 
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
@@ -18,12 +17,9 @@ import com.xbx.client.ui.fragment.GuidesFragment;
 import com.xbx.client.ui.fragment.NativesFragment;
 import com.xbx.client.ui.fragment.TogetherFragment;
 import com.xbx.client.ui.fragment.WithtourFragment;
-import com.xbx.client.utils.Util;
+import com.xbx.client.view.BanSlideViewpager;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity {
     /**
      * 控件名称定义
      */
@@ -31,7 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView test_toggle;
     private Toolbar mToolbar;
     private TabLayout tabLayout;
-    private ViewPager viewpager;
+    private BanSlideViewpager viewpager;
+    private ImageView main_menu_img;
 
     private MyViewPagerAdapter viewPagerAdapter = null;
 
@@ -45,16 +42,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_layout);
-        initView();
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
     }
 
-    private void initView() {
+    @Override
+    protected void initViews() {
+        super.initViews();
         drawerLayout = (DrawerLayout) findViewById(R.id.main_drawerLayout);
         drawerLayout.setScrimColor(0x32000000);// 设置半透明度
         mToolbar = (Toolbar) findViewById(R.id.toolBar);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        viewpager = (ViewPager) findViewById(R.id.viewpager);
+        viewpager = (BanSlideViewpager) findViewById(R.id.viewpager);
+        main_menu_img = (ImageView) findViewById(R.id.main_menu_img);
+        viewpager.setScrollble(false);
         viewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager(), this);
+        main_menu_img.setOnClickListener(this);
         initControls();
     }
 
@@ -73,12 +75,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         viewpager.setAdapter(viewPagerAdapter);
         viewpager.setCurrentItem(0);
         tabLayout.setupWithViewPager(viewpager);
-        TabLayout.Tab tab = tabLayout.getTabAt(0);
-        tab.setCustomView(viewPagerAdapter.getTabView(0));
-        /*for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            TabLayout.Tab tab = tabLayout.getTabAt(i);
-            tab.setCustomView(viewPagerAdapter.getTabView(i));
-        }*/
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -87,14 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onPageSelected(int position) {
-                Util.pLog("selectPage=" + position);
-                for (int i = 0; i < tabLayout.getTabCount(); i++) {
-                    TabLayout.Tab tab = tabLayout.getTabAt(i);
-                    tab.setCustomView(null);
-                }
-                TabLayout.Tab tab = tabLayout.getTabAt(position);
-                tab.setCustomView(null);
-                tab.setCustomView(viewPagerAdapter.getTabView(position));
+
             }
 
             @Override
@@ -127,8 +116,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        super.onClick(v);
         switch (v.getId()) {
-
+            case R.id.main_menu_img:
+                toggleLeftLayout();
+                break;
         }
     }
 }

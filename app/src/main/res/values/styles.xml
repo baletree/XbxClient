@@ -3,6 +3,11 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+    </style>
+
+    <style name="AppThemeCustorm" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
         <item name="colorPrimaryDark">@color/colorTheme</item>
     </style>
 
@@ -44,6 +49,10 @@
     <style name="textView_Black">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorText</item>
+    </style>
+    <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/dp_fifteen</item>
         <item name="android:textColor">@color/colorText</item>
     </style>
 </resources>

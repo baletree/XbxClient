@@ -5,6 +5,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <!-- 距离dp-->
     <dimen name="dp_zero">0dp</dimen>
+    <dimen name="dp_zero_five">0.5dp</dimen>
     <dimen name="dp_one">1dp</dimen>
     <dimen name="dp_two">2dp</dimen>
     <dimen name="dp_three">3dp</dimen>
@@ -30,10 +31,16 @@
     <dimen name="dp_twenty_two">22dp</dimen>
     <dimen name="dp_twenty_five">25dp</dimen>
     <dimen name="dp_thirty">30dp</dimen>
+    <dimen name="dp_thirty_one">31dp</dimen>
+    <dimen name="dp_forty_four">44dp</dimen>
     <dimen name="dp_forty_eight">48dp</dimen>
+    <dimen name="dp_fifty">50dp</dimen>
     <dimen name="dp_sixty">60dp</dimen>
+    <dimen name="dp_sixty_four">64dp</dimen>
     <dimen name="dp_seventy_four">74dp</dimen>
     <dimen name="dp_ninety_three">93dp</dimen>
+    <dimen name="dp_hundred">100dp</dimen>
+    <dimen name="dp_thundred_fifty">250dp</dimen>
     <!-- 字体sp-->
     <dimen name="sp_ten">10sp</dimen>
     <dimen name="sp_eleven">11sp</dimen>

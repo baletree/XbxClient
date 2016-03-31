@@ -21,26 +21,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true">
-
+                <!--app:layout_scrollFlags="scroll|enterAlways"-->
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolBar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/colorTheme"
-                    app:layout_scrollFlags="scroll|enterAlways"
+                    android:background="@color/colorTitleBack"
                     app:layout_collapseMode="parallax">
 
                     <ImageView
+                        android:id="@+id/main_menu_img"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_launcher" />
+                        android:src="@mipmap/main_menu" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="@string/main_title"
-                        android:textColor="@color/colorTitle"
+                        android:textColor="@color/colorTheme"
                         android:textSize="@dimen/sp_eighteen" />
                 </android.support.v7.widget.Toolbar>
 
@@ -53,23 +53,23 @@
                     app:tabGravity="fill"
                     app:tabIndicatorHeight="@dimen/dp_zero"
                     app:tabMode="fixed"
+                    app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
                     app:tabSelectedTextColor="@color/colorTheme"
                     app:tabTextColor="@color/colorText" />
             </android.support.design.widget.AppBarLayout>
-        </android.support.design.widget.CoordinatorLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:scrollbars="none"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewpager"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <com.xbx.client.view.BanSlideViewpager
+                    android:id="@+id/viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </android.support.design.widget.CoordinatorLayout>
     </LinearLayout>
 
     <include layout="@layout/menu_contain_layout" />

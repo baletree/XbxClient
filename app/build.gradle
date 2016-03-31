@@ -27,4 +27,11 @@ dependencies {
     compile files('libs/Volley.jar')
     compile files('libs/fastjson-1.1.45.android.jar')
     compile files('libs/org.apache.http.legacy.jar')
+    compile files('libs/baidumapapi_base_v3_7_0.jar')
+    compile files('libs/baidumapapi_cloud_v3_7_0.jar')
+    compile files('libs/baidumapapi_map_v3_7_0.jar')
+    compile files('libs/baidumapapi_radar_v3_7_0.jar')
+    compile files('libs/baidumapapi_search_v3_7_0.jar')
+    compile files('libs/baidumapapi_util_v3_7_0.jar')
+    compile files('libs/locSDK_6.13.jar')
 }
