@@ -28,12 +28,10 @@ public class LoadingFragment extends DialogFragment {
 	}
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 	}
 	@Override
 	public void onStart() {
-		// TODO Auto-generated method stub
 		super.onStart();
 	}
 	public void setMsg(String msg) {

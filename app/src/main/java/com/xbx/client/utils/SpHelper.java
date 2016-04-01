@@ -32,6 +32,8 @@ public class SpHelper {
 
     public String getSP(String sKey) {
         String str;
+        if(context == null)
+            return "";
         SharedPreferences s = context.getSharedPreferences(spName, 0);
         str = s.getString(sKey, "");
         return str;

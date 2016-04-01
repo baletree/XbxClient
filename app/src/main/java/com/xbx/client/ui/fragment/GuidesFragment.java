@@ -17,6 +17,7 @@ import android.widget.ZoomControls;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
+import com.baidu.location.Poi;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -28,6 +29,7 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
@@ -36,9 +38,11 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.xbx.client.R;
 import com.xbx.client.beans.LocationBean;
 import com.xbx.client.ui.activity.SearchAddressActivity;
+import com.xbx.client.utils.Constant;
 import com.xbx.client.utils.MapLocate;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.Util;
+import com.xbx.client.view.LoadingFragment;
 
 /**
  * Created by EricYuan on 2016/3/29.
@@ -53,6 +57,7 @@ public class GuidesFragment extends BaseFragment implements BDLocationListener,
     private BitmapDescriptor bdMyself = null;
     private Marker mMarkerMy;
     private GeoCoder geoCoder;
+    private LoadingFragment loadingFragment = null;
 
     private MapView mapView;
     private RelativeLayout guide_outset_rl;
@@ -64,6 +69,8 @@ public class GuidesFragment extends BaseFragment implements BDLocationListener,
     private LinearLayout guide_fuc_layout;
 
     private BaiduMap mBaiduMap;
+    private final int outsetReques = 1000;
+    private final int destReques = 1001;
 
     private Handler handler = new Handler() {
         @Override
@@ -155,6 +162,9 @@ public class GuidesFragment extends BaseFragment implements BDLocationListener,
                 .fromResource(R.mipmap.myself_locate);
         geoCoder = GeoCoder.newInstance();
         handler.sendEmptyMessageDelayed(1, 10000);
+        loadingFragment = new LoadingFragment();
+        /*loadingFragment.show(getActivity().getSupportFragmentManager(),"Loading");
+        loadingFragment.setMsg("正在呼叫导游");*/
     }
 
     private void initLisener() {
@@ -180,27 +190,47 @@ public class GuidesFragment extends BaseFragment implements BDLocationListener,
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        fragment.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode){
-            case 1001:
-                Util.pLog("Result=>"+data.getStringExtra("result"));
+        if(data == null){
+            return;
+        }
+        PoiInfo poiInfo = null;
+        switch (requestCode){
+            case outsetReques:
+                poiInfo = data.getParcelableExtra("outsetResult");
+                main_outset_tv.setText(poiInfo.name);
                 break;
+            case destReques:
+                poiInfo = data.getParcelableExtra("destResult");
+                main_destination_tv.setText(poiInfo.name);
+                break;
+        }
+        if(poiInfo != null){
+            if(poiInfo.location == null)
+                return;
+            MapStatus mMapstatus = new MapStatus.Builder().target(poiInfo.location).zoom(18f)
+                    .build();
+            MapStatusUpdate u = MapStatusUpdateFactory.newMapStatus(mMapstatus);
+            mBaiduMap.setMapStatus(u);
         }
     }
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
+        Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.guide_locatemy_img:
 
                 break;
-            case R.id.guide_outset_rl:
-                startActivity(new Intent(getActivity(), SearchAddressActivity.class));
-//                startActivityForResult(new Intent(getActivity(), SearchAddressActivity.class), 1001);
+            case R.id.guide_outset_rl://出发地
+                intent.setClass(getActivity(), SearchAddressActivity.class);
+                intent.putExtra("guide_code", Constant.outsetFlag);
+                startActivityForResult(intent, outsetReques);
                 break;
-            case R.id.guide_destination_rl:
-
+            case R.id.guide_destination_rl://目的地
+                intent.setClass(getActivity(),SearchAddressActivity.class);
+                intent.putExtra("guide_code", Constant.destFlag);
+                startActivityForResult(intent, destReques);
                 break;
         }
     }
@@ -226,10 +256,6 @@ public class GuidesFragment extends BaseFragment implements BDLocationListener,
 
     @Override
     public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
-        /*Util.pLog(" AfterDrop："+reverseGeoCodeResult.getAddress());
-        for(int i = 0;i<reverseGeoCodeResult.getPoiList().size();i++){
-            Util.pLog("/name:"+reverseGeoCodeResult.getPoiList().get(i).name);
-        }*/
         if(reverseGeoCodeResult == null)
             return;
         if(reverseGeoCodeResult.getPoiList() == null)

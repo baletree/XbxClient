@@ -9,22 +9,28 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_forty_eight"
         android:background="@color/colorTheme">
-
-        <ImageView
-            android:id="@+id/search_back_img"
+        <RelativeLayout
+            android:id="@+id/search_back_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="@dimen/dp_ten"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_sixteen"
-            android:background="@mipmap/back_arrow" />
+            android:layout_marginLeft="@dimen/dp_six">
+            <ImageView
+                android:id="@+id/search_back_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/back_arrow" />
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_thirty_one"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_sixteen"
+            android:layout_marginLeft="@dimen/dp_six"
             android:layout_toLeftOf="@+id/search_cancel_tv"
-            android:layout_toRightOf="@+id/search_back_img"
+            android:layout_toRightOf="@+id/search_back_layout"
             android:background="@drawable/search_input_bg"
             android:orientation="horizontal">
 

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.search.core.PoiInfo;
@@ -19,9 +20,15 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     private Context context;
     private List<PoiInfo> poiList;
 
+    private OnRecyItemClickListener mOnItemClickListener;
+
     public SearchResultAdapter(Context context,List<PoiInfo> poiList){
         this.context = context;
         this.poiList = poiList;
+    }
+
+    public void setOnItemClickListener(OnRecyItemClickListener onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -32,10 +39,17 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        PoiInfo poiInfo = poiList.get(position);
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
+        final PoiInfo poiInfo = poiList.get(position);
         holder.search_name.setText(poiInfo.name);
         holder.search_address.setText(poiInfo.address);
+        holder.search_item_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mOnItemClickListener != null)
+                    mOnItemClickListener.onItemClick(v,position);
+            }
+        });
     }
 
     @Override
@@ -44,12 +58,18 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+        private RelativeLayout search_item_layout;
         private TextView search_name;
         private TextView search_address;
         public MyViewHolder(View itemView) {
             super(itemView);
             search_name = (TextView) itemView.findViewById(R.id.search_name);
             search_address = (TextView) itemView.findViewById(R.id.search_address);
+            search_item_layout = (RelativeLayout) itemView.findViewById(R.id.search_item_layout);
         }
+    }
+
+    public interface OnRecyItemClickListener {
+        void onItemClick(View v, int position);
     }
 }
