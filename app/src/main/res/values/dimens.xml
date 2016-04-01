@@ -5,6 +5,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <!-- 距离dp-->
     <dimen name="dp_zero">0dp</dimen>
+    <dimen name="dp_zero_three">0.3dp</dimen>
     <dimen name="dp_zero_five">0.5dp</dimen>
     <dimen name="dp_one">1dp</dimen>
     <dimen name="dp_two">2dp</dimen>

@@ -4,53 +4,72 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_forty_eight"
         android:background="@color/colorTheme">
+
         <ImageView
             android:id="@+id/search_back_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@mipmap/back_arrow"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_sixteen"/>
+            android:layout_marginLeft="@dimen/dp_sixteen"
+            android:background="@mipmap/back_arrow" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_thirty_one"
-            android:orientation="horizontal"
-            android:background="@drawable/search_input_bg"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_sixteen"
+            android:layout_toLeftOf="@+id/search_cancel_tv"
             android:layout_toRightOf="@+id/search_back_img"
-            android:layout_toLeftOf="@+id/search_cancel_tv">
+            android:background="@drawable/search_input_bg"
+            android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/dp_eight"
-                android:src="@mipmap/serach_adr"/>
+                android:src="@mipmap/serach_adr" />
+
             <EditText
                 android:id="@+id/search_input_et"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@null"
                 android:layout_marginLeft="@dimen/dp_eight"
-                android:textSize="@dimen/sp_fourteen"
+                android:background="@null"
+                android:hint="@string/search_hint"
                 android:singleLine="true"
-                android:hint="@string/search_hint"/>
+                android:textSize="@dimen/sp_fourteen" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/search_cancel_tv"
             style="@style/textView_White"
+            android:layout_alignParentRight="true"
             android:padding="@dimen/dp_sixteen"
             android:text="@string/txt_cancel"
-            android:layout_alignParentRight="true"
-            android:textSize="@dimen/sp_fourteen"/>
+            android:textSize="@dimen/sp_fourteen" />
     </RelativeLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/locate_rv"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/locate_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader
+            android:id="@+id/hear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_sixteen"
+                android:background="@color/colorBackground"/>
+        </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>
+    </FrameLayout>
 </LinearLayout>

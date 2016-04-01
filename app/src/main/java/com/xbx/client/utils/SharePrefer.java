@@ -13,6 +13,7 @@ public class SharePrefer {
         SpHelper spHelper = new SpHelper(context, Constant.SPLOC_NAME);
         spHelper.setSP("loc_lon", locationBean.getLon()); // 经度
         spHelper.setSP("loc_lat", locationBean.getLat()); // 经度
+        spHelper.setSP("loc_city", locationBean.getCity()); // 城市
     }
 
     public static LocationBean getLocate(Context context) {
@@ -20,6 +21,7 @@ public class SharePrefer {
         SpHelper spHelper = new SpHelper(context, Constant.SPLOC_NAME);
         locationBean.setLon(spHelper.getSP("loc_lon"));
         locationBean.setLat(spHelper.getSP("loc_lat"));
+        locationBean.setCity(spHelper.getSP("loc_city"));
         return locationBean;
     }
 }

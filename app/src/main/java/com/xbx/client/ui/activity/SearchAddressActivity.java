@@ -1,6 +1,9 @@
 package com.xbx.client.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,24 +15,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.PoiInfo;
+import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
+import com.baidu.mapapi.search.poi.PoiCitySearchOption;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
 import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.baidu.mapapi.search.sug.SuggestionSearch;
-import com.baidu.mapapi.search.sug.SuggestionSearchOption;
+import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 import com.xbx.client.R;
+import com.xbx.client.adapter.SearchResultAdapter;
+import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.Util;
+import com.xbx.client.view.RecycleViewDivider;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,7 +46,7 @@ import java.util.Map;
  * 搜索地址
  */
 public class SearchAddressActivity extends BaseActivity implements
-        OnGetPoiSearchResultListener, OnGetSuggestionResultListener ,OnGetGeoCoderResultListener {
+        OnGetPoiSearchResultListener, OnGetSuggestionResultListener, OnGetGeoCoderResultListener {
     private ImageView search_back_img;
     private EditText search_input_et;
     private TextView search_cancel_tv;
@@ -46,8 +55,11 @@ public class SearchAddressActivity extends BaseActivity implements
     private PoiSearch mPoiSearch = null;
     private SuggestionSearch mSuggestionSearch = null;
     private GeoCoder geoCoder = null;
+    private LinearLayoutManager layoutManager = null;
 
-    private Map<LatLng,String> resultMap = null;
+    private Map<LatLng, String> resultMap = null;
+
+    private SearchResultAdapter searchResultAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +77,7 @@ public class SearchAddressActivity extends BaseActivity implements
         mSuggestionSearch.setOnGetSuggestionResultListener(this);
         geoCoder = GeoCoder.newInstance();
         geoCoder.setOnGetGeoCodeResultListener(this);
+        layoutManager = new LinearLayoutManager(this);
     }
 
     @Override
@@ -74,6 +87,11 @@ public class SearchAddressActivity extends BaseActivity implements
         search_input_et = (EditText) findViewById(R.id.search_input_et);
         search_cancel_tv = (TextView) findViewById(R.id.search_cancel_tv);
         locate_rv = (RecyclerView) findViewById(R.id.locate_rv);
+        locate_rv.setLayoutManager(layoutManager);
+        locate_rv.addItemDecoration(new RecycleViewDivider(this, R.drawable.spitline_bg));
+        RecyclerViewHeader recyclerHeader = (RecyclerViewHeader) findViewById(R.id.hear_layout);
+        recyclerHeader.attachTo(locate_rv, true);
+        locate_rv.setItemAnimator(new DefaultItemAnimator());
     }
 
     private void initLisener() {
@@ -112,13 +130,19 @@ public class SearchAddressActivity extends BaseActivity implements
                 if (cs.length() <= 0) {
                     return;
                 }
-                String city = "成都";
+                String city = SharePrefer.getLocate(SearchAddressActivity.this).getCity();
+                if (Util.isNull(city)) {
+                    return;
+                }
                 /**
                  * 使用建议搜索服务获取建议列表，结果在onSuggestionResult()中更新
                  */
-                mSuggestionSearch
+                /*mSuggestionSearch
                         .requestSuggestion((new SuggestionSearchOption())
-                                .keyword(cs.toString()).city(city));
+                                .keyword(cs.toString()).city(city));*/
+                mPoiSearch.searchInCity((new PoiCitySearchOption())
+                        .city(city)
+                        .keyword(cs.toString()));
             }
         });
     }
@@ -145,18 +169,27 @@ public class SearchAddressActivity extends BaseActivity implements
 
     @Override
     public void onGetPoiResult(PoiResult poiResult) {
-        Util.pLog("Result-key:" + poiResult.getSuggestCityList().get(0).city);
+        if (poiResult.error == SearchResult.ERRORNO.NO_ERROR) {
+            List<PoiInfo> poiList = poiResult.getAllPoi();
+            if (poiList != null && poiList.size() != 0) {
+                searchResultAdapter = new SearchResultAdapter(SearchAddressActivity.this, poiList);
+                locate_rv.setAdapter(searchResultAdapter);
+                for (PoiInfo poiInfo : poiList) {
+                    Util.pLog("poiResult:" + "poi===城市：" + poiInfo.city + "名字：" + poiInfo.name + "地址：");
+                }
+            }
+        }
     }
 
     @Override
     public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
-        Util.pLog("onGetPoiDetailResult:" + poiDetailResult.getAddress()+"/name:"+poiDetailResult.getName());
+        Util.pLog("onGetPoiDetailResult:" + poiDetailResult.getAddress() + "/name:" + poiDetailResult.getName());
     }
 
     @Override
     public void onGetSuggestionResult(SuggestionResult suggestionResult) {
         resultMap = new HashMap<>();
-        for(int i = 0;i<suggestionResult.getAllSuggestions().size();i++){
+        for (int i = 0; i < suggestionResult.getAllSuggestions().size(); i++) {
             Util.pLog("Result-key:" + suggestionResult.getAllSuggestions().get(i).key);
             /*resultMap.put(suggestionResult.getAllSuggestions().get(i).pt,"");
             geoCoder.reverseGeoCode(new ReverseGeoCodeOption()
@@ -172,13 +205,13 @@ public class SearchAddressActivity extends BaseActivity implements
 
     @Override
     public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
-        Util.pLog("reverseGeoCodeResult="+reverseGeoCodeResult.getAddress());
+        Util.pLog("reverseGeoCodeResult=" + reverseGeoCodeResult.getAddress());
         Iterator iter = resultMap.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry entry = (Map.Entry) iter.next();
             LatLng ll = (LatLng) entry.getKey();
-            if(ll.equals(reverseGeoCodeResult.getLocation())){
-                resultMap.put(ll,reverseGeoCodeResult.getAddress());
+            if (ll.equals(reverseGeoCodeResult.getLocation())) {
+                resultMap.put(ll, reverseGeoCodeResult.getAddress());
             }
         }
     }

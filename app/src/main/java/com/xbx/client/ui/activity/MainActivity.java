@@ -1,5 +1,6 @@
 package com.xbx.client.ui.activity;
 
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -17,6 +18,7 @@ import com.xbx.client.ui.fragment.GuidesFragment;
 import com.xbx.client.ui.fragment.NativesFragment;
 import com.xbx.client.ui.fragment.TogetherFragment;
 import com.xbx.client.ui.fragment.WithtourFragment;
+import com.xbx.client.utils.Util;
 import com.xbx.client.view.BanSlideViewpager;
 
 public class MainActivity extends BaseActivity {
@@ -112,6 +114,11 @@ public class MainActivity extends BaseActivity {
         } else {
             drawerLayout.openDrawer(Gravity.LEFT);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

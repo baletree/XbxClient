@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ZoomControls;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -23,17 +26,25 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.xbx.client.R;
 import com.xbx.client.beans.LocationBean;
 import com.xbx.client.ui.activity.SearchAddressActivity;
 import com.xbx.client.utils.MapLocate;
 import com.xbx.client.utils.SharePrefer;
+import com.xbx.client.utils.Util;
 
 /**
  * Created by EricYuan on 2016/3/29.
  */
-public class GuidesFragment extends BaseFragment {
+public class GuidesFragment extends BaseFragment implements BDLocationListener,
+        BaiduMap.OnMapStatusChangeListener, OnGetGeoCoderResultListener, BaiduMap.OnMapLoadedCallback{
     private static GuidesFragment fragment = null;
     private View view = null;
     private MapLocate mapLocate = null;
@@ -41,6 +52,7 @@ public class GuidesFragment extends BaseFragment {
     private MarkerOptions markOpMyself = null;
     private BitmapDescriptor bdMyself = null;
     private Marker mMarkerMy;
+    private GeoCoder geoCoder;
 
     private MapView mapView;
     private RelativeLayout guide_outset_rl;
@@ -61,6 +73,16 @@ public class GuidesFragment extends BaseFragment {
                 case 1:
                     mapLocate.startLocate();
                     handler.sendEmptyMessageDelayed(1, 10000);
+                    if(mMarkerMy != null){
+                        LocationBean nowLbean = SharePrefer.getLocate(getActivity());
+                        if(nowLbean == null){
+                            return;
+                        }
+                        if(!Util.isNull(nowLbean.getLat()) && !Util.isNull(nowLbean.getLon())){
+                            LatLng nowLl = new LatLng(Double.parseDouble(nowLbean.getLat()), Double.parseDouble(nowLbean.getLon()));
+                            mMarkerMy.setPosition(nowLl);
+                        }
+                    }
                     break;
             }
         }
@@ -120,6 +142,8 @@ public class GuidesFragment extends BaseFragment {
             mBaiduMap.setMapStatus(u);
             markOpMyself = new MarkerOptions().position(nowLl).icon(bdMyself).zIndex(9).draggable(true);
             mMarkerMy = (Marker) mBaiduMap.addOverlay(markOpMyself);
+            geoCoder.reverseGeoCode(new ReverseGeoCodeOption()
+                    .location(nowLl));
         }
     }
 
@@ -129,6 +153,7 @@ public class GuidesFragment extends BaseFragment {
         mapLocate.startLocate();
         bdMyself = BitmapDescriptorFactory
                 .fromResource(R.mipmap.myself_locate);
+        geoCoder = GeoCoder.newInstance();
         handler.sendEmptyMessageDelayed(1, 10000);
     }
 
@@ -136,11 +161,31 @@ public class GuidesFragment extends BaseFragment {
         guide_locatemy_img.setOnClickListener(this);
         guide_outset_rl.setOnClickListener(this);
         guide_destination_rl.setOnClickListener(this);
+        mapView.getMap().setOnMapLoadedCallback(this);
+        mapView.getMap().setOnMapStatusChangeListener(this);
+        geoCoder.setOnGetGeoCodeResultListener(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mapView.onDestroy();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        fragment.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode){
+            case 1001:
+                Util.pLog("Result=>"+data.getStringExtra("result"));
+                break;
+        }
     }
 
     @Override
@@ -152,10 +197,66 @@ public class GuidesFragment extends BaseFragment {
                 break;
             case R.id.guide_outset_rl:
                 startActivity(new Intent(getActivity(), SearchAddressActivity.class));
+//                startActivityForResult(new Intent(getActivity(), SearchAddressActivity.class), 1001);
                 break;
             case R.id.guide_destination_rl:
 
                 break;
         }
+    }
+
+    @Override
+    public void onReceiveLocation(BDLocation bdLocation) {
+        MyLocationData locData = new MyLocationData.Builder()
+                .accuracy(bdLocation.getRadius())
+                        // 此处设置开发者获取到的方向信息，顺时针0-360
+                .direction(100).latitude(bdLocation.getLatitude())
+                .longitude(bdLocation.getLongitude()).build();
+        mapView.getMap().setMyLocationData(locData);
+        LatLng latLng = new LatLng(bdLocation.getLatitude(),
+                bdLocation.getLongitude());
+        geoCoder.reverseGeoCode(new ReverseGeoCodeOption()
+                .location(latLng));
+    }
+
+    @Override
+    public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
+
+    }
+
+    @Override
+    public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
+        /*Util.pLog(" AfterDrop："+reverseGeoCodeResult.getAddress());
+        for(int i = 0;i<reverseGeoCodeResult.getPoiList().size();i++){
+            Util.pLog("/name:"+reverseGeoCodeResult.getPoiList().get(i).name);
+        }*/
+        if(reverseGeoCodeResult == null)
+            return;
+        if(reverseGeoCodeResult.getPoiList() == null)
+            return;
+        if(reverseGeoCodeResult.getPoiList().size() == 0)
+            return;
+        main_outset_tv.setText(reverseGeoCodeResult.getPoiList().get(0).name);
+    }
+
+    @Override
+    public void onMapLoaded() {
+
+    }
+
+    @Override
+    public void onMapStatusChangeStart(MapStatus mapStatus) {
+
+    }
+
+    @Override
+    public void onMapStatusChange(MapStatus mapStatus) {
+
+    }
+
+    @Override
+    public void onMapStatusChangeFinish(MapStatus mapStatus) {
+        geoCoder.reverseGeoCode(new ReverseGeoCodeOption()
+                .location(mapStatus.target));
     }
 }

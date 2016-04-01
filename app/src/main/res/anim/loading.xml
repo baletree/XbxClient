@@ -4,57 +4,85 @@
 	<item android:duration="100" >
 	    <clip
             android:clipOrientation="horizontal"
-            android:drawable="@drawable/loading_0"
+            android:drawable="@drawable/loading1"
             android:gravity="left" >
         </clip>
 	</item>
 	<item android:duration="100" >
 	    <clip
             android:clipOrientation="horizontal"
-            android:drawable="@drawable/loading_1"
+            android:drawable="@drawable/loading2"
             android:gravity="left" >
         </clip>
 	</item>
 	<item android:duration="100" >
 	    <clip
             android:clipOrientation="horizontal"
-            android:drawable="@drawable/loading_2"
+            android:drawable="@drawable/loading3"
             android:gravity="left" >
         </clip>
 	</item>
 	<item android:duration="100" >
 	    <clip
             android:clipOrientation="horizontal"
-            android:drawable="@drawable/loading_3"
+            android:drawable="@drawable/loading4"
             android:gravity="left" >
         </clip>
 	</item>
 	<item android:duration="100" >
 	    <clip
             android:clipOrientation="horizontal"
-            android:drawable="@drawable/loading_4"
+            android:drawable="@drawable/loading5"
             android:gravity="left" >
         </clip>
 	</item>
 	<item android:duration="100" >
 	    <clip
             android:clipOrientation="horizontal"
-            android:drawable="@drawable/loading_5"
+            android:drawable="@drawable/loading6"
             android:gravity="left" >
         </clip>
 	</item>
 	<item android:duration="100" >
 	    <clip
             android:clipOrientation="horizontal"
-            android:drawable="@drawable/loading_6"
+            android:drawable="@drawable/loading7"
             android:gravity="left" >
         </clip>
 	</item>
 	<item android:duration="100" >
 	    <clip
             android:clipOrientation="horizontal"
-            android:drawable="@drawable/loading_7"
+            android:drawable="@drawable/loading8"
             android:gravity="left" >
         </clip>
 	</item>
+    <item android:duration="100" >
+        <clip
+            android:clipOrientation="horizontal"
+            android:drawable="@drawable/loading9"
+            android:gravity="left" >
+        </clip>
+    </item>
+    <item android:duration="100" >
+        <clip
+            android:clipOrientation="horizontal"
+            android:drawable="@drawable/loading10"
+            android:gravity="left" >
+        </clip>
+    </item>
+    <item android:duration="100" >
+        <clip
+            android:clipOrientation="horizontal"
+            android:drawable="@drawable/loading11"
+            android:gravity="left" >
+        </clip>
+    </item>
+    <item android:duration="100" >
+        <clip
+            android:clipOrientation="horizontal"
+            android:drawable="@drawable/loading12"
+            android:gravity="left" >
+        </clip>
+    </item>
 </animation-list> 

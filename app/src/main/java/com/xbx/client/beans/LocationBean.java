@@ -5,10 +5,16 @@ public class LocationBean {
     private String lon;
     private String lat;
     private String city;
-    private double targetLat;
-    private double targetLon;
-    private String targetCity;
+    private String markAddress;
     private String detailAddress;
+
+    public String getMarkAddress() {
+        return markAddress;
+    }
+
+    public void setMarkAddress(String markAddress) {
+        this.markAddress = markAddress;
+    }
 
     public String getDetailAddress() {
         return detailAddress;
@@ -42,28 +48,5 @@ public class LocationBean {
         this.city = city;
     }
 
-    public double getTargetLat() {
-        return targetLat;
-    }
-
-    public void setTargetLat(double targetLat) {
-        this.targetLat = targetLat;
-    }
-
-    public double getTargetLon() {
-        return targetLon;
-    }
-
-    public void setTargetLon(double targetLon) {
-        this.targetLon = targetLon;
-    }
-
-    public String getTargetCity() {
-        return targetCity;
-    }
-
-    public void setTargetCity(String targetCity) {
-        this.targetCity = targetCity;
-    }
 
 }

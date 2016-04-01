@@ -57,8 +57,13 @@ public class MapLocate {
                     isFirstLoc = false;
                     LocationBean lB = new LocationBean();
                     lB.setCity(location.getCity());
+                    lB.setDetailAddress(location.getAddrStr());
                     lB.setLat("" + location.getLatitude());
                     lB.setLon("" + location.getLongitude());
+                    lB.setMarkAddress(location.getBuildingName());
+                    if(location.getPoiList() != null && location.getPoiList().size()>0){
+
+                    }
                     lB.setDetailAddress(location.getAddrStr());
                     SharePrefer.saveLocate(context,lB);
                 }
