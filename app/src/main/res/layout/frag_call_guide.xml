@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_sixty_four"
+    android:background="@color/colorWhite"
+    android:layout_alignParentBottom="true"
+    android:orientation="horizontal">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_forty_eight"
+        android:background="@drawable/button_bg"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_marginRight="@dimen/dp_sixteen"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/sp_sixteen"
+        android:gravity="center"
+        android:text="@string/call_sure"/>
+</LinearLayout>

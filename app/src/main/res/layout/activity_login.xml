@@ -38,11 +38,14 @@
                     android:textSize="@dimen/sp_fourteen" />
 
                 <EditText
+                    android:id="@+id/login_phone_et"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dp_seventy_four"
                     android:background="@null"
+                    android:maxLength="11"
                     android:hint="@string/login_phone_hint"
+                    android:inputType="number"
                     android:textColorHint="@color/colorHint"
                     android:textSize="@dimen/sp_fourteen" />
             </RelativeLayout>
@@ -67,18 +70,21 @@
                     android:textSize="@dimen/sp_fourteen" />
 
                 <EditText
+                    android:id="@+id/login_code_et"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dp_seventy_four"
                     android:layout_marginRight="@dimen/dp_ninety_three"
                     android:background="@null"
                     android:hint="@string/login_code_hint"
-                    android:maxLength="4"
+                    android:maxLength="6"
+                    android:inputType="number"
                     android:textColorHint="@color/colorHint"
                     android:textSize="@dimen/sp_fourteen" />
 
                 <Button
-                    android:layout_width="@dimen/dp_ninety_three"
+                    android:id="@+id/login_code_btn"
+                    android:layout_width="@dimen/dp_ninety_six"
                     android:layout_height="@dimen/dp_twenty_eight"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -86,7 +92,7 @@
                     android:background="@drawable/button_bg"
                     android:text="@string/login_code_get"
                     android:textColor="@color/colorTextBack"
-                    android:textSize="@dimen/sp_fourteen" />
+                    android:textSize="@dimen/sp_twelve" />
             </RelativeLayout>
         </LinearLayout>
 
