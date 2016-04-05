@@ -9,10 +9,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.xbx.client.R;
+import com.xbx.client.utils.Util;
 
 public class LoadingFragment extends DialogFragment {
 	private TextView vLoading_text;
-	private String mMsg = "正在加载···";
+	private String mMsg = "";
 
 	@SuppressLint("InflateParams")
 	@Override
@@ -20,7 +21,11 @@ public class LoadingFragment extends DialogFragment {
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		View view = inflater.inflate(R.layout.fragment_loading, null);
 		vLoading_text = (TextView) view.findViewById(R.id.loading_text);
-		vLoading_text.setText(mMsg);
+		if(Util.isNull(mMsg)){
+			vLoading_text.setVisibility(View.GONE);
+		}else {
+			vLoading_text.setText(mMsg);
+		}
 		Dialog dialog = new Dialog(getActivity(), R.style.MyLoadDialog);
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.setContentView(view);
@@ -35,7 +40,7 @@ public class LoadingFragment extends DialogFragment {
 		super.onStart();
 	}
 	public void setMsg(String msg) {
-		if (msg != null) {
+		if (!Util.isNull(msg)) {
 			this.mMsg = msg;
 		}
 	}

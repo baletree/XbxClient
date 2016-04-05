@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="url_http">http://naichawaimai.applinzi.com/Takeout/api.php/Users/</string>
-    <string name="url_login">login</string>
+    <string name="url_conIp">http://192.168.1.27/yueyou/Api/</string>
+    <string name="url_getCode">user/send_verify_code</string>
+    <string name="url_Login">user/login.json</string>
 </resources>

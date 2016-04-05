@@ -39,6 +39,22 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:gravity">bottom</item>
     </style>
+    <!-- Activity作为Dialog对话框-->
+    <style name="DialogStyleBottom" parent="android:Theme.Dialog">
+        <!--<item name="android:windowAnimationStyle">@style/AnimBottom</item>-->
+        <item name="android:windowFrame">@null</item>
+        <!-- 边框 -->
+        <item name="android:windowIsFloating">false</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 无标题 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 背景透明 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 模糊 -->
+    </style>
     <!-- 白色字体的风格-->
     <style name="textView_White">
         <item name="android:layout_width">wrap_content</item>
@@ -55,6 +71,16 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/colorHint</item>
+    </style>
+    <style name="peoNumChoice_txt">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp_forty_eight</item>
+        <item name="android:background">@drawable/peonum_bg</item>
+        <item name="android:layout_marginLeft">@dimen/dp_sixteen</item>
+        <item name="android:layout_marginRight">@dimen/dp_sixteen</item>
+        <item name="android:textColor">@color/colorTitle</item>
+        <item name="android:textSize">@dimen/sp_sixteen</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">

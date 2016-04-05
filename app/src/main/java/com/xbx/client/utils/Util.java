@@ -11,6 +11,12 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkError;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.xbx.client.ui.activity.MainActivity;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,8 +26,8 @@ import java.util.regex.Pattern;
 public class Util {
 
     public static boolean checkTel(String phone) {
-        Pattern p = Pattern.compile("^[1][34578]\\d{9}$");
 //        Pattern p = Pattern.compile("^[0][9]\\d{8}$");
+        Pattern p = Pattern.compile("^[1][34578]\\d{9}$");
         if (p != null) {
             Matcher matcher = p.matcher(phone);
             if (matcher.find()) {
@@ -45,11 +51,12 @@ public class Util {
     }
 
     public static void showToast(Context context, String message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        if (!Util.isNull(message))
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    public static void pLog(String message){
-        Log.i("Tag",message);
+    public static void pLog(String message) {
+        Log.i("Tag", message);
     }
 
     /**
@@ -92,5 +99,18 @@ public class Util {
             return true;
         }
         return false;
+    }
+
+    public static void checkNetError(Context context, VolleyError e) {
+        Util.pLog("VolleyError:" + e.getMessage());
+        if (e instanceof NetworkError) {
+            showToast(context, "请检查网络...");
+        } else if (e instanceof TimeoutError) {
+            showToast(context, "连接超时...");
+        } else if (e instanceof ServerError) {
+            showToast(context, "服务器异常...");
+        } else {
+            showToast(context, "未知异常...");
+        }
     }
 }

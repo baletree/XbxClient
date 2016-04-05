@@ -9,17 +9,17 @@ import org.json.JSONObject;
  * Created by Eric on 2016/2/26.
  */
 public class CommonParse {
-    public static boolean getRequest(String responseResult){
+    public static int getRequest(String responseResult){
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(responseResult);
-            if(checkTag(jsonObject,"flag")){
-                return jsonObject.getBoolean("flag");
+            if(checkTag(jsonObject,"code")){
+                return jsonObject.getInt("code");
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return false;
+        return 0;
     }
 
     public static String getRequestMsg(String responseResult){

@@ -29,4 +29,20 @@ public class SharePrefer {
 
         return locationBean;
     }
+
+    public static void savePhone(Context context, String phone){
+        SpHelper spHelper = new SpHelper(context, Constant.SPUSER_PHONE);
+        if (spHelper == null)
+            return;
+        spHelper.setSP("phone", phone); //用户的手机号码
+    }
+
+    public static String getUserPhone(Context context){
+        String phone = "";
+        SpHelper spHelper = new SpHelper(context, Constant.SPUSER_PHONE);
+        if (spHelper == null)
+            return null;
+        phone = spHelper.getSP("phone");
+        return phone;
+    }
 }
