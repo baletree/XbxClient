@@ -83,6 +83,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
         super.onClick(v);
+        login_phone_et.setText("18602854129");
         String phone = login_phone_et.getText().toString();
         login_code_et.setText("147258");
         String code = login_code_et.getText().toString();

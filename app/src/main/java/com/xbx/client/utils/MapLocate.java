@@ -60,14 +60,9 @@ public class MapLocate {
                     lB.setDetailAddress(location.getAddrStr());
                     lB.setLat("" + location.getLatitude());
                     lB.setLon("" + location.getLongitude());
-                    lB.setMarkAddress(location.getBuildingName());
-                    if(location.getPoiList() != null && location.getPoiList().size()>0){
-
-                    }
-                    lB.setDetailAddress(location.getAddrStr());
                     SharePrefer.saveLocate(context,lB);
                 }
-                stopLocate();
+//                stopLocate();
             }else {
                 //定位失败
                 Util.pLog("定位失败");
