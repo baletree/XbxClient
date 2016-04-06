@@ -8,7 +8,10 @@
         android:id="@+id/title_left_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:padding="@dimen/dp_eight"
+        android:layout_marginLeft="@dimen/dp_eight"
+        android:src="@mipmap/back_arrow"/>
     <TextView
         android:id="@+id/title_txt_tv"
         style="@style/textView_White"

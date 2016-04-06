@@ -3,6 +3,7 @@ package com.xbx.client.utils;
 import android.content.Context;
 
 import com.xbx.client.beans.LocationBean;
+import com.xbx.client.beans.UserInfo;
 
 /**
  * Created by EricYuan on 2016/3/30.
@@ -44,5 +45,29 @@ public class SharePrefer {
             return null;
         phone = spHelper.getSP("phone");
         return phone;
+    }
+
+    public static void saveUserInfo(Context context,UserInfo userInfo){
+        SpHelper spHelper = new SpHelper(context, Constant.SPUSER_INFO);
+        if (spHelper == null)
+            return;
+        spHelper.setSP("userUid", userInfo.getUid());
+        spHelper.setSP("userPhone", userInfo.getUserPhone());
+        spHelper.setSP("userNickname", userInfo.getNickName());
+        spHelper.setSP("userHead", userInfo.getUserHead());
+        spHelper.setSP("userLoginToken", userInfo.getLoginToken());
+    }
+
+    public static UserInfo getUserInfo(Context context){
+        UserInfo userInfo = new UserInfo();
+        SpHelper spHelper = new SpHelper(context, Constant.SPUSER_INFO);
+        if(spHelper == null)
+            return null;
+        userInfo.setUid(spHelper.getSP("userUid"));
+        userInfo.setUserPhone(spHelper.getSP("userPhone"));
+        userInfo.setNickName(spHelper.getSP("userNickname"));
+        userInfo.setUserHead(spHelper.getSP("userHead"));
+        userInfo.setLoginToken(spHelper.getSP("userLoginToken"));
+        return userInfo;
     }
 }

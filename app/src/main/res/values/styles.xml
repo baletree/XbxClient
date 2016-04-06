@@ -55,6 +55,12 @@
         <item name="android:backgroundDimEnabled">true</item>
         <!-- 模糊 -->
     </style>
+    <!--星级-->
+    <style name="roomRatingBar_small" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar</item>
+        <item name="android:minHeight">@dimen/dp_twelve</item>
+        <item name="android:maxHeight">@dimen/dp_twelve</item>
+    </style>
     <!-- 白色字体的风格-->
     <style name="textView_White">
         <item name="android:layout_width">wrap_content</item>
@@ -67,11 +73,13 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/colorText</item>
     </style>
+
     <style name="textView_Hint">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/colorHint</item>
     </style>
+
     <style name="peoNumChoice_txt">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/dp_forty_eight</item>

@@ -1,25 +1,42 @@
 package com.xbx.client.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.xbx.client.R;
 import com.xbx.client.adapter.MyViewPagerAdapter;
+import com.xbx.client.beans.UserInfo;
+import com.xbx.client.http.IRequest;
+import com.xbx.client.http.RequestParams;
+import com.xbx.client.jsonparse.CommonParse;
+import com.xbx.client.jsonparse.UserInfoParse;
 import com.xbx.client.ui.fragment.BowenFragment;
 import com.xbx.client.ui.fragment.GuidesFragment;
 import com.xbx.client.ui.fragment.NativesFragment;
 import com.xbx.client.ui.fragment.TogetherFragment;
 import com.xbx.client.ui.fragment.WithtourFragment;
+import com.xbx.client.utils.Constant;
+import com.xbx.client.utils.RequestBackLisener;
+import com.xbx.client.utils.SharePrefer;
+import com.xbx.client.utils.SpHelper;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.BanSlideViewpager;
+import com.xbx.client.view.TipsDialog;
 
 public class MainActivity extends BaseActivity {
     /**
@@ -31,6 +48,8 @@ public class MainActivity extends BaseActivity {
     private TabLayout tabLayout;
     private BanSlideViewpager viewpager;
     private ImageView main_menu_img;
+    private TextView cancel_order_tv;
+    private LinearLayout menu_order_layout; //我的订单
 
     private MyViewPagerAdapter viewPagerAdapter = null;
 
@@ -40,11 +59,26 @@ public class MainActivity extends BaseActivity {
     private TogetherFragment togetherFragment = null;
     private BowenFragment bowenFragment = null;
 
+    private LocalReceiver localReceiver = null;
+    private LocalBroadcastManager lBManager = null;
+    private IntentFilter intentFilter = null;
+
+    private TipsDialog tipsDialog = null;
+    private boolean isFromLogin = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_layout);
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
+    }
+
+    @Override
+    protected void initDatas() {
+        super.initDatas();
+        isFromLogin = getIntent().getBooleanExtra("isFromLoin",false);
+        if(!isFromLogin)
+            checkLoginState();
     }
 
     @Override
@@ -56,10 +90,23 @@ public class MainActivity extends BaseActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         viewpager = (BanSlideViewpager) findViewById(R.id.viewpager);
         main_menu_img = (ImageView) findViewById(R.id.main_menu_img);
+        cancel_order_tv = (TextView) findViewById(R.id.cancel_order_tv);
+        menu_order_layout = (LinearLayout) findViewById(R.id.menu_order_layout);
         viewpager.setScrollble(false);
         viewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager(), this);
         main_menu_img.setOnClickListener(this);
+        cancel_order_tv.setOnClickListener(this);
+        menu_order_layout.setOnClickListener(this);
         initControls();
+        initBroadcast();
+    }
+
+    private void initBroadcast() {
+        lBManager = LocalBroadcastManager.getInstance(this);
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(Constant.ACTION_GCANCELORD);
+        localReceiver = new LocalReceiver();
+        lBManager.registerReceiver(localReceiver, intentFilter);
     }
 
     private void initControls() {
@@ -116,6 +163,33 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    private void checkLoginState(){
+        String postUrl = getString(R.string.url_conIp).concat(getString(R.string.url_Login));
+        RequestParams params = new RequestParams();
+        UserInfo userInfo = SharePrefer.getUserInfo(MainActivity.this);
+        params.put("mobile", userInfo.getUserPhone());
+        params.put("password", userInfo.getLoginToken());
+        params.put("user_type", "0");//代表用户端
+//        Util.pLog("Login phone=" + userInfo.getUserPhone()+" token:"+userInfo.getLoginToken());
+        IRequest.post(this, postUrl, params , new RequestBackLisener(MainActivity.this) {
+            @Override
+            public void requestSuccess(String json) {
+                Util.pLog("Login check Result=" + json);
+                if(CommonParse.getRequest(json) == 0){
+                    Util.showToast(MainActivity.this, getString(R.string.login_fail));
+                    SharePrefer.saveUserInfo(MainActivity.this,new UserInfo());
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
+                }else if(CommonParse.getRequest(json) == 1){
+                    UserInfo userInfo = UserInfoParse.getUserInfo(CommonParse.getDataResult(json));
+                    if(userInfo != null){
+                        SharePrefer.saveUserInfo(MainActivity.this, userInfo);
+                    }
+                }
+            }
+        });
+    }
+
     @Override
     public void onClick(View v) {
         super.onClick(v);
@@ -123,6 +197,46 @@ public class MainActivity extends BaseActivity {
             case R.id.main_menu_img:
                 toggleLeftLayout();
                 break;
+            case R.id.cancel_order_tv://取消订单
+                initDialog();
+                break;
+            case R.id.menu_order_layout:
+                startActivity(new Intent(MainActivity.this,MyOrderActivity.class));
+                toggleLeftLayout();
+                break;
+        }
+    }
+
+    private void initDialog(){
+        tipsDialog = new TipsDialog(MainActivity.this);
+        tipsDialog.setClickListener(new TipsDialog.DialogClickListener() {
+            @Override
+            public void cancelDialog() {
+                tipsDialog.dismiss();
+            }
+
+            @Override
+            public void confirmDialog() {
+                tipsDialog.dismiss();
+            }
+        });
+        tipsDialog.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (localReceiver != null)
+            lBManager.unregisterReceiver(localReceiver);
+    }
+
+    class LocalReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Constant.ACTION_GCANCELORD.equals(action)) {
+                cancel_order_tv.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

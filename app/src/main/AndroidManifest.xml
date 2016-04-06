@@ -28,9 +28,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.xbx.client.ui.activity.LoginActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppThemeCustorm">
+            android:name="com.xbx.client.ui.activity.LoadingActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,10 +37,22 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.activity.LoginActivity"
+            android:theme="@style/AppThemeCustorm"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activity.MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.SearchAddressActivity"
+            android:theme="@style/AppThemeCustorm"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CancelOrderSucActivity"
+            android:theme="@style/AppThemeCustorm"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.MyOrderActivity"
             android:theme="@style/AppThemeCustorm"
             android:screenOrientation="portrait" />
         <activity

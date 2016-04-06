@@ -13,10 +13,12 @@ import android.widget.TextView;
 import com.android.volley.NetworkError;
 import com.android.volley.VolleyError;
 import com.xbx.client.R;
+import com.xbx.client.beans.UserInfo;
 import com.xbx.client.http.IRequest;
 import com.xbx.client.http.RequestListener;
 import com.xbx.client.http.RequestParams;
 import com.xbx.client.jsonparse.CommonParse;
+import com.xbx.client.jsonparse.UserInfoParse;
 import com.xbx.client.utils.RequestBackLisener;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.Util;
@@ -83,9 +85,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        login_phone_et.setText("18602854129");
         String phone = login_phone_et.getText().toString();
-        login_code_et.setText("147258");
         String code = login_code_et.getText().toString();
         switch (v.getId()) {
             case R.id.login_btn:
@@ -97,8 +97,8 @@ public class LoginActivity extends BaseActivity {
                     Util.showToast(LoginActivity.this, getString(R.string.code_tips));
                     return;
                 }
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-//                toLogin(phone, code);
+//                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                toLogin(phone, code);
                 break;
             case R.id.login_code_btn:
                 if (Util.isNull(phone)) {
@@ -145,9 +145,16 @@ public class LoginActivity extends BaseActivity {
             public void requestSuccess(String json) {
                 Util.pLog("Login Result=" + json);
                 if(CommonParse.getRequest(json) == 1){
-//                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    UserInfo userInfo = UserInfoParse.getUserInfo(CommonParse.getDataResult(json));
+                    if(userInfo != null){
+                        SharePrefer.saveUserInfo(LoginActivity.this, userInfo);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("isFromLoin",true);
+                        startActivity(intent);
+                        finish();
+                    }
                 }else{
-                    Util.showToast(LoginActivity.this,CommonParse.getRequestMsg(json));
+                    Util.showToast(LoginActivity.this, CommonParse.getRequestMsg(json));
                 }
             }
         });

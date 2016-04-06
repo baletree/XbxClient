@@ -11,9 +11,9 @@
         android:id="@+id/guide_locatemy_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_twenty"
+        android:layout_marginBottom="@dimen/dp_eighty"
         android:layout_marginLeft="@dimen/dp_sixteen"
-        android:layout_above="@+id/guide_fuc_layout"
+        android:layout_alignParentBottom="true"
         android:src="@mipmap/main_locself" />
     <include
         android:id="@+id/guide_locate_layout"

@@ -104,13 +104,13 @@ public class Util {
     public static void checkNetError(Context context, VolleyError e) {
         Util.pLog("VolleyError:" + e.getMessage());
         if (e instanceof NetworkError) {
-            showToast(context, "请检查网络...");
+            showToast(context, "请检查网络");
         } else if (e instanceof TimeoutError) {
-            showToast(context, "连接超时...");
+            showToast(context, "连接超时");
         } else if (e instanceof ServerError) {
-            showToast(context, "服务器异常...");
+            showToast(context, "服务器异常");
         } else {
-            showToast(context, "未知异常...");
+            showToast(context, "未知异常");
         }
     }
 }
