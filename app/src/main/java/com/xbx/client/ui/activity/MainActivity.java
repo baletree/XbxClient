@@ -11,7 +11,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,7 +22,7 @@ import com.xbx.client.adapter.MyViewPagerAdapter;
 import com.xbx.client.beans.UserInfo;
 import com.xbx.client.http.IRequest;
 import com.xbx.client.http.RequestParams;
-import com.xbx.client.jsonparse.CommonParse;
+import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.jsonparse.UserInfoParse;
 import com.xbx.client.ui.fragment.BowenFragment;
 import com.xbx.client.ui.fragment.GuidesFragment;
@@ -33,7 +32,6 @@ import com.xbx.client.ui.fragment.WithtourFragment;
 import com.xbx.client.utils.Constant;
 import com.xbx.client.utils.RequestBackLisener;
 import com.xbx.client.utils.SharePrefer;
-import com.xbx.client.utils.SpHelper;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.BanSlideViewpager;
 import com.xbx.client.view.TipsDialog;
@@ -175,13 +173,13 @@ public class MainActivity extends BaseActivity {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("Login check Result=" + json);
-                if(CommonParse.getRequest(json) == 0){
+                if(UtilParse.getRequest(json) == 0){
                     Util.showToast(MainActivity.this, getString(R.string.login_fail));
                     SharePrefer.saveUserInfo(MainActivity.this,new UserInfo());
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
-                }else if(CommonParse.getRequest(json) == 1){
-                    UserInfo userInfo = UserInfoParse.getUserInfo(CommonParse.getDataResult(json));
+                }else if(UtilParse.getRequest(json) == 1){
+                    UserInfo userInfo = UserInfoParse.getUserInfo(UtilParse.getDataResult(json));
                     if(userInfo != null){
                         SharePrefer.saveUserInfo(MainActivity.this, userInfo);
                     }

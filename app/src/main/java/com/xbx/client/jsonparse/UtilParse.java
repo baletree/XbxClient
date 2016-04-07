@@ -8,7 +8,7 @@ import org.json.JSONObject;
 /**
  * Created by Eric on 2016/2/26.
  */
-public class CommonParse {
+public class UtilParse {
     public static int getRequest(String responseResult){
         JSONObject jsonObject = null;
         try {

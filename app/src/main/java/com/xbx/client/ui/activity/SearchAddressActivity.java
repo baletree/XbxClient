@@ -144,8 +144,8 @@ public class SearchAddressActivity extends BaseActivity implements
                 /*mSuggestionSearch
                         .requestSuggestion((new SuggestionSearchOption())
                                 .keyword(cs.toString()).city(city));*/
-                mPoiSearch.searchInCity((new PoiCitySearchOption())
-                        .city(city)
+                Util.pLog("keywords:"+cs.toString());
+                mPoiSearch.searchInCity((new PoiCitySearchOption()).city(city)
                         .keyword(cs.toString()));
             }
         });

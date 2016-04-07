@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.xbx.client.R;
@@ -21,9 +22,10 @@ import java.util.List;
 /**
  * Created by EricYuan on 2016/3/29.
  */
-public class NativesFragment extends Fragment {
+public class NativesFragment extends BaseFragment {
     private static NativesFragment fragment = null;
     private View view = null;
+    private EditText login_phone_et;
 
     public NativesFragment() {
     }
@@ -35,11 +37,26 @@ public class NativesFragment extends Fragment {
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.frag_guide, container, false);
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+    }
 
-        return view;
+    @Override
+    protected void onCreateView(View contentView) {
+        this.view = contentView;
+        Util.pLog("NativesFragment onCreateView()");
+    }
+
+    @Override
+    protected int getViewLayoutId() {
+        return R.layout.activity_login;
+    }
+
+    @Override
+    protected void initViews() {
+        super.initViews();
+        login_phone_et = (EditText) view.findViewById(R.id.login_phone_et);
+        login_phone_et.setText("18602854129");
     }
 }

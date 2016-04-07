@@ -18,21 +18,21 @@ public class UserInfoParse {
         try {
             JSONObject jsonObject = new JSONObject(json);
             userInfo = new UserInfo();
-            if(CommonParse.checkTag(jsonObject,"uid")){
+            if(UtilParse.checkTag(jsonObject, "uid")){
                 userInfo.setUid(jsonObject.getString("uid"));
             }
-            if(CommonParse.checkTag(jsonObject,"login_token")){
+            if(UtilParse.checkTag(jsonObject, "login_token")){
                 userInfo.setLoginToken(jsonObject.getString("login_token"));
             }
-            if(CommonParse.checkTag(jsonObject,"user_info")){
+            if(UtilParse.checkTag(jsonObject, "user_info")){
                 JSONObject job = jsonObject.getJSONObject("user_info");
-                if(CommonParse.checkTag(job,"mobile")){
+                if(UtilParse.checkTag(job, "mobile")){
                     userInfo.setUserPhone(job.getString("mobile"));
                 }
-                if(CommonParse.checkTag(job,"nickname")){
+                if(UtilParse.checkTag(job, "nickname")){
                     userInfo.setNickName(job.getString("nickname"));
                 }
-                if(CommonParse.checkTag(job,"head_image")){
+                if(UtilParse.checkTag(job, "head_image")){
                     userInfo.setUserHead(job.getString("head_image"));
                 }
             }

@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ZoomControls;
 
+import com.android.volley.VolleyError;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -26,6 +27,7 @@ import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
 import com.baidu.mapapi.map.MyLocationData;
@@ -38,12 +40,21 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.xbx.client.R;
+import com.xbx.client.beans.GuideBean;
+import com.xbx.client.beans.LocationBean;
+import com.xbx.client.http.IRequest;
+import com.xbx.client.http.RequestParams;
+import com.xbx.client.jsonparse.GuideParse;
+import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.ui.activity.ChoicePeoNumActivity;
 import com.xbx.client.ui.activity.SearchAddressActivity;
 import com.xbx.client.utils.Constant;
-import com.xbx.client.utils.MapLocate;
+import com.xbx.client.utils.RequestBackLisener;
+import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.LoadingFragment;
+
+import java.util.List;
 
 /**
  * Created by EricYuan on 2016/3/29.
@@ -52,14 +63,18 @@ public class GuidesFragment extends BaseFragment implements
         BaiduMap.OnMapStatusChangeListener, OnGetGeoCoderResultListener, BaiduMap.OnMapLoadedCallback {
     private static GuidesFragment fragment = null;
     private View view = null;
-    private MapLocate mapLocate = null;
     private BitmapDescriptor bdMyself = null;
+    private BitmapDescriptor guideBdp = null;
     private GeoCoder geoCoder;
     private LoadingFragment loadingFragment = null;
     private LocationMode mCurrentMode;
     private LocationClient mLocClient;
     private BaiduMap mBaiduMap;
     private LocalBroadcastManager lBManager = null;
+    private LocationBean lBean = null;
+    private MyLocationListenner myListener = null;
+    private LatLng currentLalng = null;
+    private List<GuideBean> guideList = null;
 
     private MapView mapView;
     private RelativeLayout guide_outset_rl;
@@ -86,7 +101,10 @@ public class GuidesFragment extends BaseFragment implements
     private final int callGuideReques = 1002;
     private static final int accuracyCircleFillColor = 0x00000000;
     private static final int accuracyCircleStrokeColor = 0x00000000;
-    private boolean isFirstLoc = true;
+    private boolean isFirstLoc = true; // 是否是第一次像用户定位
+    private String nearGuideUrl = "";
+    private boolean isVisibaleTouser = false;
+    private boolean isInOrder = false;
 
 
     private Handler handler = new Handler() {
@@ -95,6 +113,9 @@ public class GuidesFragment extends BaseFragment implements
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
+                    if (isVisibaleTouser && !isInOrder)
+                        getNearGuide();
+                    handler.sendEmptyMessageDelayed(1, 6000);
                     break;
                 case 10:
                     if (loadingFragment != null) {
@@ -121,26 +142,39 @@ public class GuidesFragment extends BaseFragment implements
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.frag_guide, container, false);
-        initDatas();
-        initViews();
-        initLisener();
-        return view;
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser)
+            isVisibaleTouser = true;
+        else
+            isVisibaleTouser = false;
     }
 
-    private void initDatas() {
-        mapLocate = new MapLocate(getActivity());
+    @Override
+    protected void onCreateView(View contentView) {
+        this.view = contentView;
+    }
+
+    @Override
+    protected int getViewLayoutId() {
+        return R.layout.frag_guide;
+    }
+
+    @Override
+    protected void initDatas() {
         bdMyself = BitmapDescriptorFactory
                 .fromResource(R.mipmap.myself_locate);
+        guideBdp = BitmapDescriptorFactory
+                .fromResource(R.mipmap.guide_icon);
         geoCoder = GeoCoder.newInstance();
         loadingFragment = new LoadingFragment();
         lBManager = LocalBroadcastManager.getInstance(getActivity());
+        nearGuideUrl = getString(R.string.url_conIp).concat(getString(R.string.url_nearGuide));
     }
 
-    private void initViews() {
+    @Override
+    protected void initViews() {
         mapView = (MapView) view.findViewById(R.id.guide_map);
         guide_outset_rl = (RelativeLayout) view.findViewById(R.id.guide_outset_rl);
         guide_destination_rl = (RelativeLayout) view.findViewById(R.id.guide_destination_rl);
@@ -164,7 +198,20 @@ public class GuidesFragment extends BaseFragment implements
         guide_phone_rl = (RelativeLayout) view.findViewById(R.id.guide_phone_rl);
 
         mBaiduMap = mapView.getMap();
-        mBaiduMap.setMyLocationEnabled(true);//开启定位图层
+        lBean = SharePrefer.getLocate(getActivity());
+        if (lBean != null) {
+            if (!Util.isNull(lBean.getLat()) && !Util.isNull(lBean.getLon())) {
+                currentLalng = new LatLng(Double.parseDouble(lBean.getLat()),
+                        Double.parseDouble(lBean.getLon()));
+                handler.sendEmptyMessage(1);
+                LatLng ll = new LatLng(Double.parseDouble(lBean.getLat()),
+                        Double.parseDouble(lBean.getLon()));
+                MapStatus mMapstatus = new MapStatus.Builder().target(ll).zoom(20f)
+                        .build();
+                MapStatusUpdate u = MapStatusUpdateFactory.newMapStatus(mMapstatus);
+                mBaiduMap.setMapStatus(u);
+            }
+        }
         initBaiduMap();
     }
 
@@ -181,9 +228,7 @@ public class GuidesFragment extends BaseFragment implements
         if (zoom != null) {
             zoom.setVisibility(View.GONE);
         }
-        // 开启定位图层
-        mBaiduMap.setMyLocationEnabled(true);
-        MyLocationListenner myListener = new MyLocationListenner();
+        myListener = new MyLocationListenner();
         //定位初始化
         mLocClient = new LocationClient(getActivity());
         mLocClient.registerLocationListener(myListener);
@@ -193,13 +238,10 @@ public class GuidesFragment extends BaseFragment implements
         option.setScanSpan(1000);
         mLocClient.setLocOption(option);
         mLocClient.start();
-
-        mCurrentMode = LocationMode.NORMAL;
-        mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
-                mCurrentMode, true, bdMyself, accuracyCircleFillColor, accuracyCircleStrokeColor));
     }
 
-    private void initLisener() {
+    @Override
+    protected void initLisener() {
         guide_locatemy_img.setOnClickListener(this);
         guide_outset_rl.setOnClickListener(this);
         guide_destination_rl.setOnClickListener(this);
@@ -219,12 +261,13 @@ public class GuidesFragment extends BaseFragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        isFirstLoc = true;
+        if (mLocClient != null && mLocClient.isStarted())
+            if (myListener != null)
+                mLocClient.unRegisterLocationListener(myListener);
+        mLocClient.stop();
         mapView.onDestroy();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+        currentLalng = null;
     }
 
     @Override
@@ -334,8 +377,51 @@ public class GuidesFragment extends BaseFragment implements
                 .location(mapStatus.target));
     }
 
-    public class MyLocationListenner implements BDLocationListener {
+    private void getNearGuide() {
+        if (currentLalng == null)
+            return;
+        RequestParams params = new RequestParams();
+        params.put("lon", currentLalng.longitude + "");
+        params.put("lat", currentLalng.latitude + "");
+//        Util.pLog("lon:"+currentLalng.longitude+" lat:"+currentLalng.latitude);
+        IRequest.post(getActivity(), nearGuideUrl, params, new RequestBackLisener(getActivity()) {
+            @Override
+            public void requestSuccess(String json) {
+                super.requestSuccess(json);
+                Util.pLog("guideList:" + json);
+                if (UtilParse.getRequest(json) == 1) {
+                    switch (GuideParse.getDataType(UtilParse.getDataResult(json))) {
+                        case 1://导游
+                            guideList = GuideParse.getGuideList(UtilParse.getDataResult(json));
+                            if (guideList == null)
+                                return;
+                            addOverlyGuide();
+                            break;
+                        case 2://订单信息
 
+                            break;
+                    }
+                }
+            }
+            @Override
+            public void requestError(VolleyError e) {
+                //该接口不用回调错误信息
+            }
+        });
+    }
+
+    private void addOverlyGuide() {
+        mBaiduMap.clear();
+        for (int i = 0; i < guideList.size(); i++) {
+            GuideBean guideBean = guideList.get(i);
+            LatLng latLng = new LatLng(guideBean.getLatitude(), guideBean.getLongitude());
+            MarkerOptions mos = new MarkerOptions().position(latLng).icon(guideBdp)
+                    .zIndex(9).draggable(true);
+            mBaiduMap.addOverlay(mos);
+        }
+    }
+
+    public class MyLocationListenner implements BDLocationListener {
         @Override
         public void onReceiveLocation(BDLocation location) {
             // map view 销毁后不在处理新接收的位置
@@ -349,17 +435,25 @@ public class GuidesFragment extends BaseFragment implements
                     .longitude(location.getLongitude()).build();
             mBaiduMap.setMyLocationData(locData);
             if (isFirstLoc && !Util.isNull(location.getAddrStr())) {
-                Util.pLog("Locate:"+location.getLatitude()+","+location.getLongitude());
+                Util.pLog("LocateLisen:" + location.getLatitude() + "," + location.getLongitude() + " adr:" + location.getAddrStr() + " isFirstLoc:" + isFirstLoc);
                 isFirstLoc = false;
-                LatLng ll = new LatLng(location.getLatitude(),
-                        location.getLongitude());
+                LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+                if (currentLalng == null) {
+                    currentLalng = ll;
+                    handler.sendEmptyMessage(1);
+                }
+                currentLalng = ll;
                 geoCoder.reverseGeoCode(new ReverseGeoCodeOption()
                         .location(ll));
-                MapStatus mMapstatus = new MapStatus.Builder().target(ll).zoom(19f)
+                MapStatus mMapstatus = new MapStatus.Builder().target(ll).zoom(15f)
                         .build();
                 MapStatusUpdate u = MapStatusUpdateFactory.newMapStatus(mMapstatus);
                 mBaiduMap.animateMapStatus(u);
                 mBaiduMap.setMapStatus(u);
+                mCurrentMode = LocationMode.NORMAL;
+                mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
+                        mCurrentMode, true, bdMyself, accuracyCircleFillColor, accuracyCircleStrokeColor));
+                mBaiduMap.setMyLocationEnabled(true);//开启定位图层
             }
         }
 

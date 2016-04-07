@@ -27,7 +27,6 @@ public class MapLocate {
     private void initLocate() {
         mLocationClient = new LocationClient(context);
         myListener = new MyLocationListener();
-
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         option.setOpenGps(true); // 打开gps
@@ -41,7 +40,6 @@ public class MapLocate {
     public void startLocate(){
         if (mLocationClient != null) {
             isFirstLoc = true;
-            Util.pLog("开始定位方法");
             mLocationClient.registerLocationListener(myListener);
             mLocationClient.start();
         }
@@ -62,7 +60,7 @@ public class MapLocate {
                     lB.setLon("" + location.getLongitude());
                     SharePrefer.saveLocate(context,lB);
                 }
-//                stopLocate();
+                stopLocate();
             }else {
                 //定位失败
                 Util.pLog("定位失败");
@@ -73,8 +71,8 @@ public class MapLocate {
     /**停止定位*/
     public void stopLocate() {
         if (mLocationClient != null && mLocationClient.isStarted()) {
-            mLocationClient.unRegisterLocationListener(myListener);
             Util.pLog("stop定位方法"+System.currentTimeMillis());
+            mLocationClient.unRegisterLocationListener(myListener);
             mLocationClient.stop();
             isFirstLoc = false;
         }

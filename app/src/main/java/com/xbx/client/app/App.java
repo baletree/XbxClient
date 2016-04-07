@@ -23,7 +23,7 @@ public class App extends Application {
 		super.onCreate();
 		mContext = getApplicationContext();
 		SDKInitializer.initialize(this);
-//		toLocate();
+		toLocate();
 	}
 
 	private void toLocate(){
