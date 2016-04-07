@@ -30,6 +30,8 @@
     <string name="menu_recruit">导游招募</string>
     <string name="menu_setting">设置</string>
     <string name="txt_cancel">取消</string>
+    <string name="txt_sure">确定</string>
+    <string name="txt_people_num">出行人数</string>
     <string name="search_hint">你要去哪儿</string>
     <string name="search_null">搜索词不能为空</string>
     <string name="call_count_title">您的出行人数</string>
