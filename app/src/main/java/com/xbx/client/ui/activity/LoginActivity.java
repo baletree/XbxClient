@@ -120,7 +120,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("getCode Result=" + json);
-                if(UtilParse.getRequest(json) == 1){
+                if(UtilParse.getRequestCode(json) == 1){
                     countDown = 60;
                     login_code_btn.setBackgroundResource(R.drawable.button_code_bg);
                     login_code_btn.setClickable(false);
@@ -141,8 +141,8 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("Login Result=" + json);
-                if(UtilParse.getRequest(json) == 1){
-                    UserInfo userInfo = UserInfoParse.getUserInfo(UtilParse.getDataResult(json));
+                if(UtilParse.getRequestCode(json) == 1){
+                    UserInfo userInfo = UserInfoParse.getUserInfo(UtilParse.getRequestData(json));
                     if(userInfo != null){
                         SharePrefer.saveUserInfo(LoginActivity.this, userInfo);
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);

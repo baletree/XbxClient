@@ -1,21 +1,16 @@
 package com.xbx.client.ui.fragment;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ZoomControls;
 
-import com.android.volley.VolleyError;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -42,15 +37,14 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import com.xbx.client.R;
 import com.xbx.client.beans.GuideBean;
 import com.xbx.client.beans.LocationBean;
-import com.xbx.client.http.IRequest;
-import com.xbx.client.http.RequestParams;
+import com.xbx.client.http.Api;
 import com.xbx.client.jsonparse.GuideParse;
 import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.ui.activity.ChoicePeoNumActivity;
 import com.xbx.client.ui.activity.SearchAddressActivity;
 import com.xbx.client.utils.Constant;
-import com.xbx.client.utils.RequestBackLisener;
 import com.xbx.client.utils.SharePrefer;
+import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.LoadingFragment;
 
@@ -75,6 +69,7 @@ public class GuidesFragment extends BaseFragment implements
     private MyLocationListenner myListener = null;
     private LatLng currentLalng = null;
     private List<GuideBean> guideList = null;
+    private Api api = null;
 
     private MapView mapView;
     private RelativeLayout guide_outset_rl;
@@ -94,8 +89,8 @@ public class GuidesFragment extends BaseFragment implements
     private TextView guide_code_tv; //导游证号码
     private TextView guide_star_tv;//星星评分
     private TextView user_stroke_tv;//行程状态
-
     private RelativeLayout guide_phone_rl;
+
     private final int outsetReques = 1000;
     private final int destReques = 1001;
     private final int callGuideReques = 1002;
@@ -103,6 +98,7 @@ public class GuidesFragment extends BaseFragment implements
     private static final int accuracyCircleStrokeColor = 0x00000000;
     private boolean isFirstLoc = true; // 是否是第一次像用户定位
     private String nearGuideUrl = "";
+    private String guideInfoUrl = "";
     private boolean isVisibaleTouser = false;
     private boolean isInOrder = false;
 
@@ -114,7 +110,7 @@ public class GuidesFragment extends BaseFragment implements
             switch (msg.what) {
                 case 1:
                     if (isVisibaleTouser && !isInOrder)
-                        getNearGuide();
+                        api.getNearGuide(currentLalng, nearGuideUrl);
                     handler.sendEmptyMessageDelayed(1, 6000);
                     break;
                 case 10:
@@ -127,6 +123,25 @@ public class GuidesFragment extends BaseFragment implements
                     Intent intent = new Intent();
                     intent.setAction(Constant.ACTION_GCANCELORD);
                     lBManager.sendBroadcast(intent);
+                    break;
+                case TaskFlag.REQUESTSUCCESS:
+                    String guideData = (String) msg.obj;
+                    if(Util.isNull(guideData))
+                        return;
+                    switch (GuideParse.getDataType(UtilParse.getRequestData(guideData))) {
+                        case 1://导游
+                            guideList = GuideParse.getGuideList(UtilParse.getRequestData(guideData));
+                            if (guideList == null)
+                                return;
+                            addOverlyGuide();
+                            break;
+                        case 2://订单信息
+
+                            break;
+                    }
+                    break;
+                case TaskFlag.PAGEREQUESTWO://服务我的导游信息
+                    String myGuideData = (String) msg.obj;
                     break;
             }
         }
@@ -163,6 +178,7 @@ public class GuidesFragment extends BaseFragment implements
 
     @Override
     protected void initDatas() {
+        api = new Api(getActivity(),handler);
         bdMyself = BitmapDescriptorFactory
                 .fromResource(R.mipmap.myself_locate);
         guideBdp = BitmapDescriptorFactory
@@ -171,6 +187,7 @@ public class GuidesFragment extends BaseFragment implements
         loadingFragment = new LoadingFragment();
         lBManager = LocalBroadcastManager.getInstance(getActivity());
         nearGuideUrl = getString(R.string.url_conIp).concat(getString(R.string.url_nearGuide));
+
     }
 
     @Override
@@ -377,50 +394,6 @@ public class GuidesFragment extends BaseFragment implements
                 .location(mapStatus.target));
     }
 
-    private void getNearGuide() {
-        if (currentLalng == null)
-            return;
-        RequestParams params = new RequestParams();
-        params.put("lon", currentLalng.longitude + "");
-        params.put("lat", currentLalng.latitude + "");
-//        Util.pLog("lon:"+currentLalng.longitude+" lat:"+currentLalng.latitude);
-        IRequest.post(getActivity(), nearGuideUrl, params, new RequestBackLisener(getActivity()) {
-            @Override
-            public void requestSuccess(String json) {
-                super.requestSuccess(json);
-                Util.pLog("guideList:" + json);
-                if (UtilParse.getRequest(json) == 1) {
-                    switch (GuideParse.getDataType(UtilParse.getDataResult(json))) {
-                        case 1://导游
-                            guideList = GuideParse.getGuideList(UtilParse.getDataResult(json));
-                            if (guideList == null)
-                                return;
-                            addOverlyGuide();
-                            break;
-                        case 2://订单信息
-
-                            break;
-                    }
-                }
-            }
-            @Override
-            public void requestError(VolleyError e) {
-                //该接口不用回调错误信息
-            }
-        });
-    }
-
-    private void addOverlyGuide() {
-        mBaiduMap.clear();
-        for (int i = 0; i < guideList.size(); i++) {
-            GuideBean guideBean = guideList.get(i);
-            LatLng latLng = new LatLng(guideBean.getLatitude(), guideBean.getLongitude());
-            MarkerOptions mos = new MarkerOptions().position(latLng).icon(guideBdp)
-                    .zIndex(9).draggable(true);
-            mBaiduMap.addOverlay(mos);
-        }
-    }
-
     public class MyLocationListenner implements BDLocationListener {
         @Override
         public void onReceiveLocation(BDLocation location) {
@@ -459,5 +432,21 @@ public class GuidesFragment extends BaseFragment implements
 
         public void onReceivePoi(BDLocation poiLocation) {
         }
+    }
+
+    /**将附近的导游添加到地图上*/
+    private void addOverlyGuide() {
+        mBaiduMap.clear();
+        for (int i = 0; i < guideList.size(); i++) {
+            GuideBean guideBean = guideList.get(i);
+            LatLng latLng = new LatLng(guideBean.getLatitude(), guideBean.getLongitude());
+            MarkerOptions mos = new MarkerOptions().position(latLng).icon(guideBdp)
+                    .zIndex(9).draggable(true);
+            mBaiduMap.addOverlay(mos);
+        }
+    }
+
+    private void setMyGuideInfo(){
+
     }
 }

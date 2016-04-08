@@ -173,13 +173,13 @@ public class MainActivity extends BaseActivity {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("Login check Result=" + json);
-                if(UtilParse.getRequest(json) == 0){
+                if(UtilParse.getRequestCode(json) == 0){
                     Util.showToast(MainActivity.this, getString(R.string.login_fail));
                     SharePrefer.saveUserInfo(MainActivity.this,new UserInfo());
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
-                }else if(UtilParse.getRequest(json) == 1){
-                    UserInfo userInfo = UserInfoParse.getUserInfo(UtilParse.getDataResult(json));
+                }else if(UtilParse.getRequestCode(json) == 1){
+                    UserInfo userInfo = UserInfoParse.getUserInfo(UtilParse.getRequestData(json));
                     if(userInfo != null){
                         SharePrefer.saveUserInfo(MainActivity.this, userInfo);
                     }
@@ -211,6 +211,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void cancelDialog() {
                 tipsDialog.dismiss();
+                startActivity(new Intent(MainActivity.this,CancelOrderSucActivity.class));
             }
 
             @Override

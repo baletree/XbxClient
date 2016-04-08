@@ -56,6 +56,10 @@
             android:theme="@style/AppThemeCustorm"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activity.OrderDetailActivity"
+            android:theme="@style/AppThemeCustorm"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activity.ChoicePeoNumActivity"
             android:theme="@style/DialogStyleBottom"
             android:screenOrientation="portrait" />

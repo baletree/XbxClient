@@ -46,4 +46,26 @@
     <string name="code_tips">请输入验证码</string>
     <string name="myorder_title">我的订单</string>
     <string name="login_fail">登录失效，请重新登录</string>
+    <string name="cancel_success">取消成功</string>
+    <string name="cancel_order">取消订单</string>
+    <string name="cancel_time">取消时间:</string>
+    <string name="cancel_pay">支付金额:</string>
+    <string name="wechat_pay">微信支付</string>
+    <string name="wechat_pay_tips">推荐安装微信6.0及以上版本的使用</string>
+    <string name="alipay_pay">支付宝支付</string>
+    <string name="alipay_pay_tips">推荐有支付宝账号的用户使用</string>
+    <string name="submit_pay">确认支付</string>
+    <string name="order_detail">订单明细</string>
+    <string name="order_time">订单时间</string>
+    <string name="service_time">服务时间</string>
+    <string name="order_state">订单状态</string>
+    <string name="pay_detail">交易明细:</string>
+    <string name="pay_money">消费金额:</string>
+    <string name="pay_tip">小费:</string>
+    <string name="pay_coupon">优惠:</string>
+    <string name="pay_total">总计:</string>
+    <string name="pay_ways">支付方式:</string>
+    <string name="guide_assess">我的评价</string>
+    <string name="Complaints">投诉</string>
+    <string name="order_detail_title">订单详情</string>
 </resources>

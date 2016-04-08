@@ -1,6 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <include layout="@layout/page_title"/>
-</LinearLayout>
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <include layout="@layout/page_title"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dp_twenty_two"
+            android:layout_marginLeft="@dimen/dp_sixteen">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/cancel_suc"/>
+            <TextView
+                style="@style/textView_Black"
+                android:text="@string/cancel_success"
+                android:textSize="@dimen/dp_fifteen"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_twelve"
+            android:layout_marginLeft="@dimen/dp_sixteen"
+            android:layout_marginRight="@dimen/dp_sixteen">
+            <TextView
+                style="@style/textView_Black"
+                android:text="@string/cancel_time"
+                android:textSize="@dimen/dp_fifteen"
+                android:layout_gravity="center_vertical"/>
+            <TextView
+                style="@style/textView_Black"
+                android:text="@string/cancel_time"
+                android:textSize="@dimen/dp_fifteen"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_vertical"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_twelve"
+            android:layout_marginLeft="@dimen/dp_sixteen"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:layout_marginBottom="@dimen/dp_sixteen">
+            <TextView
+                style="@style/textView_Black"
+                android:text="@string/cancel_pay"
+                android:textSize="@dimen/dp_fifteen"
+                android:layout_gravity="center_vertical"/>
+            <TextView
+                style="@style/textView_Black"
+                android:text=""
+                android:textSize="@dimen/dp_fifteen"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/mainCircle2"
+                android:layout_gravity="center_vertical"/>
+        </RelativeLayout>
+        <include layout="@layout/page_pay_layout" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/submit_pay_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_forty_eight"
+        android:layout_margin="@dimen/dp_sixteen"
+        android:layout_alignParentBottom="true"
+        android:text="@string/submit_pay"
+        android:textSize="@dimen/dp_sixteen"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/button_bg"
+        android:layout_gravity="bottom"/>
+</RelativeLayout>

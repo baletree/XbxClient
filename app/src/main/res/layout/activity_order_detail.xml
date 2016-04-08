@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+    <include layout="@layout/page_title"
+        android:id="@+id/or_detail_title"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/or_detail_title">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_sixteen">
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/guide_head_img"
+                    android:layout_width="@dimen/dp_sixty_four"
+                    android:layout_height="@dimen/dp_sixty_four"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_sixteen"
+                    android:src="@mipmap/user_head"
+                    app:riv_oval="true" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_sixteen"
+                    android:layout_toRightOf="@+id/guide_head_img"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/guide_name_tv"
+                        style="@style/textView_Black"
+                        android:text="李晓琪"
+                        android:textSize="@dimen/sp_seventeen" />
+
+                    <TextView
+                        android:id="@+id/guide_code_tv"
+                        style="@style/textView_Black"
+                        android:text="NA125****1541"
+                        android:textSize="@dimen/sp_twelve" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RatingBar
+                            android:id="@+id/guide_ratingbar"
+                            style="@style/roomRatingBar_small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:isIndicator="true"
+                            android:numStars="5"
+                            android:rating="1.9" />
+
+                        <TextView
+                            android:id="@+id/guide_star_tv"
+                            style="@style/textView_Black"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/dp_eight"
+                            android:text="9.7分"
+                            android:textSize="@dimen/sp_twelve" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/user_stroke_tv"
+                        style="@style/textView_Black"
+                        android:text="行程时间：未开始"
+                        android:textSize="@dimen/sp_twelve" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/dp_sixteen"
+                    android:src="@mipmap/not_call_img" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:layout_marginRight="@dimen/dp_sixteen"
+                android:layout_marginTop="@dimen/dp_thirty_one">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_zero_five"
+                    android:layout_centerVertical="true"
+                    android:background="@color/colorLine" />
+
+                <TextView
+                    style="@style/textView_Hint"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/colorBackground"
+                    android:paddingLeft="@dimen/dp_sixteen"
+                    android:paddingRight="@dimen/dp_sixteen"
+                    android:text="@string/order_detail"
+                    android:textSize="@dimen/sp_fifteen" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:layout_marginRight="@dimen/dp_sixteen"
+                android:layout_marginTop="@dimen/dp_sixteen">
+
+                <TextView
+                    style="@style/textView_Black"
+                    android:text="@string/order_state"
+                    android:textSize="@dimen/sp_fifteen" />
+
+                <TextView
+                    style="@style/textView_Black"
+                    android:layout_alignParentRight="true"
+                    android:text="已完成"
+                    android:textSize="@dimen/sp_fifteen" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:layout_marginRight="@dimen/dp_sixteen"
+                android:layout_marginTop="@dimen/dp_ten">
+
+                <TextView
+                    style="@style/textView_Black"
+                    android:text="@string/service_time"
+                    android:textSize="@dimen/sp_fifteen" />
+
+                <TextView
+                    style="@style/textView_Black"
+                    android:layout_alignParentRight="true"
+                    android:text="4月6日-4月7日"
+                    android:textSize="@dimen/sp_fifteen" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_sixteen">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_zero_five"
+                    android:layout_centerVertical="true"
+                    android:background="@color/colorLine" />
+
+                <TextView
+                    style="@style/textView_Hint"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/colorBackground"
+                    android:paddingLeft="@dimen/dp_sixteen"
+                    android:paddingRight="@dimen/dp_sixteen"
+                    android:text="@string/pay_detail"
+                    android:textSize="@dimen/sp_fifteen" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:layout_marginRight="@dimen/dp_sixteen">
+
+                <TextView
+                    style="@style/textView_Black"
+                    android:text="@string/pay_money"
+                    android:textSize="@dimen/sp_fifteen" />
+
+                <TextView
+                    style="@style/textView_Black"
+                    android:layout_alignParentRight="true"
+                    android:text="￥540"
+                    android:textColor="@color/mainCircle2"
+                    android:textSize="@dimen/sp_fifteen" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:layout_marginRight="@dimen/dp_sixteen"
+                android:layout_marginTop="@dimen/dp_ten">
+
+                <TextView
+                    style="@style/textView_Black"
+                    android:text="@string/pay_tip"
+                    android:textSize="@dimen/sp_fifteen" />
+
+                <TextView
+                    style="@style/textView_Black"
+                    android:layout_alignParentRight="true"
+                    android:text="+10"
+                    android:textColor="@color/mainCircle2"
+                    android:textSize="@dimen/sp_fifteen" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:layout_marginRight="@dimen/dp_sixteen"
+                android:layout_marginTop="@dimen/dp_ten">
+
+                <TextView
+                    style="@style/textView_Black"
+                    android:text="@string/pay_coupon"
+                    android:textSize="@dimen/sp_fifteen" />
+
+                <TextView
+                    style="@style/textView_Black"
+                    android:layout_alignParentRight="true"
+                    android:text="-30"
+                    android:textColor="@color/mainCircle2"
+                    android:textSize="@dimen/sp_fifteen" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:layout_marginRight="@dimen/dp_sixteen"
+                android:layout_marginTop="@dimen/dp_ten">
+
+                <TextView
+                    style="@style/textView_Black"
+                    android:text="@string/pay_coupon"
+                    android:textSize="@dimen/sp_fifteen" />
+
+                <TextView
+                    style="@style/textView_Black"
+                    android:layout_alignParentRight="true"
+                    android:text="￥520"
+                    android:textColor="@color/mainCircle2"
+                    android:textSize="@dimen/sp_fifteen" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_sixteen"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:layout_marginRight="@dimen/dp_sixteen">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_zero_five"
+                    android:layout_centerVertical="true"
+                    android:background="@color/colorLine" />
+
+                <TextView
+                    style="@style/textView_Hint"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/colorBackground"
+                    android:paddingLeft="@dimen/dp_sixteen"
+                    android:paddingRight="@dimen/dp_sixteen"
+                    android:text="@string/guide_assess"
+                    android:textSize="@dimen/sp_fifteen" />
+            </RelativeLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorTitle"
+                android:padding="@dimen/dp_four"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:layout_marginRight="@dimen/dp_sixteen"
+                android:layout_marginTop="@dimen/dp_twelve"
+                android:text="该导游很棒，我喜欢！"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/guide_tag_rv"
+                android:layout_width="@dimen/dp_thundred_fifty"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_ten"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_forty_eight"
+                android:layout_margin="@dimen/dp_sixteen"
+                android:text="@string/Complaints"
+                android:textSize="@dimen/sp_fifteen"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/button_bg"/>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

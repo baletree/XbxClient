@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorTitle"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_zero_five"
+        android:background="@color/colorLine" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_forty_eight"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_marginRight="@dimen/dp_sixteen">
+
+        <ImageView
+            android:id="@+id/wechat_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/wechat_pay" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_twenty_four"
+            android:layout_toRightOf="@+id/wechat_img"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/textView_Black"
+                android:text="@string/wechat_pay"
+                android:textSize="@dimen/sp_fourteen" />
+
+            <TextView
+                style="@style/textView_Hint"
+                android:layout_marginTop="@dimen/dp_one"
+                android:text="@string/wechat_pay_tips"
+                android:textSize="@dimen/sp_eleven" />
+        </LinearLayout>
+
+        <RadioButton
+            android:id="@+id/wchat_pay_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/select_pay"
+            android:button="@null" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_zero_five"
+        android:background="@color/colorLinePart" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_forty_eight"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_marginRight="@dimen/dp_sixteen">
+
+        <ImageView
+            android:id="@+id/alipay_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/alipay" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_twenty_four"
+            android:layout_toRightOf="@+id/alipay_img"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/textView_Black"
+                android:text="@string/alipay_pay"
+                android:textSize="@dimen/sp_fourteen" />
+
+            <TextView
+                style="@style/textView_Hint"
+                android:layout_marginTop="@dimen/dp_one"
+                android:text="@string/alipay_pay_tips"
+                android:textSize="@dimen/sp_eleven" />
+        </LinearLayout>
+
+        <RadioButton
+            android:id="@+id/alipay_pay_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/select_pay"
+            android:button="@null" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_zero_five"
+        android:background="@color/colorLine" />
+</LinearLayout>

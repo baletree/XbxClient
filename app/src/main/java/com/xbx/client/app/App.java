@@ -2,6 +2,7 @@ package com.xbx.client.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.baidu.location.BDLocation;
@@ -22,6 +23,9 @@ public class App extends Application {
 	public void onCreate() {
 		super.onCreate();
 		mContext = getApplicationContext();
+		TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String phoneId = tm.getDeviceId();
+		SharePrefer.savePhoneId(mContext,phoneId);
 		SDKInitializer.initialize(this);
 		toLocate();
 	}

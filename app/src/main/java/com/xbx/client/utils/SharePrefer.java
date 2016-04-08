@@ -70,4 +70,18 @@ public class SharePrefer {
         userInfo.setLoginToken(spHelper.getSP("userLoginToken"));
         return userInfo;
     }
+
+    public static void savePhoneId(Context context,String phoneId){
+        SpHelper spHelper = new SpHelper(context, Constant.SPPHONE_ID);
+        if(spHelper == null)
+            return;
+        spHelper.setSP("phoneId", phoneId);
+    }
+
+    public static String getPhoneId(Context context){
+        SpHelper spHelper = new SpHelper(context, Constant.SPPHONE_ID);
+        if (spHelper == null)
+            return "";
+        return spHelper.getSP("phoneId");
+    }
 }
