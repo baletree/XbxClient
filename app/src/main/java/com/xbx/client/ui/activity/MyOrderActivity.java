@@ -1,5 +1,6 @@
 package com.xbx.client.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +22,7 @@ import java.util.List;
  * Created by EricYuan on 2016/4/6.
  * 我的订单
  */
-public class MyOrderActivity extends BaseActivity {
+public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRecyItemClickListener{
     private ImageView title_left_img;
     private TextView title_txt_tv;
     private RecyclerView order_rv;
@@ -70,6 +71,7 @@ public class MyOrderActivity extends BaseActivity {
         order_rv.setItemAnimator(new DefaultItemAnimator());
         myOrderAdapter = new MyOrderAdapter(orderList);
         order_rv.setAdapter(myOrderAdapter);
+        myOrderAdapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -80,5 +82,10 @@ public class MyOrderActivity extends BaseActivity {
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public void onItemClick(View v, int position) {
+        startActivity(new Intent(MyOrderActivity.this,OrderDetailActivity.class));
     }
 }

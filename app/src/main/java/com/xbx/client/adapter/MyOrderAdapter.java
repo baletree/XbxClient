@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xbx.client.R;
@@ -19,7 +20,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
     private OnRecyItemClickListener mOnItemClickListener;
     private List<OrderBean> orderList;
 
-    public MyOrderAdapter(List<OrderBean> orderList){
+    public MyOrderAdapter(List<OrderBean> orderList) {
         this.orderList = orderList;
     }
 
@@ -35,12 +36,19 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         OrderBean orderBean = orderList.get(position);
         holder.order_time_tv.setText(orderBean.getOrderTime());
         holder.order_guidetype_tv.setText(orderBean.getGuideType());
         holder.order_state_tv.setText(orderBean.getOrderState());
         holder.order_address_tv.setText(orderBean.getOrderAddress());
+        holder.order_item_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnItemClickListener != null)
+                    mOnItemClickListener.onItemClick(v, position);
+            }
+        });
     }
 
     @Override
@@ -49,6 +57,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+        private RelativeLayout order_item_layout;
         private TextView order_time_tv;
         private TextView order_guidetype_tv;
         private TextView order_state_tv;
@@ -56,6 +65,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            order_item_layout = (RelativeLayout) itemView.findViewById(R.id.order_item_layout);
             order_time_tv = (TextView) itemView.findViewById(R.id.order_time_tv);
             order_guidetype_tv = (TextView) itemView.findViewById(R.id.order_guidetype_tv);
             order_state_tv = (TextView) itemView.findViewById(R.id.order_state_tv);

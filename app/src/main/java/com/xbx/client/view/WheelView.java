@@ -90,10 +90,7 @@ public class WheelView extends ScrollView {
 
     private void init(Context context) {
         this.context = context;
-//        scrollView = ((ScrollView)this.getParent());
-//        Log.d(TAG, "scrollview: " + scrollView);
         Log.d(TAG, "parent: " + this.getParent());
-//        this.setOrientation(VERTICAL);
         this.setVerticalScrollBarEnabled(false);
 
         views = new LinearLayout(context);
@@ -351,7 +348,6 @@ public class WheelView extends ScrollView {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
-
     private int getViewMeasuredHeight(View view) {
         int width = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);

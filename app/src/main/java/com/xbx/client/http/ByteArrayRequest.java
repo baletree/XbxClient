@@ -15,6 +15,9 @@ import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.xbx.client.app.App;
+import com.xbx.client.utils.SharePrefer;
+import com.xbx.client.utils.Util;
 
 /**
  * 小袁
@@ -54,6 +57,8 @@ class ByteArrayRequest extends Request<byte[]> {
         Map<String, String> headers = super.getHeaders();
         if (null == headers || headers.equals(Collections.emptyMap())) {
             headers = new HashMap<String, String>();
+            headers.put("deviceid", SharePrefer.getPhoneId(App.getContext()));
+//            Util.pLog("deviceid:"+SharePrefer.getPhoneId(App.getContext()));
         }
         return headers;
     }
