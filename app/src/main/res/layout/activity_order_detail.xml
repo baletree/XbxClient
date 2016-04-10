@@ -282,12 +282,19 @@
                 android:layout_marginRight="@dimen/dp_sixteen"
                 android:layout_marginTop="@dimen/dp_twelve"
                 android:text="该导游很棒，我喜欢！"/>
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/guide_tag_rv"
+            <LinearLayout
+                android:id="@+id/guide_tag_ll"
                 android:layout_width="@dimen/dp_thundred_fifty"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_ten"/>
+                android:layout_marginTop="@dimen/dp_ten"
+                android:orientation="vertical"></LinearLayout>
+            <com.xbx.client.view.FlowLayout
+                android:id="@+id/guide_tag_flayout"
+                android:layout_width="@dimen/dp_thundred_fifty"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_ten"
+                android:layout_height="wrap_content"/>
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_forty_eight"

@@ -82,6 +82,8 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
         super.onClick(v);
+        login_phone_et.setText("18602854129");
+        login_code_et.setText("147248");
         String phone = login_phone_et.getText().toString();
         String code = login_code_et.getText().toString();
         switch (v.getId()) {
@@ -94,8 +96,8 @@ public class LoginActivity extends BaseActivity {
                     Util.showToast(LoginActivity.this, getString(R.string.code_tips));
                     return;
                 }
-//                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                toLogin(phone, code);
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                toLogin(phone, code);
                 break;
             case R.id.login_code_btn:
                 if (Util.isNull(phone)) {

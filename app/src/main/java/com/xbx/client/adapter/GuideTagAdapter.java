@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xbx.client.R;
+import com.xbx.client.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +39,24 @@ public class GuideTagAdapter extends RecyclerView.Adapter<GuideTagAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        /*ViewGroup.LayoutParams params =  holder.itemView.getLayoutParams();//得到item的
-        params.width = weightList.get(position);//把随机的高度赋予item布局
-        holder.itemView.setLayoutParams(params);//把params设置给item布局*/
+        if(!Util.isNull(tagList.get(position))){
+            ViewGroup.LayoutParams params =  holder.itemView.getLayoutParams();//得到item的
+            switch (tagList.get(position).length()){
+                case 1:
+                case 2:
+                    params.width = 170;
+                    break;
+                case 3:
+                    params.width = 200;
+                    break;
+                case 4:
+                    params.width = 300;
+                    break;
+                default:
+                    params.width = 360;
+            }
+            holder.itemView.setLayoutParams(params);//把params设置给item布局
+        }
         holder.guide_tag_tv.setText(tagList.get(position));
     }
 
@@ -53,7 +69,7 @@ public class GuideTagAdapter extends RecyclerView.Adapter<GuideTagAdapter.MyView
         private TextView guide_tag_tv;
         public MyViewHolder(View itemView) {
             super(itemView);
-            guide_tag_tv = (TextView) itemView.findViewById(R.id.guide_tag_tv);
+//            guide_tag_tv = (TextView) itemView.findViewById(R.id.guide_tag_tv);
         }
     }
 }
