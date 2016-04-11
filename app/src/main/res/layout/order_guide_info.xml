@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_sixteen">
+
+    <RelativeLayout
+        android:id="@+id/guide_head_layout"
+        android:layout_width="@dimen/dp_sixty_four"
+        android:layout_height="@dimen/dp_sixty_four"
+        android:layout_marginLeft="@dimen/dp_sixteen">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/guide_head_img"
+            android:layout_width="@dimen/dp_sixty_four"
+            android:layout_height="@dimen/dp_sixty_four"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/user_head"
+            app:riv_oval="true" />
+
+        <TextView
+            android:layout_width="@dimen/dp_nineteen"
+            android:layout_height="@dimen/dp_nineteen"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/guide_type_bg"
+            android:textColor="@color/colorWhite" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_toRightOf="@+id/guide_head_layout"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/guide_name_tv"
+            style="@style/textView_Black"
+            android:text="李晓琪"
+            android:textSize="@dimen/sp_seventeen" />
+
+        <TextView
+            android:id="@+id/guide_code_tv"
+            style="@style/textView_Black"
+            android:text="NA125****1541"
+            android:textSize="@dimen/sp_twelve" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RatingBar
+                android:id="@+id/guide_ratingbar"
+                style="@style/roomRatingBar_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:rating="1.9" />
+
+            <TextView
+                android:id="@+id/guide_star_tv"
+                style="@style/textView_Black"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_eight"
+                android:text="9.7分"
+                android:textSize="@dimen/sp_twelve" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/user_stroke_tv"
+            style="@style/textView_Black"
+            android:text="行程时间：未开始"
+            android:textSize="@dimen/sp_twelve" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp_sixteen"
+        android:src="@mipmap/not_call_img" />
+</RelativeLayout>
