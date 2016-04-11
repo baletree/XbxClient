@@ -36,6 +36,11 @@ import com.xbx.client.utils.Util;
 import com.xbx.client.view.BanSlideViewpager;
 import com.xbx.client.view.TipsDialog;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import cn.jpush.android.api.JPushInterface;
+
 public class MainActivity extends BaseActivity {
     /**
      * 控件名称定义
@@ -74,9 +79,14 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initDatas() {
         super.initDatas();
-        isFromLogin = getIntent().getBooleanExtra("isFromLoin",false);
-        if(!isFromLogin)
+        isFromLogin = getIntent().getBooleanExtra("isFromLoin", false);
+        if (!isFromLogin)
             checkLoginState();
+        String registerId = JPushInterface.getRegistrationID(this);
+        Set<String> tagSet = new LinkedHashSet<String>();
+        tagSet.add(registerId);
+        JPushInterface.setTags(this,tagSet,null);
+        Util.pLog("RegisterId:" + registerId);
     }
 
     @Override
@@ -161,7 +171,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void checkLoginState(){
+    private void checkLoginState() {
         String postUrl = getString(R.string.url_conIp).concat(getString(R.string.url_Login));
         RequestParams params = new RequestParams();
         UserInfo userInfo = SharePrefer.getUserInfo(MainActivity.this);
@@ -169,21 +179,30 @@ public class MainActivity extends BaseActivity {
         params.put("password", userInfo.getLoginToken());
         params.put("user_type", "0");//代表用户端
 //        Util.pLog("Login phone=" + userInfo.getUserPhone()+" token:"+userInfo.getLoginToken());
-        IRequest.post(this, postUrl, params , new RequestBackLisener(MainActivity.this) {
+        IRequest.post(this, postUrl, params, new RequestBackLisener(MainActivity.this) {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("Login check Result=" + json);
-                if(UtilParse.getRequestCode(json) == 0){
+                if (UtilParse.getRequestCode(json) == 0) {
                     Util.showToast(MainActivity.this, getString(R.string.login_fail));
-                    SharePrefer.saveUserInfo(MainActivity.this,new UserInfo());
+                    SharePrefer.saveUserInfo(MainActivity.this, new UserInfo());
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
-                }else if(UtilParse.getRequestCode(json) == 1){
+                } else if (UtilParse.getRequestCode(json) == 1) {
                     UserInfo userInfo = UserInfoParse.getUserInfo(UtilParse.getRequestData(json));
-                    if(userInfo != null){
+                    if (userInfo != null) {
                         SharePrefer.saveUserInfo(MainActivity.this, userInfo);
                     }
                 }
+            }
+        });
+
+        String testUrl = "http://192.168.1.24/yueyou/Api/Index/guide_my_order.json?uid=19";
+        IRequest.get(this,testUrl,new RequestBackLisener(this){
+            @Override
+            public void requestSuccess(String json) {
+                super.requestSuccess(json);
+                Util.pLog("Test Shuzhe:" + json);
             }
         });
     }
@@ -199,19 +218,19 @@ public class MainActivity extends BaseActivity {
                 initDialog();
                 break;
             case R.id.menu_order_layout:
-                startActivity(new Intent(MainActivity.this,MyOrderActivity.class));
+                startActivity(new Intent(MainActivity.this, MyOrderActivity.class));
                 toggleLeftLayout();
                 break;
         }
     }
 
-    private void initDialog(){
+    private void initDialog() {
         tipsDialog = new TipsDialog(MainActivity.this);
         tipsDialog.setClickListener(new TipsDialog.DialogClickListener() {
             @Override
             public void cancelDialog() {
                 tipsDialog.dismiss();
-                startActivity(new Intent(MainActivity.this,CancelOrderSucActivity.class));
+                startActivity(new Intent(MainActivity.this, CancelOrderSucActivity.class));
             }
 
             @Override

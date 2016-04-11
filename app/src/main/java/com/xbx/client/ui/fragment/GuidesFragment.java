@@ -101,6 +101,7 @@ public class GuidesFragment extends BaseFragment implements
     private String guideInfoUrl = "";
     private boolean isVisibaleTouser = false;
     private boolean isInOrder = false;
+    private String uid = "";
 
 
     private Handler handler = new Handler() {
@@ -109,9 +110,14 @@ public class GuidesFragment extends BaseFragment implements
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    if (isVisibaleTouser && !isInOrder)
-                        api.getNearGuide(currentLalng, nearGuideUrl);
-                    handler.sendEmptyMessageDelayed(1, 6000);
+                    if (isVisibaleTouser && !isInOrder){
+                        LatLng cLatlng = SharePrefer.getLatlng(getActivity());
+                        if(cLatlng == null)
+                            return;
+                        currentLalng = cLatlng;
+                        api.getNearGuide(currentLalng, nearGuideUrl, uid);
+                        handler.sendEmptyMessageDelayed(1, 6000);
+                    }
                     break;
                 case 10:
                     if (loadingFragment != null) {
@@ -126,11 +132,11 @@ public class GuidesFragment extends BaseFragment implements
                     break;
                 case TaskFlag.REQUESTSUCCESS:
                     String guideData = (String) msg.obj;
-                    if(Util.isNull(guideData))
+                    if (Util.isNull(guideData))
                         return;
-                    switch (GuideParse.getDataType(UtilParse.getRequestData(guideData))) {
+                    switch (GuideParse.getDataType(guideData)) {
                         case 1://导游
-                            guideList = GuideParse.getGuideList(UtilParse.getRequestData(guideData));
+                            guideList = GuideParse.getGuideList(guideData);
                             if (guideList == null)
                                 return;
                             addOverlyGuide();
@@ -178,7 +184,8 @@ public class GuidesFragment extends BaseFragment implements
 
     @Override
     protected void initDatas() {
-        api = new Api(getActivity(),handler);
+        uid = SharePrefer.getUserInfo(getActivity()).getUid();
+        api = new Api(getActivity(), handler);
         bdMyself = BitmapDescriptorFactory
                 .fromResource(R.mipmap.myself_locate);
         guideBdp = BitmapDescriptorFactory
@@ -403,19 +410,16 @@ public class GuidesFragment extends BaseFragment implements
             }
             MyLocationData locData = new MyLocationData.Builder()
                     .accuracy(location.getRadius())
-                            // 此处设置开发者获取到的方向信息，顺时针0-360
+                    // 此处设置开发者获取到的方向信息，顺时针0-360
                     .direction(100).latitude(location.getLatitude())
                     .longitude(location.getLongitude()).build();
             mBaiduMap.setMyLocationData(locData);
+            SharePrefer.saveLatlng(getActivity(), location.getLongitude() + "", location.getLatitude() + "");
             if (isFirstLoc && !Util.isNull(location.getAddrStr())) {
                 Util.pLog("LocateLisen:" + location.getLatitude() + "," + location.getLongitude() + " adr:" + location.getAddrStr() + " isFirstLoc:" + isFirstLoc);
                 isFirstLoc = false;
                 LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-                if (currentLalng == null) {
-                    currentLalng = ll;
-                    handler.sendEmptyMessage(1);
-                }
-                currentLalng = ll;
+                handler.sendEmptyMessage(1);
                 geoCoder.reverseGeoCode(new ReverseGeoCodeOption()
                         .location(ll));
                 MapStatus mMapstatus = new MapStatus.Builder().target(ll).zoom(15f)
@@ -434,7 +438,9 @@ public class GuidesFragment extends BaseFragment implements
         }
     }
 
-    /**将附近的导游添加到地图上*/
+    /**
+     * 将附近的导游添加到地图上
+     */
     private void addOverlyGuide() {
         mBaiduMap.clear();
         for (int i = 0; i < guideList.size(); i++) {
@@ -446,7 +452,7 @@ public class GuidesFragment extends BaseFragment implements
         }
     }
 
-    private void setMyGuideInfo(){
+    private void setMyGuideInfo() {
 
     }
 }

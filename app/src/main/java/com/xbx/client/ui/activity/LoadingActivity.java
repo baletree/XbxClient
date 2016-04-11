@@ -10,6 +10,8 @@ import com.xbx.client.beans.UserInfo;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.Util;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * Created by EricYuan on 2016/4/6.
  */

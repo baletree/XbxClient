@@ -65,7 +65,16 @@
     <string name="pay_coupon">优惠:</string>
     <string name="pay_total">总计:</string>
     <string name="pay_ways">支付方式:</string>
+    <string name="pay_alipay">支付宝支付</string>
+    <string name="pay_wechat">微信支付</string>
     <string name="guide_assess">我的评价</string>
     <string name="Complaints">投诉</string>
     <string name="order_detail_title">订单详情</string>
+    <string name="order_immedia_pay">订单支付</string>
+    <string name="reservat_info">预订信息</string>
+    <string name="reservat_name">昵称</string>
+    <string name="reservat_start_adr">出发地</string>
+    <string name="reservat_end_adr">目的地</string>
+    <string name="reservat_start_adr_hint">填写出发地址</string>
+    <string name="reservat_end_adr_hint">填写目的地址</string>
 </resources>

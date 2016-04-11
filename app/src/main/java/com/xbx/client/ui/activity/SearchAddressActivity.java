@@ -11,44 +11,39 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.search.core.PoiInfo;
-import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
-import com.baidu.mapapi.search.poi.PoiCitySearchOption;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
+import com.baidu.mapapi.search.poi.PoiDetailSearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
 import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.baidu.mapapi.search.sug.SuggestionSearch;
+import com.baidu.mapapi.search.sug.SuggestionSearchOption;
 import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 import com.xbx.client.R;
 import com.xbx.client.adapter.SearchResultAdapter;
-import com.xbx.client.utils.Constant;
+import com.xbx.client.beans.PoiResultBean;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.RecycleViewDivider;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by EricYuan on 2016/3/31.
  * 搜索地址
  */
 public class SearchAddressActivity extends BaseActivity implements
-        OnGetPoiSearchResultListener, OnGetSuggestionResultListener, OnGetGeoCoderResultListener,SearchResultAdapter.OnRecyItemClickListener {
+        OnGetPoiSearchResultListener, OnGetSuggestionResultListener, OnGetGeoCoderResultListener, SearchResultAdapter.OnRecyItemClickListener {
     private RelativeLayout search_back_layout;
     private EditText search_input_et;
     private TextView search_cancel_tv;
@@ -59,9 +54,10 @@ public class SearchAddressActivity extends BaseActivity implements
     private GeoCoder geoCoder = null;
     private LinearLayoutManager layoutManager = null;
     private int searchCode = 0;
+    private int resultCount = 0;
+    private int count = 0;
 
-    private List<PoiInfo> poiList = null;
-
+    private List<PoiResultBean> poiReultList = null;
     private SearchResultAdapter searchResultAdapter = null;
 
     @Override
@@ -81,7 +77,8 @@ public class SearchAddressActivity extends BaseActivity implements
         geoCoder = GeoCoder.newInstance();
         geoCoder.setOnGetGeoCodeResultListener(this);
         layoutManager = new LinearLayoutManager(this);
-        searchCode = getIntent().getIntExtra("guide_code",0);
+        searchCode = getIntent().getIntExtra("guide_code", 0);
+        poiReultList = new ArrayList<>();
     }
 
     @Override
@@ -141,12 +138,13 @@ public class SearchAddressActivity extends BaseActivity implements
                 /**
                  * 使用建议搜索服务获取建议列表，结果在onSuggestionResult()中更新
                  */
-                /*mSuggestionSearch
-                        .requestSuggestion((new SuggestionSearchOption())
-                                .keyword(cs.toString()).city(city));*/
-                Util.pLog("keywords:"+cs.toString());
-                mPoiSearch.searchInCity((new PoiCitySearchOption()).city(city)
-                        .keyword(cs.toString()));
+                count = 0;
+                poiReultList = new ArrayList<PoiResultBean>();
+                locate_rv.setAdapter(null);
+                SuggestionSearchOption suggestOption = new SuggestionSearchOption();
+                suggestOption.keyword(cs.toString());
+                suggestOption.city(city);
+                mSuggestionSearch.requestSuggestion(suggestOption);
             }
         });
     }
@@ -173,27 +171,37 @@ public class SearchAddressActivity extends BaseActivity implements
 
     @Override
     public void onGetPoiResult(PoiResult poiResult) {
-        if (poiResult.error == SearchResult.ERRORNO.NO_ERROR) {
-            poiList = poiResult.getAllPoi();
-            if (poiList != null && poiList.size() != 0) {
-                searchResultAdapter = new SearchResultAdapter(SearchAddressActivity.this, poiList);
+
+    }
+
+    @Override
+    public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
+        count++;
+        Util.pLog("poiResult:" + "poiResult===地址：" + poiDetailResult.getAddress() + "  名字：" + poiDetailResult.getName() + "  count="+count+"  resultCount="+resultCount);
+        PoiResultBean poiResult = new PoiResultBean();
+        poiReultList.add(poiResult);
+        if (count == resultCount) {
+            if (poiReultList != null && poiReultList.size() > 0) {
+                searchResultAdapter = new SearchResultAdapter(SearchAddressActivity.this, poiReultList);
                 locate_rv.setAdapter(searchResultAdapter);
-                searchResultAdapter.setOnItemClickListener(SearchAddressActivity.this);
-                for (PoiInfo poiInfo : poiList) {
-                    Util.pLog("poiResult:" + "poi===城市：" + poiInfo.city + "名字：" + poiInfo.name + "地址：");
-                }
             }
         }
     }
 
     @Override
-    public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
-
-    }
-
-    @Override
     public void onGetSuggestionResult(SuggestionResult suggestionResult) {
-
+        if (suggestionResult == null)
+            return;
+        if (suggestionResult.getAllSuggestions() != null)
+            resultCount = suggestionResult.getAllSuggestions().size();
+        PoiDetailSearchOption detailOption = new PoiDetailSearchOption();
+        for (SuggestionResult.SuggestionInfo info : suggestionResult.getAllSuggestions()) {
+            if (info.uid != null) {
+                Util.pLog("SuggestResult:" + info.city + "  key:" + info.key + "  uid:" + info.uid + "  disrect" + info.district);
+                detailOption.poiUid(info.uid);
+                mPoiSearch.searchPoiDetail(detailOption);
+            }
+        }
     }
 
 
@@ -209,7 +217,7 @@ public class SearchAddressActivity extends BaseActivity implements
 
     @Override
     public void onItemClick(View v, int position) {
-        if(poiList != null){
+        /*if(poiList != null){
             Intent intent = new Intent();
             switch (searchCode){
                 case Constant.outsetFlag:
@@ -219,8 +227,9 @@ public class SearchAddressActivity extends BaseActivity implements
                     intent.putExtra("destResult",poiList.get(position));
                     break;
             }
-            setResult(RESULT_OK,intent);
-            finish();
-        }
+        }*/
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

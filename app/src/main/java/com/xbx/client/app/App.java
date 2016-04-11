@@ -15,6 +15,8 @@ import com.xbx.client.utils.MapLocate;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.Util;
 
+import cn.jpush.android.api.JPushInterface;
+
 public class App extends Application {
 	private static Context mContext;
 	private MapLocate mapLocate = null;
@@ -27,6 +29,8 @@ public class App extends Application {
 		String phoneId = tm.getDeviceId();
 		SharePrefer.savePhoneId(mContext,phoneId);
 		SDKInitializer.initialize(this);
+		JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
+		JPushInterface.init(mContext);     		// 初始化 JPush
 		toLocate();
 	}
 

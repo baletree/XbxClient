@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_marginRight="@dimen/dp_sixteen">
+
+        <TextView
+            style="@style/textView_Black"
+            android:text="@string/pay_money"
+            android:textSize="@dimen/sp_fifteen" />
+
+        <TextView
+            style="@style/textView_Black"
+            android:layout_alignParentRight="true"
+            android:text="￥540"
+            android:textColor="@color/mainCircle2"
+            android:textSize="@dimen/sp_fifteen" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_marginRight="@dimen/dp_sixteen"
+        android:layout_marginTop="@dimen/dp_ten">
+
+        <TextView
+            style="@style/textView_Black"
+            android:text="@string/pay_tip"
+            android:textSize="@dimen/sp_fifteen" />
+
+        <TextView
+            style="@style/textView_Black"
+            android:layout_alignParentRight="true"
+            android:text="+10"
+            android:textColor="@color/mainCircle2"
+            android:textSize="@dimen/sp_fifteen" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_marginRight="@dimen/dp_sixteen"
+        android:layout_marginTop="@dimen/dp_ten">
+
+        <TextView
+            style="@style/textView_Black"
+            android:text="@string/pay_coupon"
+            android:textSize="@dimen/sp_fifteen" />
+
+        <TextView
+            style="@style/textView_Black"
+            android:layout_alignParentRight="true"
+            android:text="-30"
+            android:textColor="@color/mainCircle2"
+            android:textSize="@dimen/sp_fifteen" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_marginRight="@dimen/dp_sixteen"
+        android:layout_marginTop="@dimen/dp_ten">
+
+        <TextView
+            style="@style/textView_Black"
+            android:text="@string/pay_total"
+            android:textSize="@dimen/sp_fifteen" />
+
+        <TextView
+            style="@style/textView_Black"
+            android:layout_alignParentRight="true"
+            android:text="￥520"
+            android:textColor="@color/mainCircle2"
+            android:textSize="@dimen/sp_fifteen" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_marginRight="@dimen/dp_sixteen"
+        android:layout_marginTop="@dimen/dp_ten">
+
+        <TextView
+            style="@style/textView_Black"
+            android:text="@string/pay_ways"
+            android:textSize="@dimen/sp_fifteen" />
+
+        <TextView
+            style="@style/textView_Black"
+            android:layout_alignParentRight="true"
+            android:text="@string/pay_wechat"
+            android:textSize="@dimen/sp_fifteen" />
+    </RelativeLayout>
+</LinearLayout>

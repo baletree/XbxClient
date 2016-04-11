@@ -9,6 +9,7 @@ public class Constant {
     public static final String SPUSER_PHONE = "user_phone";
     public static final String SPUSER_INFO = "user_info";
     public static final String SPPHONE_ID = "phone_id";
+    public static final String SPUSER_LATLNG = "user_latlng";
     public static final int outsetFlag = 100;
     public static final int destFlag = 101;
     public static final String ACTION_GCANCELORD = "com.xbx.client.guide.cancel.order";

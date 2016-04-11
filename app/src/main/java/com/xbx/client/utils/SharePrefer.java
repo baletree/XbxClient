@@ -2,6 +2,7 @@ package com.xbx.client.utils;
 
 import android.content.Context;
 
+import com.baidu.mapapi.model.LatLng;
 import com.xbx.client.beans.LocationBean;
 import com.xbx.client.beans.UserInfo;
 
@@ -27,8 +28,27 @@ public class SharePrefer {
         locationBean.setLon(spHelper.getSP("loc_lon"));
         locationBean.setLat(spHelper.getSP("loc_lat"));
         locationBean.setCity(spHelper.getSP("loc_city"));
-
         return locationBean;
+    }
+
+    public static void saveLatlng(Context context, String longitude,String latitude){
+        SpHelper spHelper = new SpHelper(context, Constant.SPUSER_LATLNG);
+        if (spHelper == null)
+            return;
+        spHelper.setSP("user_loc_lon", longitude); // 经度
+        spHelper.setSP("user_loc_lat", latitude); // 纬度
+    }
+
+    public static LatLng getLatlng(Context context){
+        SpHelper spHelper = new SpHelper(context, Constant.SPUSER_LATLNG);
+        if (spHelper == null)
+            return null;
+        String lon = spHelper.getSP("user_loc_lon");
+        String lat = spHelper.getSP("user_loc_lat");
+        if(!Util.isNull(lon) && !Util.isNull(lat)){
+            return new LatLng(Double.parseDouble(lat),Double.parseDouble(lon));
+        }
+        return null;
     }
 
     public static void savePhone(Context context, String phone){

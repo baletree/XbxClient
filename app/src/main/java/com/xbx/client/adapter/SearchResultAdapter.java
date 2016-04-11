@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.xbx.client.R;
+import com.xbx.client.beans.PoiResultBean;
 
 import java.util.List;
 
@@ -18,13 +19,13 @@ import java.util.List;
  */
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.MyViewHolder>{
     private Context context;
-    private List<PoiInfo> poiList;
+    private List<PoiResultBean> poiResultList;
 
     private OnRecyItemClickListener mOnItemClickListener;
 
-    public SearchResultAdapter(Context context,List<PoiInfo> poiList){
+    public SearchResultAdapter(Context context,List<PoiResultBean> poiResultList){
         this.context = context;
-        this.poiList = poiList;
+        this.poiResultList = poiResultList;
     }
 
     public void setOnItemClickListener(OnRecyItemClickListener onItemClickListener) {
@@ -40,9 +41,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        final PoiInfo poiInfo = poiList.get(position);
-        holder.search_name.setText(poiInfo.name);
-        holder.search_address.setText(poiInfo.address);
+        final PoiResultBean poiInfo = poiResultList.get(position);
+        holder.search_name.setText(poiInfo.getPoiKey());
+        holder.search_address.setText(poiInfo.getPoiAddress());
         holder.search_item_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +55,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     @Override
     public int getItemCount() {
-        return poiList.size();
+        return poiResultList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

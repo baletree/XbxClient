@@ -9,6 +9,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.xbx.client.R;
 import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.utils.RequestBackLisener;
+import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 
@@ -19,6 +20,8 @@ public class Api {
     private Handler mHandler;
     private Context context;
 
+    boolean isFirst = true;
+
     public Api(Context context, Handler mHandler) {
         this.context = context;
         this.mHandler = mHandler;
@@ -26,20 +29,25 @@ public class Api {
     /**
      * 获取附近的导游
      */
-    public void getNearGuide(LatLng currentLalng, String nearGuideUrl) {
+    public void getNearGuide(LatLng currentLalng, String nearGuideUrl,String uid) {
         if (currentLalng == null)
             return;
         if(context == null)
             return;
+
         RequestParams params = new RequestParams();
         params.put("lon", currentLalng.longitude + "");
         params.put("lat", currentLalng.latitude + "");
+        params.put("uid", uid);
 //        Util.pLog("lon:"+currentLalng.longitude+" lat:"+currentLalng.latitude);
         IRequest.post(context, nearGuideUrl, params, new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 super.requestSuccess(json);
-//                Util.pLog("guideList:" + json);
+                if(isFirst){
+                    Util.pLog("MainguideList:" + json);
+                    isFirst = false;
+                }
                 sendMsg(TaskFlag.REQUESTSUCCESS, json);
             }
             @Override
