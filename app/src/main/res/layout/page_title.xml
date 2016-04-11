@@ -28,7 +28,9 @@
     <TextView
         android:id="@+id/title_rtxt_tv"
         style="@style/textView_White"
-        android:textSize="@dimen/sp_eighteen"
+        android:textSize="@dimen/sp_fifteen"
+        android:padding="@dimen/dp_eight"
+        android:layout_marginRight="@dimen/dp_eight"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"/>
 </RelativeLayout>

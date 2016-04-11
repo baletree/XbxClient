@@ -77,4 +77,12 @@
     <string name="reservat_end_adr">目的地</string>
     <string name="reservat_start_adr_hint">填写出发地址</string>
     <string name="reservat_end_adr_hint">填写目的地址</string>
+    <string name="reservat_Sun">日</string>
+    <string name="reservat_Mon">一</string>
+    <string name="reservat_Tues">二</string>
+    <string name="reservat_Wends">三</string>
+    <string name="reservat_Thurs">四</string>
+    <string name="reservat_Friday">五</string>
+    <string name="reservat_Satur">六</string>
+    <string name="choice_guide">选择导游</string>
 </resources>

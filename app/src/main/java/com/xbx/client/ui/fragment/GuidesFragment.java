@@ -41,6 +41,7 @@ import com.xbx.client.http.Api;
 import com.xbx.client.jsonparse.GuideParse;
 import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.ui.activity.ChoicePeoNumActivity;
+import com.xbx.client.ui.activity.ReservatGuideActivity;
 import com.xbx.client.ui.activity.SearchAddressActivity;
 import com.xbx.client.utils.Constant;
 import com.xbx.client.utils.SharePrefer;
@@ -344,7 +345,8 @@ public class GuidesFragment extends BaseFragment implements
                 startActivityForResult(intent, destReques);
                 break;
             case R.id.guide_reserve_rl://预约导游
-
+                intent.setClass(getActivity(),ReservatGuideActivity.class);
+                startActivity(intent);
                 break;
             case R.id.guide_call_rl:
                 intent.setClass(getActivity(), ChoicePeoNumActivity.class);

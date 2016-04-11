@@ -4,22 +4,174 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:orientation="vertical">
-    <include layout="@layout/page_title"/>
+
+    <include layout="@layout/page_title" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_zero_five"
-        android:background="@color/colorLine"
-        android:layout_marginTop="@dimen/dp_sixteen"/>
+        android:layout_marginTop="@dimen/dp_sixteen"
+        android:background="@color/colorLine" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/colorWhite">
+        android:background="@color/colorWhite"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_eight"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/dp_sixty"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:text="@string/reservat_name"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_fifteen" />
+
+            <TextView
+                android:id="@+id/user_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:text="18602854129"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_fifteen" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_zero_five"
+            android:layout_marginLeft="@dimen/dp_sixteen"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:background="@color/colorLinePart" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_eight"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/dp_sixty"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:text="@string/reservat_start_adr"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_fifteen" />
+
+            <TextView
+                android:id="@+id/user_setoff_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:hint="@string/reservat_start_adr_hint"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_fifteen" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_zero_five"
+            android:layout_marginLeft="@dimen/dp_sixteen"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:background="@color/colorLinePart" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_eight"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/dp_sixty"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:text="@string/reservat_end_adr"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_fifteen" />
+
+            <TextView
+                android:id="@+id/user_destination_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:hint="@string/reservat_end_adr_hint"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_fifteen" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_zero_five"
+            android:background="@color/colorLine" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_sixteen"
+        android:background="@color/colorWhite"
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_forty_eight"
             android:orientation="horizontal">
-
+            <TextView
+                android:layout_width="@dimen/dp_zero"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/colorTheme"
+                android:textSize="@dimen/sp_fifteen"
+                android:text="@string/reservat_Sun"/>
+            <TextView
+                android:layout_width="@dimen/dp_zero"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/colorTheme"
+                android:textSize="@dimen/sp_fifteen"
+                android:text="@string/reservat_Mon"/>
+            <TextView
+                android:layout_width="@dimen/dp_zero"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/colorTheme"
+                android:textSize="@dimen/sp_fifteen"
+                android:text="@string/reservat_Tues"/>
+            <TextView
+                android:layout_width="@dimen/dp_zero"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/colorTheme"
+                android:textSize="@dimen/sp_fifteen"
+                android:text="@string/reservat_Wends"/>
+            <TextView
+                android:layout_width="@dimen/dp_zero"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/colorTheme"
+                android:textSize="@dimen/sp_fifteen"
+                android:text="@string/reservat_Thurs"/>
+            <TextView
+                android:layout_width="@dimen/dp_zero"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/colorTheme"
+                android:textSize="@dimen/sp_fifteen"
+                android:text="@string/reservat_Friday"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -33,7 +33,7 @@
                     android:textSize="@dimen/sp_twelve"
                     android:gravity="center"
                     android:layout_gravity="center_vertical"
-                    android:background="@drawable/guide_type_bg"
+                    android:background="@drawable/order_guide_type_bg"
                     android:text="随游"/>
             </LinearLayout>
             <TextView
