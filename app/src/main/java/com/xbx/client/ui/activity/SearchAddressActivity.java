@@ -14,11 +14,13 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
+import com.baidu.mapapi.search.poi.PoiCitySearchOption;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
 import com.baidu.mapapi.search.poi.PoiDetailSearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
@@ -131,20 +133,24 @@ public class SearchAddressActivity extends BaseActivity implements
                 if (cs.length() <= 0) {
                     return;
                 }
-                String city = SharePrefer.getLocate(SearchAddressActivity.this).getCity();
+//                String city = SharePrefer.getLocate(SearchAddressActivity.this).getCity();
+                String city = "阜阳市";
                 if (Util.isNull(city)) {
                     return;
                 }
                 /**
                  * 使用建议搜索服务获取建议列表，结果在onSuggestionResult()中更新
                  */
-                count = 0;
-                poiReultList = new ArrayList<PoiResultBean>();
-                locate_rv.setAdapter(null);
-                SuggestionSearchOption suggestOption = new SuggestionSearchOption();
+                /*SuggestionSearchOption suggestOption = new SuggestionSearchOption();
                 suggestOption.keyword(cs.toString());
                 suggestOption.city(city);
-                mSuggestionSearch.requestSuggestion(suggestOption);
+                mSuggestionSearch.requestSuggestion(suggestOption);*/
+
+                PoiCitySearchOption poiCityOption = new PoiCitySearchOption();
+                poiCityOption.city(city);
+                poiCityOption.keyword(cs.toString());
+                poiCityOption.pageCapacity(50);
+                mPoiSearch.searchInCity(poiCityOption);
             }
         });
     }
@@ -171,13 +177,21 @@ public class SearchAddressActivity extends BaseActivity implements
 
     @Override
     public void onGetPoiResult(PoiResult poiResult) {
-
+        List<PoiInfo> poiList = poiResult.getAllPoi();
+        if(poiList == null)
+            return;
+        else
+            Util.pLog("poiList is null");
+        for (int i = 0; i < poiList.size(); i++) {
+            PoiInfo poiInfo = poiList.get(i);
+            Util.pLog("poiResult:" + "名称：" + poiInfo.name + " 地址：" + poiInfo.address);
+        }
     }
 
     @Override
     public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
         count++;
-        Util.pLog("poiResult:" + "poiResult===地址：" + poiDetailResult.getAddress() + "  名字：" + poiDetailResult.getName() + "  count="+count+"  resultCount="+resultCount);
+        Util.pLog("poiResult:" + "poiResult===地址：" + poiDetailResult.getAddress() + "  名字：" + poiDetailResult.getName() + "  count=" + count + "  resultCount=" + resultCount);
         PoiResultBean poiResult = new PoiResultBean();
         poiReultList.add(poiResult);
         if (count == resultCount) {
