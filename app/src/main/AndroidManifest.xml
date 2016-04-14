@@ -80,9 +80,33 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeCustorm" />
         <activity
+            android:name=".ui.activity.ImmediatePayActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeCustorm" />
+        <activity
+            android:name=".ui.activity.SubCommentActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeCustorm" />
+        <!--作为Dialog-->
+        <activity
             android:name=".ui.activity.ChoicePeoNumActivity"
             android:screenOrientation="portrait"
             android:theme="@style/DialogStyleBottom" />
+        <activity
+            android:name=".ui.activity.RewardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/DialogStyleBottom" />
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"></activity>
+        <activity
+            android:name="com.alipay.sdk.auth.AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind">
+        </activity>
         <!--百度配置地图-->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
@@ -156,6 +180,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>

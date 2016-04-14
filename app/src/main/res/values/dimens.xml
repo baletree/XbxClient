@@ -30,6 +30,7 @@
     <dimen name="dp_twenty_eight">28dp</dimen>
     <dimen name="dp_twenty_one">21dp</dimen>
     <dimen name="dp_twenty_two">22dp</dimen>
+    <dimen name="dp_twenty_three">23dp</dimen>
     <dimen name="dp_twenty_four">24dp</dimen>
     <dimen name="dp_twenty_five">25dp</dimen>
     <dimen name="dp_twenty_six">26dp</dimen>
@@ -46,6 +47,7 @@
     <dimen name="dp_sixty_four">64dp</dimen>
     <dimen name="dp_seventy_four">74dp</dimen>
     <dimen name="dp_eighty">80dp</dimen>
+    <dimen name="dp_eighty_four">84dp</dimen>
     <dimen name="dp_ninety_three">93dp</dimen>
     <dimen name="dp_ninety_six">96dp</dimen>
     <dimen name="dp_hundred">100dp</dimen>
@@ -65,4 +67,6 @@
     <dimen name="sp_eighteen">18sp</dimen>
     <dimen name="sp_nineteen">19sp</dimen>
     <dimen name="sp_twenty">20sp</dimen>
+    <dimen name="sp_twenty_five">25sp</dimen>
+    <dimen name="sp_thirty">30sp</dimen>
 </resources>

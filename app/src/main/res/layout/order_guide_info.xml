@@ -60,7 +60,7 @@
                 android:layout_gravity="center_vertical"
                 android:isIndicator="true"
                 android:numStars="5"
-                android:rating="1.9" />
+                android:rating="3" />
 
             <TextView
                 android:id="@+id/guide_star_tv"

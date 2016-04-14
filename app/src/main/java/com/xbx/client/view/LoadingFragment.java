@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -11,7 +12,7 @@ import android.widget.TextView;
 import com.xbx.client.R;
 import com.xbx.client.utils.Util;
 
-public class LoadingFragment extends DialogFragment {
+public class LoadingFragment extends DialogFragment{
 	private TextView vLoading_text;
 	private String mMsg = "";
 
@@ -44,5 +45,4 @@ public class LoadingFragment extends DialogFragment {
 			this.mMsg = msg;
 		}
 	}
-
 }

@@ -1,19 +1,11 @@
 package com.xbx.client.ui.activity;
 
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xbx.client.R;
-import com.xbx.client.adapter.GuideTagAdapter;
-import com.xbx.client.utils.Util;
 import com.xbx.client.view.FlowLayout;
-import com.xbx.client.view.RecycleViewDivider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +15,7 @@ import java.util.List;
  */
 public class OrderDetailActivity extends BaseActivity {
     private FlowLayout guide_tag_flayout;
+    private TextView title_txt;
 
     private List<String> tagList = null;
 
@@ -48,6 +41,8 @@ public class OrderDetailActivity extends BaseActivity {
     @Override
     protected void initViews() {
         super.initViews();
+        title_txt = (TextView) findViewById(R.id.title_txt_tv);
+        title_txt.setText(getString(R.string.order_detail_title));
         guide_tag_flayout = (FlowLayout) findViewById(R.id.guide_tag_flayout);
         for (int i = 0; i < tagList.size(); i++) {
             guide_tag_flayout.addView(addTextView(tagList.get(i)));

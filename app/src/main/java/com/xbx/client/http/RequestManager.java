@@ -2,6 +2,8 @@ package com.xbx.client.http;
 
 import android.annotation.SuppressLint;
 import android.support.v4.app.FragmentActivity;
+
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -313,6 +315,13 @@ public class RequestManager {
 		if (tag != null) {
 			request.setTag(tag);
 		}
+		request.setRetryPolicy(
+				new DefaultRetryPolicy(
+						30*1000,//默认超时时间，应设置一个稍微大点儿的
+						0,//默认最大尝试次数
+						DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+				)
+		);
 		mRequestQueue.add(request);
 	}
 

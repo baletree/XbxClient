@@ -26,15 +26,15 @@ public class Api {
         this.context = context;
         this.mHandler = mHandler;
     }
+
     /**
      * 获取附近的导游
      */
-    public void getNearGuide(LatLng currentLalng, String nearGuideUrl,String uid) {
+    public void getNearGuide(LatLng currentLalng, String nearGuideUrl, String uid) {
         if (currentLalng == null)
             return;
-        if(context == null)
+        if (context == null)
             return;
-
         RequestParams params = new RequestParams();
         params.put("lon", currentLalng.longitude + "");
         params.put("lat", currentLalng.latitude + "");
@@ -44,28 +44,117 @@ public class Api {
             @Override
             public void requestSuccess(String json) {
                 super.requestSuccess(json);
-                if(isFirst){
+                if (isFirst) {
                     Util.pLog("MainguideList:" + json);
                     isFirst = false;
                 }
                 sendMsg(TaskFlag.REQUESTSUCCESS, json);
             }
+
             @Override
             public void requestError(VolleyError e) {
                 //该接口不用回调错误信息
             }
         });
     }
-    /**地图上显示为我服务的导游信息*/
-    public void getMyGuideInfo(String uid){
-        if(context == null)
+
+    /**
+     * 地图上显示为我服务的导游信息
+     */
+    public void getMyGuideInfo(String orderNum) {
+        if (context == null)
             return;
-        String guideInfoUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_guideInfo));
-        IRequest.get(context, guideInfoUrl,new RequestBackLisener(context) {
+        String guideInfoUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_getMyGuideInfo)).concat("?order_number="+orderNum);
+        IRequest.get(context, guideInfoUrl, new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 super.requestSuccess(json);
-                sendShowMsg(TaskFlag.PAGEREQUESTWO,json);
+                sendShowMsg(TaskFlag.PAGEREQUESTWO, json);
+            }
+        });
+    }
+
+    /**
+     * 出行人数选择
+     */
+    public void getSetoffNum() {
+        if (context == null)
+            return;
+        String setoffNumUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_setoffNum));
+        IRequest.get(context, setoffNumUrl,new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+                super.requestSuccess(json);
+                Util.pLog("出行人数选择:" + json);
+                sendShowMsg(TaskFlag.REQUESTSUCCESS, json);
+            }
+        });
+    }
+
+    /**
+     *
+     * @param uid
+     * @param startInfo 用户开始地址Json
+     * @param startInfo
+     * @param startTime
+     * @param endTime
+     * @param serverTye
+     * @param guideType
+     * @param userNum
+     */
+    public void findGuide(String uid, String startInfo, String endInfo, String startTime, String endTime, String serverTye,
+                          String guideType, String userNum) {
+        if (context == null)
+            return;
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("start_addr_info", startInfo);
+        params.put("end_addr_info", endInfo);
+        params.put("server_start_time", startTime);
+        params.put("server_end_time", endTime);
+        params.put("server_type", serverTye);
+        params.put("service", guideType);
+        params.put("number", userNum);
+        Util.pLog("uid:"+uid+" startInfo:"+startInfo+" endInfo:"+endInfo+" startTime:"+startTime+" endTime:"+endTime+" serverType:"+serverTye+" guideType:"+guideType+" userNum:"+userNum);
+        String findUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_findGuide));
+        IRequest.post(context, findUrl, params,"", new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+                Util.pLog("呼叫导游:" + json);
+                sendShowMsg(TaskFlag.PAGEREQUESTHREE,json);
+            }
+        });
+    }
+
+    public void isFindGuide(String uid,String orderNum){
+        if (context == null)
+            return;
+        String isFindUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_isFindGuide)).concat("?uid="+uid).concat("&order_number="+orderNum);
+        Util.pLog("isFindUrl:"+isFindUrl);
+        IRequest.get(context, isFindUrl, new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+                Util.pLog("是否找到导游:" + json);
+                sendMsg(TaskFlag.PAGEREQUESFOUR,json);
+            }
+
+            @Override
+            public void requestError(VolleyError e) {
+            }
+        });
+    }
+
+    public void getMyOrderList(String uid){
+        if (context == null)
+            return;
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        String orderListUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_orderList));
+        IRequest.post(context, orderListUrl, params, new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+                super.requestSuccess(json);
+                Util.pLog("订单列表:" + json);
             }
         });
     }

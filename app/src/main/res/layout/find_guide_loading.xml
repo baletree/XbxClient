@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 正在加载 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/loading_bg"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/find_loading_bar"
+            style="@style/loading_small"
+            android:layout_width="@dimen/dp_fifty"
+            android:layout_height="@dimen/dp_fifty" />
+
+
+        <TextView
+            android:id="@+id/find_loading_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_twelve"
+            android:text="正在加载···"
+            android:textColor="@color/colorTheme"
+            android:textSize="@dimen/sp_fourteen" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/cancle_find_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottom_view"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/cancel_find_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:src="@mipmap/cancel_find_guide" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_ten"
+            android:textSize="@dimen/sp_twelve"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/colorWhite"
+            android:text="@string/long_cancel"/>
+    </LinearLayout>
+    <View
+        android:id="@+id/bottom_view"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="@dimen/dp_eighty_four"/>
+</RelativeLayout>

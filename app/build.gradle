@@ -22,19 +22,21 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
     compile 'com.bartoszlipinski.recyclerviewheader:library:1.2.0'
     compile 'com.makeramen:roundedimageview:2.2.0'
+    compile 'com.android.support:appcompat-v7:23.3.0'
     compile files('libs/Volley.jar')
     compile files('libs/fastjson-1.1.45.android.jar')
     compile files('libs/org.apache.http.legacy.jar')
-    compile files('libs/baidumapapi_base_v3_7_0.jar')
-    compile files('libs/baidumapapi_cloud_v3_7_0.jar')
-    compile files('libs/baidumapapi_map_v3_7_0.jar')
-    compile files('libs/baidumapapi_radar_v3_7_0.jar')
-    compile files('libs/baidumapapi_search_v3_7_0.jar')
-    compile files('libs/baidumapapi_util_v3_7_0.jar')
     compile files('libs/locSDK_6.13.jar')
     compile files('libs/jpush-android-2.1.3.jar')
+    compile files('libs/alipaySdk-20160223.jar')
+    compile files('libs/baidumapapi_base_v3_7_3.jar')
+    compile files('libs/baidumapapi_cloud_v3_7_3.jar')
+    compile files('libs/baidumapapi_map_v3_7_3.jar')
+    compile files('libs/baidumapapi_radar_v3_7_3.jar')
+    compile files('libs/baidumapapi_search_v3_7_3.jar')
+    compile files('libs/baidumapapi_util_v3_7_3.jar')
+    compile files('libs/universal-image-loader-1.9.3.jar')
 }

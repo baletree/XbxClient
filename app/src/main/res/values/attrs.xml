@@ -6,4 +6,16 @@
         <item>6-10人</item>
         <item>10人以上</item>
     </string-array>
+    <string-array name="rewardMoney">
+        <item>10元</item>
+        <item>20元</item>
+        <item>30元</item>
+        <item>40元</item>
+        <item>50元</item>
+        <item>60元</item>
+        <item>70元</item>
+        <item>80元</item>
+        <item>90元</item>
+        <item>100元</item>
+    </string-array>
 </resources>

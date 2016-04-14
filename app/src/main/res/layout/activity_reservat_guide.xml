@@ -172,6 +172,18 @@
                 android:textColor="@color/colorTheme"
                 android:textSize="@dimen/sp_fifteen"
                 android:text="@string/reservat_Friday"/>
+            <TextView
+                android:layout_width="@dimen/dp_zero"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/colorTheme"
+                android:textSize="@dimen/sp_fifteen"
+                android:text="@string/reservat_Satur"/>
         </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/date_show_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>

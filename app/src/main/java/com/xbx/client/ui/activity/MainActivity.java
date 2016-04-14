@@ -196,15 +196,6 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-
-        String testUrl = "http://192.168.1.24/yueyou/Api/Index/guide_my_order.json?uid=19";
-        IRequest.get(this,testUrl,new RequestBackLisener(this){
-            @Override
-            public void requestSuccess(String json) {
-                super.requestSuccess(json);
-                Util.pLog("Test Shuzhe:" + json);
-            }
-        });
     }
 
     @Override

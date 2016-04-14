@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+android:id/background"
+        android:id="@android:id/background"
         android:drawable="@mipmap/unselect_star_small">
     </item>
     <item
-        android:id="@+android:id/secondaryProgress"
+        android:id="@android:id/secondaryProgress"
         android:drawable="@mipmap/unselect_star_small">
     </item>
     <item
-        android:id="@+android:id/progress"
+        android:id="@android:id/progress"
         android:drawable="@mipmap/select_star_small">
     </item>
 </layer-list>

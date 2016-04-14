@@ -2,6 +2,8 @@ package com.xbx.client.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +15,8 @@ import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 import com.xbx.client.R;
 import com.xbx.client.adapter.MyOrderAdapter;
 import com.xbx.client.beans.OrderBean;
+import com.xbx.client.http.Api;
+import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.view.RecycleViewDivider;
 
 import java.util.ArrayList;
@@ -30,6 +34,18 @@ public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRe
     private LinearLayoutManager layoutManager = null;
     private MyOrderAdapter myOrderAdapter = null;
     private List<OrderBean> orderList = null;
+    private Api api = null;
+    private String uid = "";
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +56,10 @@ public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRe
     @Override
     protected void initDatas() {
         super.initDatas();
+        uid = SharePrefer.getUserInfo(this).getUid();
         layoutManager = new LinearLayoutManager(this);
         orderList = new ArrayList<>();
+        api = new Api(MyOrderActivity.this,handler);
         OrderBean orderBean1 = new OrderBean();
         orderBean1.setOrderTime("4月6日 10：35");
         orderBean1.setGuideType("随游");

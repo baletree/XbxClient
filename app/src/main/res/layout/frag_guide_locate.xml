@@ -24,7 +24,7 @@
             android:id="@+id/main_outset_tv"
             style="@style/textView_Black"
             android:layout_centerInParent="true"
-            android:text="@string/main_current_tip"
+            android:hint="@string/main_current_tip"
             android:textSize="@dimen/sp_fourteen" />
     </RelativeLayout>
 

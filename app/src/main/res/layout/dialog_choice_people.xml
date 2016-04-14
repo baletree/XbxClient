@@ -8,12 +8,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/colorTextBack"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/dp_sixteen">
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp_forty"
             android:layout_marginLeft="@dimen/dp_ten"
             android:layout_marginRight="@dimen/dp_ten">
 
@@ -39,6 +38,7 @@
                 android:textSize="@dimen/sp_fifteen" />
 
             <TextView
+                android:id="@+id/wheelview_title_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"

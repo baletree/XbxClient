@@ -33,6 +33,7 @@ import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 import com.xbx.client.R;
 import com.xbx.client.adapter.SearchResultAdapter;
 import com.xbx.client.beans.PoiResultBean;
+import com.xbx.client.utils.Constant;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.RecycleViewDivider;
@@ -56,11 +57,9 @@ public class SearchAddressActivity extends BaseActivity implements
     private GeoCoder geoCoder = null;
     private LinearLayoutManager layoutManager = null;
     private int searchCode = 0;
-    private int resultCount = 0;
-    private int count = 0;
 
-    private List<PoiResultBean> poiReultList = null;
     private SearchResultAdapter searchResultAdapter = null;
+    private List<PoiInfo> poiList = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +79,6 @@ public class SearchAddressActivity extends BaseActivity implements
         geoCoder.setOnGetGeoCodeResultListener(this);
         layoutManager = new LinearLayoutManager(this);
         searchCode = getIntent().getIntExtra("guide_code", 0);
-        poiReultList = new ArrayList<>();
     }
 
     @Override
@@ -133,19 +131,11 @@ public class SearchAddressActivity extends BaseActivity implements
                 if (cs.length() <= 0) {
                     return;
                 }
-//                String city = SharePrefer.getLocate(SearchAddressActivity.this).getCity();
-                String city = "阜阳市";
+                String city = SharePrefer.getLocate(SearchAddressActivity.this).getCity();
+//                String city = "阜阳市";
                 if (Util.isNull(city)) {
                     return;
                 }
-                /**
-                 * 使用建议搜索服务获取建议列表，结果在onSuggestionResult()中更新
-                 */
-                /*SuggestionSearchOption suggestOption = new SuggestionSearchOption();
-                suggestOption.keyword(cs.toString());
-                suggestOption.city(city);
-                mSuggestionSearch.requestSuggestion(suggestOption);*/
-
                 PoiCitySearchOption poiCityOption = new PoiCitySearchOption();
                 poiCityOption.city(city);
                 poiCityOption.keyword(cs.toString());
@@ -177,45 +167,22 @@ public class SearchAddressActivity extends BaseActivity implements
 
     @Override
     public void onGetPoiResult(PoiResult poiResult) {
-        List<PoiInfo> poiList = poiResult.getAllPoi();
+        poiList = poiResult.getAllPoi();
         if(poiList == null)
             return;
-        else
-            Util.pLog("poiList is null");
-        for (int i = 0; i < poiList.size(); i++) {
-            PoiInfo poiInfo = poiList.get(i);
-            Util.pLog("poiResult:" + "名称：" + poiInfo.name + " 地址：" + poiInfo.address);
-        }
+        searchResultAdapter = new SearchResultAdapter(this,poiList);
+        locate_rv.setAdapter(searchResultAdapter);
+        searchResultAdapter.setOnItemClickListener(this);
     }
 
     @Override
     public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
-        count++;
-        Util.pLog("poiResult:" + "poiResult===地址：" + poiDetailResult.getAddress() + "  名字：" + poiDetailResult.getName() + "  count=" + count + "  resultCount=" + resultCount);
-        PoiResultBean poiResult = new PoiResultBean();
-        poiReultList.add(poiResult);
-        if (count == resultCount) {
-            if (poiReultList != null && poiReultList.size() > 0) {
-                searchResultAdapter = new SearchResultAdapter(SearchAddressActivity.this, poiReultList);
-                locate_rv.setAdapter(searchResultAdapter);
-            }
-        }
+
     }
 
     @Override
     public void onGetSuggestionResult(SuggestionResult suggestionResult) {
-        if (suggestionResult == null)
-            return;
-        if (suggestionResult.getAllSuggestions() != null)
-            resultCount = suggestionResult.getAllSuggestions().size();
-        PoiDetailSearchOption detailOption = new PoiDetailSearchOption();
-        for (SuggestionResult.SuggestionInfo info : suggestionResult.getAllSuggestions()) {
-            if (info.uid != null) {
-                Util.pLog("SuggestResult:" + info.city + "  key:" + info.key + "  uid:" + info.uid + "  disrect" + info.district);
-                detailOption.poiUid(info.uid);
-                mPoiSearch.searchPoiDetail(detailOption);
-            }
-        }
+
     }
 
 
@@ -231,7 +198,7 @@ public class SearchAddressActivity extends BaseActivity implements
 
     @Override
     public void onItemClick(View v, int position) {
-        /*if(poiList != null){
+        if(poiList != null){
             Intent intent = new Intent();
             switch (searchCode){
                 case Constant.outsetFlag:
@@ -241,9 +208,9 @@ public class SearchAddressActivity extends BaseActivity implements
                     intent.putExtra("destResult",poiList.get(position));
                     break;
             }
-        }*/
-        Intent intent = new Intent();
-        setResult(RESULT_OK, intent);
-        finish();
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+
     }
 }

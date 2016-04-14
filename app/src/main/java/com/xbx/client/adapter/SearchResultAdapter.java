@@ -19,11 +19,11 @@ import java.util.List;
  */
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.MyViewHolder>{
     private Context context;
-    private List<PoiResultBean> poiResultList;
+    private List<PoiInfo> poiResultList;
 
     private OnRecyItemClickListener mOnItemClickListener;
 
-    public SearchResultAdapter(Context context,List<PoiResultBean> poiResultList){
+    public SearchResultAdapter(Context context,List<PoiInfo> poiResultList){
         this.context = context;
         this.poiResultList = poiResultList;
     }
@@ -41,9 +41,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        final PoiResultBean poiInfo = poiResultList.get(position);
-        holder.search_name.setText(poiInfo.getPoiKey());
-        holder.search_address.setText(poiInfo.getPoiAddress());
+        final PoiInfo poiInfo = poiResultList.get(position);
+        holder.search_name.setText(poiInfo.name);
+        holder.search_address.setText(poiInfo.address);
         holder.search_item_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -15,7 +15,6 @@ import com.android.volley.NetworkError;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.xbx.client.ui.activity.MainActivity;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
