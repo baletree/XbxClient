@@ -130,7 +130,7 @@ public class Api {
         if (context == null)
             return;
         String isFindUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_isFindGuide)).concat("?uid="+uid).concat("&order_number="+orderNum);
-        Util.pLog("isFindUrl:"+isFindUrl);
+//        Util.pLog("isFindUrl:"+isFindUrl);
         IRequest.get(context, isFindUrl, new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
@@ -140,6 +140,32 @@ public class Api {
 
             @Override
             public void requestError(VolleyError e) {
+            }
+        });
+    }
+
+    public void cancelFindGuide(String orderNum){
+        if (context == null)
+            return;
+        String isFindUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_cancelFindGuide)).concat("?order_number="+orderNum);
+        IRequest.get(context, isFindUrl,context.getString(R.string.stop_find), new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+                Util.pLog("取消寻找导游:" + json);
+                sendShowMsg(TaskFlag.PAGEREQUESFIVE,json);
+            }
+        });
+    }
+
+    public void cancelOrder(String orderNum){
+        if (context == null)
+            return;
+        String isFindUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_cancelImmeOrder)).concat("?order_number="+orderNum);
+        IRequest.get(context, isFindUrl,context.getString(R.string.stop_order), new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+                Util.pLog("取消订单:" + json);
+                sendMsg(TaskFlag.PAGEREQUESFIVE,json);
             }
         });
     }

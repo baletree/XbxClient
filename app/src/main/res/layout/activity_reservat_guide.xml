@@ -26,7 +26,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="@dimen/dp_sixty"
+                android:layout_width="@dimen/dp_seventy_four"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/dp_sixteen"
@@ -56,7 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_forty_eight"
             android:layout_marginRight="@dimen/dp_sixteen"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="@dimen/dp_sixty"
@@ -77,12 +78,6 @@
                 android:textColor="@color/colorText"
                 android:textSize="@dimen/sp_fifteen" />
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_zero_five"
-            android:layout_marginLeft="@dimen/dp_sixteen"
-            android:layout_marginRight="@dimen/dp_sixteen"
-            android:background="@color/colorLinePart" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -91,7 +86,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="@dimen/dp_sixty"
+                android:layout_width="@dimen/dp_seventy_four"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/dp_sixteen"
@@ -109,81 +104,195 @@
                 android:textColor="@color/colorText"
                 android:textSize="@dimen/sp_fifteen" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_zero_five"
+            android:layout_marginLeft="@dimen/dp_sixteen"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:background="@color/colorLinePart" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_eight"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/dp_seventy_four"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:text="@string/guide_sex"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_fifteen" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/radiobtn_select"
+                    android:drawablePadding="@dimen/dp_six"
+                    android:text="@string/male" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_sixteen"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/radiobtn_select"
+                    android:drawablePadding="@dimen/dp_six"
+                    android:text="@string/male" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_zero_five"
+            android:layout_marginLeft="@dimen/dp_sixteen"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:background="@color/colorLinePart" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_eight"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/dp_seventy_four"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_sixteen"
+                android:text="@string/type_Language"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_fifteen" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/radiobtn_select"
+                    android:drawablePadding="@dimen/dp_six"
+                    android:text="@string/chinese" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_sixteen"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/radiobtn_select"
+                    android:drawablePadding="@dimen/dp_six"
+                    android:text="@string/english" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_sixteen"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/radiobtn_select"
+                    android:drawablePadding="@dimen/dp_six"
+                    android:text="@string/all_Language" />
+            </RadioGroup>
+        </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_zero_five"
             android:background="@color/colorLine" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_sixteen"
         android:background="@color/colorWhite"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_forty_eight"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="@dimen/dp_zero"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:text="@string/reservat_Sun"
                 android:textColor="@color/colorTheme"
-                android:textSize="@dimen/sp_fifteen"
-                android:text="@string/reservat_Sun"/>
+                android:textSize="@dimen/sp_fifteen" />
+
             <TextView
                 android:layout_width="@dimen/dp_zero"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:text="@string/reservat_Mon"
                 android:textColor="@color/colorTheme"
-                android:textSize="@dimen/sp_fifteen"
-                android:text="@string/reservat_Mon"/>
+                android:textSize="@dimen/sp_fifteen" />
+
             <TextView
                 android:layout_width="@dimen/dp_zero"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:text="@string/reservat_Tues"
                 android:textColor="@color/colorTheme"
-                android:textSize="@dimen/sp_fifteen"
-                android:text="@string/reservat_Tues"/>
+                android:textSize="@dimen/sp_fifteen" />
+
             <TextView
                 android:layout_width="@dimen/dp_zero"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:text="@string/reservat_Wends"
                 android:textColor="@color/colorTheme"
-                android:textSize="@dimen/sp_fifteen"
-                android:text="@string/reservat_Wends"/>
+                android:textSize="@dimen/sp_fifteen" />
+
             <TextView
                 android:layout_width="@dimen/dp_zero"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:text="@string/reservat_Thurs"
                 android:textColor="@color/colorTheme"
-                android:textSize="@dimen/sp_fifteen"
-                android:text="@string/reservat_Thurs"/>
+                android:textSize="@dimen/sp_fifteen" />
+
             <TextView
                 android:layout_width="@dimen/dp_zero"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:text="@string/reservat_Friday"
                 android:textColor="@color/colorTheme"
-                android:textSize="@dimen/sp_fifteen"
-                android:text="@string/reservat_Friday"/>
+                android:textSize="@dimen/sp_fifteen" />
+
             <TextView
                 android:layout_width="@dimen/dp_zero"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:text="@string/reservat_Satur"
                 android:textColor="@color/colorTheme"
-                android:textSize="@dimen/sp_fifteen"
-                android:text="@string/reservat_Satur"/>
+                android:textSize="@dimen/sp_fifteen" />
         </LinearLayout>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/date_show_rv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>

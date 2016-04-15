@@ -28,13 +28,16 @@
             android:textColor="@color/colorTheme"
             android:textSize="@dimen/sp_fourteen" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/cancle_find_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/bottom_view"
         android:layout_centerHorizontal="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
+
         <ImageView
             android:id="@+id/cancel_find_img"
             android:layout_width="wrap_content"
@@ -43,18 +46,20 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
             android:src="@mipmap/cancel_find_guide" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_ten"
-            android:textSize="@dimen/sp_twelve"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_ten"
+            android:text="@string/long_cancel"
             android:textColor="@color/colorWhite"
-            android:text="@string/long_cancel"/>
+            android:textSize="@dimen/sp_twelve" />
     </LinearLayout>
+
     <View
         android:id="@+id/bottom_view"
         android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_height="@dimen/dp_eighty_four"/>
+        android:layout_height="@dimen/dp_eighty_four"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import com.xbx.client.R;
 import com.xbx.client.adapter.MyViewPagerAdapter;
 import com.xbx.client.beans.UserInfo;
+import com.xbx.client.http.Api;
 import com.xbx.client.http.IRequest;
 import com.xbx.client.http.RequestParams;
 import com.xbx.client.jsonparse.UtilParse;
@@ -32,6 +35,7 @@ import com.xbx.client.ui.fragment.WithtourFragment;
 import com.xbx.client.utils.Constant;
 import com.xbx.client.utils.RequestBackLisener;
 import com.xbx.client.utils.SharePrefer;
+import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.BanSlideViewpager;
 import com.xbx.client.view.TipsDialog;
@@ -65,9 +69,24 @@ public class MainActivity extends BaseActivity {
     private LocalReceiver localReceiver = null;
     private LocalBroadcastManager lBManager = null;
     private IntentFilter intentFilter = null;
+    private Api api = null;
 
     private TipsDialog tipsDialog = null;
     private boolean isFromLogin = false;
+    private int cancelType = 0;
+    private String orderNum = "";
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case TaskFlag.PAGEREQUESFIVE:
+
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +111,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initViews() {
         super.initViews();
+        api = new Api(MainActivity.this,handler);
         drawerLayout = (DrawerLayout) findViewById(R.id.main_drawerLayout);
         drawerLayout.setScrimColor(0x32000000);// 设置半透明度
         mToolbar = (Toolbar) findViewById(R.id.toolBar);
@@ -221,7 +241,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void cancelDialog() {
                 tipsDialog.dismiss();
-                startActivity(new Intent(MainActivity.this, CancelOrderSucActivity.class));
+//                startActivity(new Intent(MainActivity.this, CancelOrderSucActivity.class));
+                api.cancelOrder(orderNum);
             }
 
             @Override
@@ -245,6 +266,8 @@ public class MainActivity extends BaseActivity {
             String action = intent.getAction();
             if (Constant.ACTION_GCANCELORD.equals(action)) {
                 cancel_order_tv.setVisibility(View.VISIBLE);
+                cancelType = intent.getIntExtra("cancelType",0);
+                orderNum = intent.getStringExtra("theOrderNum");
             }
         }
     }

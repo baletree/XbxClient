@@ -59,6 +59,7 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Util.pLog("JPushId："+JPushInterface.getRegistrationID(this));
     }
 
     @Override
@@ -137,6 +138,7 @@ public class LoginActivity extends BaseActivity {
 
     private void toLogin(String phone,String code){
         String postUrl = getString(R.string.url_conIp).concat(getString(R.string.url_Login));
+        final String pushId = JPushInterface.getRegistrationID(this);
         RequestParams params = new RequestParams();
         params.put("mobile", phone);
         params.put("password", code);
@@ -145,7 +147,7 @@ public class LoginActivity extends BaseActivity {
         IRequest.post(this, postUrl, params, "", new RequestBackLisener(LoginActivity.this){
             @Override
             public void requestSuccess(String json) {
-                Util.pLog("Login Result=" + json);
+                Util.pLog(pushId+"Login Result=" + json);
                 if(UtilParse.getRequestCode(json) == 1){
                     UserInfo userInfo = UserInfoParse.getUserInfo(UtilParse.getRequestData(json));
                     if(userInfo != null){

@@ -36,6 +36,7 @@
     <RelativeLayout
         android:id="@+id/guide_destination_rl"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="@dimen/dp_forty_four">
 
         <ImageView

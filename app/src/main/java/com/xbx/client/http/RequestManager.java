@@ -317,7 +317,7 @@ public class RequestManager {
 		}
 		request.setRetryPolicy(
 				new DefaultRetryPolicy(
-						30*1000,//默认超时时间，应设置一个稍微大点儿的
+						20*1000,//默认超时时间，应设置一个稍微大点儿的
 						0,//默认最大尝试次数
 						DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 				)

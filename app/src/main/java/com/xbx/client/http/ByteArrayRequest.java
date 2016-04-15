@@ -57,8 +57,8 @@ class ByteArrayRequest extends Request<byte[]> {
         Map<String, String> headers = super.getHeaders();
         if (null == headers || headers.equals(Collections.emptyMap())) {
             headers = new HashMap<String, String>();
-            headers.put("deviceid", SharePrefer.getPhoneId(App.getContext()));
-            Util.pLog("deviceid:"+SharePrefer.getPhoneId(App.getContext()));
+            headers.put("deviceid", "131212232323");
+//            Util.pLog("deviceid:"+SharePrefer.getPhoneId(App.getContext()));
         }
         return headers;
     }

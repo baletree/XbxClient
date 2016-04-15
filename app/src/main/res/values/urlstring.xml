@@ -12,4 +12,6 @@
     <string name="url_orderList">Index/user_my_order.json</string>
     <string name="url_isFindGuide">Order/get_find_guide_status.json</string>
     <string name="url_getMyGuideInfo">Order/user_order_process.json</string>
+    <string name="url_cancelImmeOrder">Order/cancel_order.json</string>
+    <string name="url_cancelFindGuide">Order/cancel_call.json</string>
 </resources>
