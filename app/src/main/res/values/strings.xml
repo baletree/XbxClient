@@ -103,6 +103,7 @@
     <string name="long_cancel">长按取消</string>
     <string name="stop_find">停止呼叫</string>
     <string name="stop_order">正在加载</string>
+    <string name="now_loading">正在加载</string>
     <string name="loading_locate">位置加载中</string>
     <string name="stork_time">行程时间：</string>
     <string name="not_start">未开始</string>
@@ -118,4 +119,23 @@
     <string name="nothing_found">没有搜索结果~</string>
     <string name="set_city">请先设置搜索城市</string>
     <string name="choice_city">城市选择</string>
+    <string name="look_detail">查看详情</string>
+    <string name="give_order_immedia">立即下单</string>
+    <string name="user_info_title">个人信息</string>
+    <string name="user_info_title_right_text">确认修改</string>
+    <string name="user_info_head_text">头像</string>
+    <string name="user_info_nickname_text">昵称</string>
+    <string name="user_info_sex_text">性别</string>
+    <string name="user_info_birthday_text">出生日期</string>
+    <string name="user_info_name_text">真实姓名</string>
+    <string name="user_info_phone_text">手机号</string>
+    <string name="select_album_take_photo">拍照</string>
+    <string name="select_album_photo_gallery">相册</string>
+    <string name="no_sdcard">存储卡不可用</string>
+    <string name="pic_error">所选图片文件格式有误</string>
+    <string name="no_pic">选择图片错误</string>
+    <string name="green_pic_size">附件过大，请重新选择</string>
+    <string name="select_sex_male">男</string>
+    <string name="select_sex_female">女</string>
+    <string name="cancel">取消</string>
 </resources>

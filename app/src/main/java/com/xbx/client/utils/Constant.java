@@ -2,6 +2,8 @@ package com.xbx.client.utils;
 
 import android.os.Environment;
 
+import java.io.File;
+
 /**
  * Created by EricYuan on 2016/3/30.
  * 常量定义
@@ -23,4 +25,14 @@ public class Constant {
      * 图片缓存路径
      */
     public static final String PICTURE_ALBUM_PATH = APP_ROOT_PATH + "/XbxTravel/";
+    public static final String PATH_PIC = PICTURE_ALBUM_PATH + File.separator + "Photo";
+    /**
+     * 系统图片存储路径
+     */
+    public static final String PHOTO_SYS_PATH = APP_ROOT_PATH + "/DCIM/Camera/";
+    /**
+     * 从Intent获取图片路径的KEY
+     */
+    public static final String KEY_PHOTO_PATH = "com.xbb.la.client.photo_path";
+
 }

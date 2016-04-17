@@ -96,6 +96,16 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:theme="@style/AppThemeCustorm" />
+        <activity
+            android:name=".ui.activity.UserInfoActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:theme="@style/AppThemeCustorm" />
+        <activity
+            android:name=".ui.activity.GuideDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:theme="@style/AppThemeCustorm" />
         <!--作为Dialog-->
         <activity
             android:name=".ui.activity.ChoicePeoNumActivity"
@@ -103,6 +113,14 @@
             android:theme="@style/DialogStyleBottom" />
         <activity
             android:name=".ui.activity.RewardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/DialogStyleBottom" />
+        <activity
+            android:name=".ui.activity.SelectAlbumActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/DialogStyleBottom" />
+        <activity
+            android:name=".ui.activity.SelectSexActivity"
             android:screenOrientation="portrait"
             android:theme="@style/DialogStyleBottom" />
         <!--支付宝-->

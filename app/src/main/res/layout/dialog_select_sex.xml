@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/select_sex_male"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_eight"
+            android:text="@string/select_sex_male"
+            android:textSize="@dimen/sp_fifteen"
+            android:textColor="@color/colorText"
+            android:gravity="center"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_zero_five"
+            android:background="@color/colorLine"/>
+
+        <TextView
+            android:id="@+id/select_sex_female"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_eight"
+            android:text="@string/select_sex_female"
+            android:textSize="@dimen/sp_fifteen"
+            android:textColor="@color/colorText"
+            android:gravity="center"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_eight"
+            android:background="@color/colorLine"/>
+
+        <TextView
+            android:id="@+id/select_sex_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_eight"
+            android:text="@string/cancel"
+            android:textSize="@dimen/sp_fifteen"
+            android:textColor="@color/colorTheme"
+            android:gravity="center"/>
+    </LinearLayout>
+</RelativeLayout>

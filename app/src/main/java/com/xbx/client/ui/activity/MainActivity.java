@@ -17,6 +17,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xbx.client.R;
@@ -57,6 +58,7 @@ public class MainActivity extends BaseActivity {
     private ImageView main_menu_img;
     private TextView cancel_order_tv;
     private LinearLayout menu_order_layout; //我的订单
+    private RelativeLayout menu_userInfo_layout;// 个人中心
 
     private MyViewPagerAdapter viewPagerAdapter = null;
 
@@ -120,11 +122,13 @@ public class MainActivity extends BaseActivity {
         main_menu_img = (ImageView) findViewById(R.id.main_menu_img);
         cancel_order_tv = (TextView) findViewById(R.id.cancel_order_tv);
         menu_order_layout = (LinearLayout) findViewById(R.id.menu_order_layout);
+        menu_userInfo_layout = (RelativeLayout) findViewById(R.id.menu_userInfo_layout);
         viewpager.setScrollble(false);
         viewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager(), this);
         main_menu_img.setOnClickListener(this);
         cancel_order_tv.setOnClickListener(this);
         menu_order_layout.setOnClickListener(this);
+        menu_userInfo_layout.setOnClickListener(this);
         initControls();
         initBroadcast();
     }
@@ -230,6 +234,10 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.menu_order_layout:
                 startActivity(new Intent(MainActivity.this, MyOrderActivity.class));
+                toggleLeftLayout();
+                break;
+            case R.id.menu_userInfo_layout:
+                startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
                 toggleLeftLayout();
                 break;
         }
