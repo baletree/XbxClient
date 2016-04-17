@@ -148,7 +148,7 @@
                     android:button="@null"
                     android:drawableLeft="@drawable/radiobtn_select"
                     android:drawablePadding="@dimen/dp_six"
-                    android:text="@string/male" />
+                    android:text="@string/female" />
             </RadioGroup>
         </LinearLayout>
 

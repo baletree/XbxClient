@@ -2,28 +2,15 @@ package com.xbx.client.app;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.xbx.client.Manifest;
-import com.xbx.client.beans.LocationBean;
 import com.xbx.client.utils.Constant;
 import com.xbx.client.utils.MapLocate;
-import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.Util;
 
 import java.io.File;
@@ -40,6 +27,7 @@ public class App extends Application {
         mContext = getApplicationContext();
         getPhoneId();
         SDKInitializer.initialize(mContext);
+        Util.pLog("Init Baidu SDK");
         initImageLoader();
         JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
         JPushInterface.init(mContext);            // 初始化 JPush
@@ -47,19 +35,7 @@ public class App extends Application {
     }
 
     private void getPhoneId() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            String permission = "android.permission.READ_PHONE_STATE";
-            int deviceIdPermission = ContextCompat.checkSelfPermission(mContext,permission);
-            if (deviceIdPermission != PackageManager.PERMISSION_GRANTED) {
-                //弹出对话框接收权限
-//                ActivityCompat.requestPermissions(mContext, new String[]{permission}, id);
-                return;
-            }
-        } else {
-            TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            String phoneId = tm.getDeviceId();
-            SharePrefer.savePhoneId(mContext, phoneId);
-        }
+
     }
 
     private void initImageLoader() {

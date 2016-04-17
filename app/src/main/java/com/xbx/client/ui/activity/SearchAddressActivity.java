@@ -98,7 +98,7 @@ public class SearchAddressActivity extends BaseActivity implements
     private void initLisener() {
         search_back_layout.setOnClickListener(this);
         search_cancel_tv.setOnClickListener(this);
-        search_input_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        /*search_input_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -111,7 +111,7 @@ public class SearchAddressActivity extends BaseActivity implements
                 }
                 return false;
             }
-        });
+        });*/
         search_input_et.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -132,7 +132,6 @@ public class SearchAddressActivity extends BaseActivity implements
                     return;
                 }
                 String city = SharePrefer.getLocate(SearchAddressActivity.this).getCity();
-//                String city = "阜阳市";
                 if (Util.isNull(city)) {
                     return;
                 }

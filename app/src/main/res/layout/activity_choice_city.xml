@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/colorBackground">
+    <include layout="@layout/page_title"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_thirty_six"
+        android:background="@drawable/search_edit_bg"
+        android:layout_marginTop="@dimen/dp_eight"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_marginRight="@dimen/dp_sixteen">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/serach_adr"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/dp_ten"
+            android:layout_marginLeft="@dimen/dp_twelve" />
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            tools:ignore="RtlHardcoded"
+            android:inputType="text"
+            android:singleLine="true"
+            android:hint="@string/input_city_name"
+            android:layout_margin="@dimen/dp_two"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/sp_fifteen" />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp_ten">
+
+        <ListView
+            android:id="@+id/listview_all_city"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@android:color/transparent"
+            android:listSelector="@android:color/transparent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"/>
+
+        <TextView
+            android:id="@+id/tv_letter_overlay"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:background="@drawable/overlay_bg"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:visibility="gone"/>
+
+        <com.xbx.client.view.SideLetterBar
+            android:id="@+id/side_letter_bar"
+            android:layout_width="@dimen/dp_thirty_six"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            tools:ignore="RtlHardcoded" />
+
+        <ListView
+            android:id="@+id/listview_search_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:cacheColorHint="@android:color/transparent"
+            android:listSelector="@android:color/transparent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"
+            android:visibility="gone"/>
+
+        <include layout="@layout/view_no_search_result" />
+    </RelativeLayout>
+</LinearLayout>

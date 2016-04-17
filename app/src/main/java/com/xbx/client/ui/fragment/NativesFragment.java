@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.TextureMapView;
 import com.xbx.client.R;
 import com.xbx.client.utils.Util;
 
@@ -26,6 +28,7 @@ public class NativesFragment extends BaseFragment {
     private static NativesFragment fragment = null;
     private View view = null;
     private EditText login_phone_et;
+    private TextureMapView mMapView;
 
     public NativesFragment() {
     }
@@ -49,14 +52,32 @@ public class NativesFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        mMapView.onResume();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        mMapView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mMapView.onDestroy();
+        mMapView = null;
+        super.onDestroy();
+    }
+
+    @Override
     protected int getViewLayoutId() {
-        return R.layout.activity_login;
+        return R.layout.frag_native;
     }
 
     @Override
     protected void initViews() {
         super.initViews();
-        login_phone_et = (EditText) view.findViewById(R.id.login_phone_et);
-        login_phone_et.setText("18602854129");
+        mMapView = (TextureMapView) view.findViewById(R.id.guide_map);
     }
 }

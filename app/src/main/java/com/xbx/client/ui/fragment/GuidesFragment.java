@@ -35,6 +35,7 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
@@ -89,7 +90,7 @@ public class GuidesFragment extends BasedFragment implements
     private MyGuideInfoBean guideInfoBean = null;
     private BitmapDescriptor guideDes = null;
 
-    private MapView mapView;
+    private TextureMapView mapView;
     private RelativeLayout guide_outset_rl;
     private RelativeLayout guide_destination_rl;
     private TextView main_outset_tv; // 出发地
@@ -260,7 +261,7 @@ public class GuidesFragment extends BasedFragment implements
     }
 
     protected void initViews() {
-        mapView = (MapView) view.findViewById(R.id.guide_map);
+        mapView = (TextureMapView) view.findViewById(R.id.guide_map);
         guide_outset_rl = (RelativeLayout) view.findViewById(R.id.guide_outset_rl);
         guide_destination_rl = (RelativeLayout) view.findViewById(R.id.guide_destination_rl);
         main_outset_tv = (TextView) view.findViewById(R.id.main_outset_tv);

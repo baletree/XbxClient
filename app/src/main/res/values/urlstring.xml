@@ -2,7 +2,7 @@
 <resources>
     <string name="url_http">http://naichawaimai.applinzi.com/Takeout/api.php/Users/</string>
    <!-- <string name="url_conIp">http://192.168.1.24/yueyou/index.php/Api/</string>-->
-    <string name="url_conIp">http://192.168.1.27/yueyou/Api/</string>
+    <string name="url_conIp">http://123.56.194.208/yueyou/Api/</string>
     <string name="url_getCode">user/send_verify_code.json</string>
     <string name="url_Login">user/login.json</string>
     <string name="url_nearGuide">Index/home_page.json</string>

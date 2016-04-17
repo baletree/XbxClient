@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baidu.mapapi.search.core.PoiInfo;
 import com.xbx.client.R;
 import com.xbx.client.adapter.DateShowAdapter;
 import com.xbx.client.beans.DateItemBean;
@@ -28,14 +29,16 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
     private ImageView title_left_img;
     private TextView title_rtxt_tv;
     private TextView user_name_tv;
-    private TextView user_setoff_tv;
     private TextView user_destination_tv;
     private RecyclerView date_show_rv;
 
-    private int nowWeek;
-    private int maxDay = 0;
     private List<DateItemBean> dateList = null;
     private DateShowAdapter dateAdapter = null;
+    private PoiInfo poiInfoRe = null;
+
+    private int nowWeek;
+    private int maxDay = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,9 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
         title_txt_tv = (TextView) findViewById(R.id.title_txt_tv);
         title_left_img = (ImageView) findViewById(R.id.title_left_img);
         title_rtxt_tv = (TextView) findViewById(R.id.title_rtxt_tv);
+        user_destination_tv = (TextView) findViewById(R.id.user_destination_tv);
         title_left_img.setOnClickListener(this);
+        user_destination_tv.setOnClickListener(this);
         title_txt_tv.setText(getString(R.string.reservat_info));
         title_rtxt_tv.setText(getString(R.string.txt_sure));
         date_show_rv = (RecyclerView) findViewById(R.id.date_show_rv);
@@ -68,7 +73,6 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
         for (int i = 1; i < maxDay; i++) {
             rightNow.setTime(date);
             rightNow.set(Calendar.DATE, rightNow.get(Calendar.DATE) + i);
-//            Util.pLog(rightNow.get(Calendar.YEAR) + "-" + (rightNow.get(Calendar.MONTH) + 1) + "-" + rightNow.get(Calendar.DAY_OF_MONTH));
             DateItemBean dateBean = new DateItemBean();
             dateBean.setDateNum(rightNow.get(Calendar.DAY_OF_MONTH) + "");
             dateBean.setDateReal(rightNow.get(Calendar.YEAR) + "-" + (rightNow.get(Calendar.MONTH) + 1) + "-" + rightNow.get(Calendar.DAY_OF_MONTH));
@@ -82,6 +86,24 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode != RESULT_OK)
+            return;
+        if(data == null)
+            return;
+        switch (requestCode){
+            case 1000://目的地选择
+                String destCity = data.getStringExtra("choiceCityName");
+                poiInfoRe = data.getParcelableExtra("destResult");
+                if(poiInfoRe == null)
+                    return;
+                user_destination_tv.setText(destCity+"·"+poiInfoRe.name);
+                break;
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         super.onClick(v);
         switch (v.getId()) {
@@ -90,6 +112,9 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
                 break;
             case R.id.title_rtxt_tv:
                 startActivity(new Intent(ReservatGuideActivity.this, ChoiceGuideActivity.class));
+                break;
+            case R.id.user_destination_tv:
+                startActivityForResult(new Intent(ReservatGuideActivity.this, SerachInCityActvity.class),1000);
                 break;
         }
     }
