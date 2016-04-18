@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity {
         Set<String> tagSet = new LinkedHashSet<String>();
         tagSet.add(registerId);
         JPushInterface.setTags(this,tagSet,null);
-        Util.pLog("RegisterId:" + registerId);
+        Util.pLog("RegisterId:" + registerId+" uid:"+SharePrefer.getUserInfo(MainActivity.this).getUid());
     }
 
     @Override

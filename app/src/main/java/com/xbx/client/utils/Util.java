@@ -16,6 +16,8 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -112,6 +114,7 @@ public class Util {
             showToast(context, "未知异常");
         }
     }
+
     /**
      * 将px值转换为dip或dp值，保证尺寸大小不变
      *
@@ -135,20 +138,22 @@ public class Util {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
     }
+
     /**
      * 获取拼音的首字母（大写）
+     *
      * @param pinyin
      * @return
      */
-    public static String getFirstLetter(final String pinyin){
+    public static String getFirstLetter(final String pinyin) {
         if (TextUtils.isEmpty(pinyin)) return "定位";
         String c = pinyin.substring(0, 1);
         Pattern pattern = Pattern.compile("^[A-Za-z]+$");
-        if (pattern.matcher(c).matches()){
+        if (pattern.matcher(c).matches()) {
             return c.toUpperCase();
-        } else if ("0".equals(c)){
+        } else if ("0".equals(c)) {
             return "定位";
-        } else if ("1".equals(c)){
+        } else if ("1".equals(c)) {
             return "热门";
         }
         return "定位";
@@ -156,11 +161,29 @@ public class Util {
 
     /**
      * 提取出城市或者县
+     *
      * @param city
      * @param district
      * @return
      */
-    public static String extractLocation(final String city, final String district){
+    public static String extractLocation(final String city, final String district) {
         return district.contains("县") ? district.substring(0, district.length() - 1) : city.substring(0, city.length() - 1);
+    }
+
+    /**
+     * 时间戳转换成日期格式字符串
+     *
+     * @param seconds 精确到秒的字符串
+     * @param format
+     * @return
+     */
+    public static String timeStamp2Date(String seconds, String format) {
+        if (seconds == null || seconds.isEmpty() || seconds.equals("null")) {
+            return "";
+        }
+        if (format == null || format.isEmpty())
+            format = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(new Date(Long.valueOf(seconds)));
     }
 }

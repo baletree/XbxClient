@@ -51,7 +51,7 @@ public class MapLocate {
             if (location != null) {
                 if (isFirstLoc) {
                     Util.pLog("XbxLocate：" + location.getLatitude() + " " + location.getLongitude()
-                            + "" + location.getCity() + location.getAddrStr());
+                            + "" + location.getCity() + location.getAddrStr()+location.getCityCode());
                     isFirstLoc = false;
                     LocationBean lB = new LocationBean();
                     lB.setCity(location.getCity());

@@ -4,6 +4,7 @@ package com.xbx.client.beans;
  * author zaaach on 2016/1/26.
  */
 public class City {
+    private String id;
     private String name;
     private String pinyin;
 
@@ -12,6 +13,14 @@ public class City {
     public City(String name, String pinyin) {
         this.name = name;
         this.pinyin = pinyin;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

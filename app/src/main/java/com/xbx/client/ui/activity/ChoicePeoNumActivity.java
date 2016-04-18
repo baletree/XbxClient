@@ -39,7 +39,7 @@ public class ChoicePeoNumActivity extends Activity implements View.OnClickListen
                 case TaskFlag.REQUESTSUCCESS:
                     String data = (String) msg.obj;
                     peopleNum = GuideParse.getChoiceNum(data);
-                    if(peopleNum == null)
+                    if (peopleNum == null)
                         return;
                     peonum_wheelView.setOffset(1);
                     peonum_wheelView.setItems(Arrays.asList(peopleNum));
@@ -84,12 +84,12 @@ public class ChoicePeoNumActivity extends Activity implements View.OnClickListen
                 finish();
                 break;
             case R.id.peo_sure_txt:
-                if(peopleNum == null){
-                    Util.showToast(this,getString(R.string.choice_null));
+                if (peopleNum == null) {
+                    Util.showToast(this, getString(R.string.choice_null));
                     finish();
                     return;
                 }
-                intent.putExtra("GuideNum",peopleNum[selectIndex]);
+                intent.putExtra("userNumType", selectIndex + "");
                 setResult(RESULT_OK, intent);
                 finish();
                 break;

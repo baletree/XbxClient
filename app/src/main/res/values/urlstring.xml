@@ -2,14 +2,15 @@
 <resources>
     <string name="url_http">http://naichawaimai.applinzi.com/Takeout/api.php/Users/</string>
    <!-- <string name="url_conIp">http://192.168.1.24/yueyou/index.php/Api/</string>-->
-    <string name="url_conIp">http://123.56.194.208/yueyou/Api/</string>
+    <string name="url_conIp">http://192.168.1.27/yueyou/Api/</string>
     <string name="url_getCode">user/send_verify_code.json</string>
     <string name="url_Login">user/login.json</string>
     <string name="url_nearGuide">Index/home_page.json</string>
     <string name="url_guideInfo">user/guide_detail.json</string>
     <string name="url_setoffNum">Index/get_people_number.json</string>
     <string name="url_findGuide">Order/create_order.json</string>
-    <string name="url_orderList">Index/user_my_order.json</string>
+    <string name="url_orderList">Order/user_my_order.json</string>
+    <string name="url_orderDetail">Order/user_order_detail.json</string>
     <string name="url_isFindGuide">Order/get_find_guide_status.json</string>
     <string name="url_getMyGuideInfo">Order/user_order_process.json</string>
     <string name="url_cancelImmeOrder">Order/cancel_order.json</string>

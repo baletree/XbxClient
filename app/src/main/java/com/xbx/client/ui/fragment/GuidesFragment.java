@@ -29,7 +29,6 @@ import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
@@ -121,17 +120,16 @@ public class GuidesFragment extends BasedFragment implements
     private String nearGuideUrl = "";
     private boolean isVisibaleTouser = false;
     private boolean isInOrder = false; // 是否处在订单中
-    //    private boolean isCancle = false;// 用户是否取消
-    private boolean isArrivalTime = false;
     private boolean isFirstInOrder = true;
+    private boolean isArrivalTime = false;
     private int countFindGui = 0;
     private String uid = "";
     private String outsetJson = "";
     private String destinationJson = null;
     private Marker mMarkerGuide;
-    private String guideNums = "";
+    private String userNums = ""; // 出行人数选择
     private String findGuideorderNum;
-
+    //    private boolean isCancle = false;// 用户是否取消
 
     private Handler handler = new Handler() {
         @Override
@@ -139,17 +137,13 @@ public class GuidesFragment extends BasedFragment implements
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    if (isVisibaleTouser && !isInOrder) {
-                        LatLng cLatlng = SharePrefer.getLatlng(getActivity());
-                        if (cLatlng == null)
-                            return;
+                    if (isVisibaleTouser && !isInOrder && !Util.isNull(main_outset_tv.getText().toString())) {
                         api.getNearGuide(currentLalng, nearGuideUrl, uid);
                         handler.sendEmptyMessageDelayed(1, 6000);
                     }
                     break;
                 case 10:
-                    if (!isInOrder && !isArrivalTime) {
-                        // 未匹配到导游并且没有到达规定时间继续发送
+                    if (!isInOrder && !isArrivalTime) { // 未匹配到导游并且没有到达规定时间继续发送
                         api.isFindGuide(uid, findGuideorderNum);
                         handler.sendEmptyMessageDelayed(10, 5000);
                     }
@@ -159,14 +153,17 @@ public class GuidesFragment extends BasedFragment implements
                     handler.sendEmptyMessageDelayed(20, 5000);
                     break;
                 case 30:
-                    countFindGui++;
-                    if(countFindGui < 81){
-                        handler.sendEmptyMessage(30);
-                    }else {
+                    countFindGui = countFindGui + 1;
+                    if (countFindGui < 51) {
+                        handler.sendEmptyMessageDelayed(30, 1000);
+                    } else {
+                        if (isInOrder)
+                            return;
                         isArrivalTime = true;
                         countFindGui = 0;
                         guide_call_layout.setVisibility(View.GONE);
                         guide_fuc_layout.setVisibility(View.VISIBLE);
+                        loadingFragment.dismiss();
                     }
                     break;
                 case TaskFlag.REQUESTSUCCESS:
@@ -187,6 +184,7 @@ public class GuidesFragment extends BasedFragment implements
                     break;
                 case TaskFlag.PAGEREQUESTWO://服务我的导游信息
                     String myGuideData = (String) msg.obj;
+                    Util.pLog("MyGuideInfo:" + myGuideData);
                     guideInfoBean = GuideParse.parseMyGuide(myGuideData);
                     if (guideInfoBean != null)
                         if (isFirstInOrder)
@@ -386,8 +384,8 @@ public class GuidesFragment extends BasedFragment implements
                 destinationJson = poiInfo.location.latitude + "," + poiInfo.location.longitude + "," + poiInfo.name;
                 break;
             case callGuideReques:
-                guideNums = data.getStringExtra("GuideNum");
-                if (Util.isNull(guideNums))
+                userNums = data.getStringExtra("userNumType");
+                if (Util.isNull(userNums))
                     return;
                 guide_fuc_layout.setVisibility(View.GONE);
                 guide_call_layout.setVisibility(View.VISIBLE);
@@ -428,7 +426,7 @@ public class GuidesFragment extends BasedFragment implements
                     Util.showToast(getActivity(), getString(R.string.setoff_null));
                     return;
                 }
-                api.findGuide(uid, outsetJson, outsetJson, "", "", "0", "1", guideNums);
+                api.findGuide(uid, outsetJson, "", "", "0", "1", userNums, "");
                 break;
             case R.id.guide_head_img://头像
 
@@ -453,6 +451,10 @@ public class GuidesFragment extends BasedFragment implements
         if (rGeoCodeResult.getPoiList().size() == 0)
             return;
         currentLalng = rGeoCodeResult.getLocation();
+        if (!isInOrder) {
+            api.getNearGuide(currentLalng, nearGuideUrl, uid);
+            Util.pLog("拖拽地图结果");
+        }
         main_outset_tv.setText(rGeoCodeResult.getPoiList().get(0).name);
         outsetJson = rGeoCodeResult.getLocation().latitude + "," + rGeoCodeResult.getLocation().longitude + "," + main_outset_tv.getText().toString();
     }
@@ -475,7 +477,7 @@ public class GuidesFragment extends BasedFragment implements
 
     @Override
     public void onMapStatusChangeFinish(MapStatus mapStatus) {
-        Util.pLog("拖动地图结束");
+//        Util.pLog("拖动地图结束");
         geoCoder.reverseGeoCode(new ReverseGeoCodeOption()
                 .location(mapStatus.target));
     }
@@ -572,6 +574,7 @@ public class GuidesFragment extends BasedFragment implements
         guide_call_layout.setVisibility(View.GONE);
         guide_locate_layout.setVisibility(View.GONE);
         guide_center_layout.setVisibility(View.GONE);
+        guide_fuc_layout.setVisibility(View.GONE);
         Intent intent = new Intent();
         intent.putExtra("theOrderNum", findGuideorderNum);
         intent.putExtra("cancelType", 1);
@@ -585,6 +588,17 @@ public class GuidesFragment extends BasedFragment implements
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
 
     private class NearGuide implements ServiceConnection {
 

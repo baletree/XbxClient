@@ -1,5 +1,6 @@
 package com.xbx.client.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.xbx.client.R;
 import com.xbx.client.beans.OrderBean;
+import com.xbx.client.utils.Util;
 
 import java.util.List;
 
@@ -19,8 +21,10 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
 
     private OnRecyItemClickListener mOnItemClickListener;
     private List<OrderBean> orderList;
+    private Context context;
 
-    public MyOrderAdapter(List<OrderBean> orderList) {
+    public MyOrderAdapter(Context context, List<OrderBean> orderList) {
+        this.context = context;
         this.orderList = orderList;
     }
 
@@ -39,9 +43,28 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         OrderBean orderBean = orderList.get(position);
         holder.order_time_tv.setText(orderBean.getOrderTime());
-        holder.order_guidetype_tv.setText(orderBean.getGuideType());
-        holder.order_state_tv.setText(orderBean.getOrderState());
+        if ("0".equals(orderBean.getOrderType()))
+            holder.order_type_tv.setText(context.getString(R.string.immediaServer));
+        else
+            holder.order_type_tv.setText(context.getString(R.string.reserveServer));
+        if ("1".equals(orderBean.getOrderType()))
+            holder.order_guidetype_tv.setText(context.getString(R.string.main_guide));
+        else if ("2".equals(orderBean.getOrderType()))
+            holder.order_guidetype_tv.setText(context.getString(R.string.main_native));
+        else
+            holder.order_guidetype_tv.setText(context.getString(R.string.main_withTour));
+        if ("0".equals(orderBean.getOrderState()))
+            holder.order_state_tv.setText(context.getString(R.string.orderWaitSure));
+        else if ("1".equals(orderBean.getOrderState()))
+            holder.order_state_tv.setText(context.getString(R.string.orderReserve));
+        else if ("2".equals(orderBean.getOrderState()))
+            holder.order_state_tv.setText(context.getString(R.string.orderClose));
+        else if ("3".equals(orderBean.getOrderState()))
+            holder.order_state_tv.setText(context.getString(R.string.orderGeton));
+        else if ("4".equals(orderBean.getOrderState()))
+            holder.order_state_tv.setText(context.getString(R.string.orderFinish));
         holder.order_address_tv.setText(orderBean.getOrderAddress());
+        holder.order_pay_tv.setText("￥"+orderBean.getOrderPay());
         holder.order_item_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +85,8 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
         private TextView order_guidetype_tv;
         private TextView order_state_tv;
         private TextView order_address_tv;
+        private TextView order_type_tv;
+        private TextView order_pay_tv;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -70,6 +95,8 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
             order_guidetype_tv = (TextView) itemView.findViewById(R.id.order_guidetype_tv);
             order_state_tv = (TextView) itemView.findViewById(R.id.order_state_tv);
             order_address_tv = (TextView) itemView.findViewById(R.id.order_address_tv);
+            order_type_tv = (TextView) itemView.findViewById(R.id.order_type_tv);
+            order_pay_tv = (TextView) itemView.findViewById(R.id.order_pay_tv);
         }
     }
 

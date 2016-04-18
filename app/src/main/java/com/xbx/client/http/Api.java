@@ -64,7 +64,7 @@ public class Api {
     public void getMyGuideInfo(String orderNum) {
         if (context == null)
             return;
-        String guideInfoUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_getMyGuideInfo)).concat("?order_number="+orderNum);
+        String guideInfoUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_getMyGuideInfo)).concat("?order_number=" + orderNum);
         IRequest.get(context, guideInfoUrl, new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
@@ -81,7 +81,7 @@ public class Api {
         if (context == null)
             return;
         String setoffNumUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_setoffNum));
-        IRequest.get(context, setoffNumUrl,new RequestBackLisener(context) {
+        IRequest.get(context, setoffNumUrl, new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 super.requestSuccess(json);
@@ -92,50 +92,50 @@ public class Api {
     }
 
     /**
-     *
      * @param uid
      * @param startInfo 用户开始地址Json
      * @param startInfo
      * @param startTime
      * @param endTime
-     * @param serverTye
-     * @param guideType
+     * @param serverTye 即时或者预约
+     * @param guideType 导游或者伴游和土著
      * @param userNum
+     * @param cityId
      */
-    public void findGuide(String uid, String startInfo, String endInfo, String startTime, String endTime, String serverTye,
-                          String guideType, String userNum) {
+    public void findGuide(String uid, String startInfo,String startTime, String endTime, String serverTye,
+                          String guideType, String userNum,String cityId) {
         if (context == null)
             return;
         RequestParams params = new RequestParams();
         params.put("uid", uid);
-        params.put("start_addr_info", startInfo);
-        params.put("end_addr_info", endInfo);
+        params.put("server_addr_lnglat", startInfo);
         params.put("server_start_time", startTime);
         params.put("server_end_time", endTime);
+        params.put("server_city_id", cityId);
         params.put("server_type", serverTye);
-        params.put("service", guideType);
+        params.put("guide_type", guideType);
         params.put("number", userNum);
-        Util.pLog("uid:"+uid+" startInfo:"+startInfo+" endInfo:"+endInfo+" startTime:"+startTime+" endTime:"+endTime+" serverType:"+serverTye+" guideType:"+guideType+" userNum:"+userNum);
+        Util.pLog("uid:" + uid + " start_addr_lnglat:" + startInfo +" server_start_time:" + startTime + " server_end_time:" + endTime + " server_type:" + serverTye + " guideType:" + guideType + " number:" + userNum+" cityId"+cityId);
         String findUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_findGuide));
-        IRequest.post(context, findUrl, params,"", new RequestBackLisener(context) {
+        IRequest.post(context, findUrl, params, "", new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("呼叫导游:" + json);
-                sendShowMsg(TaskFlag.PAGEREQUESTHREE,json);
+                sendShowMsg(TaskFlag.PAGEREQUESTHREE, json);
             }
         });
     }
 
-    public void isFindGuide(String uid,String orderNum){
+    public void isFindGuide(String uid, String orderNum) {
         if (context == null)
             return;
-        String isFindUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_isFindGuide)).concat("?uid="+uid).concat("&order_number="+orderNum);
+        String isFindUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_isFindGuide)).concat("?uid=" + uid).concat("&order_number=" + orderNum);
 //        Util.pLog("isFindUrl:"+isFindUrl);
         IRequest.get(context, isFindUrl, new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("是否找到导游:" + json);
-                sendMsg(TaskFlag.PAGEREQUESFOUR,json);
+                sendMsg(TaskFlag.PAGEREQUESFOUR, json);
             }
 
             @Override
@@ -144,43 +144,61 @@ public class Api {
         });
     }
 
-    public void cancelFindGuide(String orderNum){
+    public void cancelFindGuide(String orderNum) {
         if (context == null)
             return;
-        String isFindUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_cancelFindGuide)).concat("?order_number="+orderNum);
-        IRequest.get(context, isFindUrl,context.getString(R.string.stop_find), new RequestBackLisener(context) {
+        String isFindUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_cancelFindGuide)).concat("?order_number=" + orderNum);
+        IRequest.get(context, isFindUrl, context.getString(R.string.stop_find), new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("取消寻找导游:" + json);
-                sendShowMsg(TaskFlag.PAGEREQUESFIVE,json);
+                sendShowMsg(TaskFlag.PAGEREQUESFIVE, json);
             }
         });
     }
 
-    public void cancelOrder(String orderNum){
+    public void cancelOrder(String orderNum) {
         if (context == null)
             return;
-        String isFindUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_cancelImmeOrder)).concat("?order_number="+orderNum);
-        IRequest.get(context, isFindUrl,context.getString(R.string.stop_order), new RequestBackLisener(context) {
+        String isFindUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_cancelImmeOrder)).concat("?order_number=" + orderNum);
+        IRequest.get(context, isFindUrl, context.getString(R.string.stop_order), new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("取消订单:" + json);
-                sendMsg(TaskFlag.PAGEREQUESFIVE,json);
+                sendMsg(TaskFlag.PAGEREQUESFIVE, json);
             }
         });
     }
 
-    public void getMyOrderList(String uid){
+    /**
+     * 用户订单列表
+     *
+     * @param uid
+     */
+    public void getMyOrderList(String uid) {
         if (context == null)
             return;
-        RequestParams params = new RequestParams();
-        params.put("uid", uid);
-        String orderListUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_orderList));
-        IRequest.post(context, orderListUrl, params, new RequestBackLisener(context) {
+        String orderListUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_orderList)).concat("?uid=" + uid);
+        IRequest.get(context, orderListUrl, new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 super.requestSuccess(json);
                 Util.pLog("订单列表:" + json);
+                sendShowMsg(TaskFlag.REQUESTSUCCESS, json);
+            }
+        });
+    }
+
+    public void getOrderDetail(String orderNum) {
+        if (context == null)
+            return;
+        String orderListUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_orderDetail)).concat("?order_number=" + orderNum);
+        IRequest.get(context, orderListUrl, new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+                super.requestSuccess(json);
+                Util.pLog("订单详情:" + json);
+                sendShowMsg(TaskFlag.REQUESTSUCCESS, json);
             }
         });
     }

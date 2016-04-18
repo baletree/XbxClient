@@ -16,7 +16,10 @@ import com.xbx.client.R;
 import com.xbx.client.adapter.MyOrderAdapter;
 import com.xbx.client.beans.OrderBean;
 import com.xbx.client.http.Api;
+import com.xbx.client.jsonparse.OrderParse;
 import com.xbx.client.utils.SharePrefer;
+import com.xbx.client.utils.TaskFlag;
+import com.xbx.client.utils.Util;
 import com.xbx.client.view.RecycleViewDivider;
 
 import java.util.ArrayList;
@@ -33,8 +36,9 @@ public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRe
 
     private LinearLayoutManager layoutManager = null;
     private MyOrderAdapter myOrderAdapter = null;
-    private List<OrderBean> orderList = null;
     private Api api = null;
+    private List<OrderBean> orderList = null;
+
     private String uid = "";
 
     private Handler handler = new Handler(){
@@ -42,7 +46,13 @@ public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRe
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-
+                case TaskFlag.REQUESTSUCCESS:
+                    String data = (String) msg.obj;
+                    orderList = OrderParse.orderListParse(data);
+                    myOrderAdapter = new MyOrderAdapter(MyOrderActivity.this,orderList);
+                    order_rv.setAdapter(myOrderAdapter);
+                    myOrderAdapter.setOnItemClickListener(MyOrderActivity.this);
+                    break;
             }
         }
     };
@@ -60,18 +70,6 @@ public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRe
         layoutManager = new LinearLayoutManager(this);
         orderList = new ArrayList<>();
         api = new Api(MyOrderActivity.this,handler);
-        OrderBean orderBean1 = new OrderBean();
-        orderBean1.setOrderTime("4月6日 10：35");
-        orderBean1.setGuideType("随游");
-        orderBean1.setOrderState("进行中");
-        orderBean1.setOrderAddress("都江堰青城山");
-        OrderBean orderBean2 = new OrderBean();
-        orderBean2.setOrderTime("10月26日 10：35");
-        orderBean2.setGuideType("土著");
-        orderBean2.setOrderState("未开始");
-        orderBean2.setOrderAddress("峨眉山");
-        orderList.add(orderBean1);
-        orderList.add(orderBean2);
     }
 
     @Override
@@ -87,9 +85,7 @@ public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRe
         RecyclerViewHeader recyclerHeader = (RecyclerViewHeader) findViewById(R.id.order_head_layout);
         recyclerHeader.attachTo(order_rv, true);
         order_rv.setItemAnimator(new DefaultItemAnimator());
-        myOrderAdapter = new MyOrderAdapter(orderList);
-        order_rv.setAdapter(myOrderAdapter);
-        myOrderAdapter.setOnItemClickListener(this);
+        api.getMyOrderList(uid);
     }
 
     @Override
@@ -104,6 +100,8 @@ public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRe
 
     @Override
     public void onItemClick(View v, int position) {
-        startActivity(new Intent(MyOrderActivity.this,OrderDetailActivity.class));
+        Intent intent = new Intent(MyOrderActivity.this,OrderDetailActivity.class);
+        intent.putExtra("orderNumber",orderList.get(position).getOrderNum());
+        startActivity(intent);
     }
 }

@@ -1,10 +1,14 @@
 package com.xbx.client.ui.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xbx.client.R;
+import com.xbx.client.http.Api;
+import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.view.FlowLayout;
 
 import java.util.ArrayList;
@@ -18,6 +22,21 @@ public class OrderDetailActivity extends BaseActivity {
     private TextView title_txt;
 
     private List<String> tagList = null;
+    private Api api = null;
+
+    private String orderNuber = "";
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case TaskFlag.REQUESTSUCCESS:
+
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +47,8 @@ public class OrderDetailActivity extends BaseActivity {
     @Override
     protected void initDatas() {
         super.initDatas();
+        orderNuber = getIntent().getStringExtra("orderNumber");
+        api = new Api(OrderDetailActivity.this,handler);
         tagList = new ArrayList<>();
         tagList.add("大胆");
         tagList.add("脾气大");
@@ -47,6 +68,7 @@ public class OrderDetailActivity extends BaseActivity {
         for (int i = 0; i < tagList.size(); i++) {
             guide_tag_flayout.addView(addTextView(tagList.get(i)));
         }
+        api.getOrderDetail(orderNuber);
     }
 
     private TextView addTextView(String txt) {

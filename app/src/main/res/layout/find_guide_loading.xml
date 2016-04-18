@@ -17,7 +17,13 @@
             style="@style/loading_small"
             android:layout_width="@dimen/dp_fifty"
             android:layout_height="@dimen/dp_fifty" />
-
+        <ProgressBar
+            android:id="@+id/find_loading_bar2"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="@dimen/dp_fifty"
+            android:layout_height="@dimen/dp_fifty"
+            android:visibility="gone"
+            android:layout_gravity="center_horizontal" />
 
         <TextView
             android:id="@+id/find_loading_text"

@@ -76,7 +76,7 @@
             <TextView
                 android:id="@+id/order_pay_tv"
                 style="@style/textView_Black"
-                android:text="￥100"
+                android:text=""
                 android:textColor="@color/mainCircle2"
                 android:layout_alignParentRight="true"
                 android:textSize="@dimen/sp_fifteen"/>

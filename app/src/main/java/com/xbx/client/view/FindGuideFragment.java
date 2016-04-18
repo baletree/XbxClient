@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.xbx.client.R;
@@ -19,6 +20,8 @@ public class FindGuideFragment extends DialogFragment implements DialogInterface
 	private TextView vLoading_text;
 	private ImageView vLoading_img;
 	private LinearLayout cancle_find_ll;
+	private ProgressBar find_loading_bar;
+	private ProgressBar find_loading_bar2;
 
 	private String mMsg = "";
 	private OnCancelGuiFindLisener cancelFindLisener;
@@ -50,6 +53,15 @@ public class FindGuideFragment extends DialogFragment implements DialogInterface
 		vLoading_text = (TextView) view.findViewById(R.id.find_loading_text);
 		vLoading_img = (ImageView) view.findViewById(R.id.cancel_find_img);
 		cancle_find_ll = (LinearLayout) view.findViewById(R.id.cancle_find_ll);
+		find_loading_bar = (ProgressBar) view.findViewById(R.id.find_loading_bar);
+		find_loading_bar2 = (ProgressBar) view.findViewById(R.id.find_loading_bar2);
+		if(Integer.valueOf(android.os.Build.VERSION.SDK_INT) >= 23){
+			find_loading_bar2.setVisibility(View.VISIBLE);
+			find_loading_bar.setVisibility(View.GONE);
+		}else{
+			find_loading_bar.setVisibility(View.GONE);
+			find_loading_bar2.setVisibility(View.VISIBLE);
+		}
 		if(Util.isNull(mMsg)){
 			vLoading_text.setVisibility(View.GONE);
 		}else {
