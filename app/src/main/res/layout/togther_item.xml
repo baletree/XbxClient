@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/dp_hundred_fifty_four"
+    android:layout_height="@dimen/dp_thundred_twenty_one">
+
+    <ImageView
+        android:id="@+id/together_item_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/theme_light_bg" />
+
+    <LinearLayout
+        android:layout_width="@dimen/dp_hundred_fifty"
+        android:layout_height="@dimen/dp_thundred_seventeen"
+        android:layout_gravity="center"
+        android:background="@drawable/white_bg"
+        android:orientation="vertical">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/together_item_head_img"
+            android:layout_width="@dimen/dp_sixty_four"
+            android:layout_height="@dimen/dp_sixty_four"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_sixteen"
+            android:src="@mipmap/user_head"
+            app:riv_oval="true" />
+
+        <TextView
+            android:id="@+id/together_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_eight"
+            android:text="@string/user_info_nickname_text"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/sp_eighteen" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_four"
+            android:orientation="horizontal">
+
+            <RatingBar
+                android:id="@+id/together_item_ratingbar"
+                style="@style/roomRatingBar_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:rating="3" />
+
+            <TextView
+                android:id="@+id/together_item_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_eight"
+                android:text="@string/user_info_nickname_text"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_ten" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_one"
+            android:layout_marginTop="@dimen/dp_eight"
+            android:background="@drawable/div_line"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_eight"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/together_price"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_twelve" />
+            <TextView
+                android:id="@+id/together_item_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_fifteen"
+                android:text="@string/user_info_nickname_text"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_twelve" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_eight"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/together_num"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_twelve" />
+            <TextView
+                android:id="@+id/together_item_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_fifteen"
+                android:text="@string/user_info_nickname_text"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_twelve" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/together_item_call"
+            android:layout_width="@dimen/dp_ninety"
+            android:layout_height="@dimen/dp_thirty"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_twelve"
+            android:gravity="center"
+            android:background="@drawable/theme_light_bg"
+            android:text="@string/user_info_nickname_text"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/sp_twelve" />
+    </LinearLayout>
+
+
+</FrameLayout>

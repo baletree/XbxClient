@@ -55,6 +55,10 @@
     <dimen name="dp_hundred_thirty">130dp</dimen>
     <dimen name="dp_hundred_fifty">150dp</dimen>
     <dimen name="dp_thundred_fifty">250dp</dimen>
+    <dimen name="dp_ninety">90dp</dimen>
+    <dimen name="dp_hundred_fifty_four">154dp</dimen>
+    <dimen name="dp_thundred_seventeen">217dp</dimen>
+    <dimen name="dp_thundred_twenty_one">221dp</dimen>
     <!-- 字体sp-->
     <dimen name="sp_ten">10sp</dimen>
     <dimen name="sp_eleven">11sp</dimen>

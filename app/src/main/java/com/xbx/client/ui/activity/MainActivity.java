@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.xbx.client.R;
 import com.xbx.client.adapter.MyViewPagerAdapter;
+import com.xbx.client.beans.TogetherBean;
 import com.xbx.client.beans.UserInfo;
 import com.xbx.client.http.Api;
 import com.xbx.client.http.IRequest;
@@ -41,7 +42,10 @@ import com.xbx.client.utils.Util;
 import com.xbx.client.view.BanSlideViewpager;
 import com.xbx.client.view.TipsDialog;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
@@ -125,6 +129,8 @@ public class MainActivity extends BaseActivity {
         menu_userInfo_layout = (RelativeLayout) findViewById(R.id.menu_userInfo_layout);
         viewpager.setScrollble(false);
         viewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager(), this);
+        findViewById(R.id.menu_setting_layout).setOnClickListener(this);
+        findViewById(R.id.menu_recruit_layout).setOnClickListener(this);
         main_menu_img.setOnClickListener(this);
         cancel_order_tv.setOnClickListener(this);
         menu_order_layout.setOnClickListener(this);
@@ -238,6 +244,27 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.menu_userInfo_layout:
                 startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
+                toggleLeftLayout();
+                break;
+            case R.id.menu_setting_layout: //设置
+                startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                toggleLeftLayout();
+                break;
+            case R.id.menu_recruit_layout: //导游招募
+                List<TogetherBean> list = new ArrayList<>();
+                TogetherBean bean1 = new TogetherBean();
+                TogetherBean bean2 = new TogetherBean();
+                TogetherBean bean3 = new TogetherBean();
+                TogetherBean bean4 = new TogetherBean();
+                TogetherBean bean5 = new TogetherBean();
+                list.add(bean1);
+                list.add(bean2);
+                list.add(bean3);
+                list.add(bean4);
+                list.add(bean5);
+                Intent intent = new Intent(MainActivity.this, TogetherActivity.class);
+                intent.putExtra("data",(Serializable) list);
+                startActivity(intent);
                 toggleLeftLayout();
                 break;
         }

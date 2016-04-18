@@ -145,4 +145,23 @@
     <string name="orderClose">已关闭</string>
     <string name="orderGeton">进行中</string>
     <string name="orderWaitSure">待确认</string>
+    <string name="setting_title">设置</string>
+    <string name="setting_user_guide">用户指南</string>
+    <string name="setting_consumer_hotline">客服电话</string>
+    <string name="setting_legal">法律条款</string>
+    <string name="setting_about">关于途途导由</string>
+    <string name="setting_feedback">意见反馈</string>
+    <string name="setting_sign_out">退出登录</string>
+    <string name="about_title">关于</string>
+    <string name="about_basic_intro">基本介绍</string>
+    <string name="about_current_version">当前版本</string>
+    <string name="about_contact_us">联系我们</string>
+    <string name="user_guide_title">用户指南</string>
+    <string name="user_guide_about_tour">关于导游</string>
+    <string name="user_guide_about_darky">关于土著</string>
+    <string name="user_guide_about_follow">关于随游</string>
+    <string name="user_guide_book">即时和预约</string>
+    <string name="user_guide_cancel_order">取消订单</string>
+    <string name="together_price">价格</string>
+    <string name="together_num">导游</string>
 </resources>
