@@ -17,6 +17,7 @@ public class Constant {
     public static final int outsetFlag = 100;
     public static final int destFlag = 101;
     public static final String ACTION_GCANCELORD = "com.xbx.client.guide.cancel.order";
+    public static final String ACTION_GCANCELUIDEORDSUC = "com.xbx.client.guide.cancel.order.success";
     /**
      * 存储根目录
      */

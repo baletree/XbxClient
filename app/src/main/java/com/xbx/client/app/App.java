@@ -2,6 +2,7 @@ package com.xbx.client.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.telephony.TelephonyManager;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
@@ -35,7 +36,9 @@ public class App extends Application {
     }
 
     private void getPhoneId() {
-
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+//        Util.encrypt(tm.getDeviceId(),"key123");
+//        SharePrefer.savePhone();
     }
 
     private void initImageLoader() {

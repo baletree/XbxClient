@@ -1,15 +1,19 @@
 package com.xbx.client.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xbx.client.R;
 import com.xbx.client.utils.Constant;
+import com.xbx.client.utils.Util;
 
 /**
- * Created by 鹏 on 2016/4/17.
+ * Created by EricYuan on 2016/4/17.
  */
 public class UserInfoActivity extends BaseActivity {
 
@@ -20,6 +24,7 @@ public class UserInfoActivity extends BaseActivity {
     private TextView user_info_birthday_text;
     private TextView user_info_name_text;
     private TextView user_info_phone_text;
+    private ImageView user_info_head_img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +41,7 @@ public class UserInfoActivity extends BaseActivity {
         user_info_birthday_text = (TextView) findViewById(R.id.user_info_birthday_text);
         user_info_name_text = (TextView) findViewById(R.id.user_info_name_text);
         user_info_phone_text = (TextView) findViewById(R.id.user_info_phone_text);
+        user_info_head_img = (ImageView) findViewById(R.id.user_info_head_img);
 
         title_txt_tv.setText(getString(R.string.user_info_title));
         title_rtxt_tv.setText(getString(R.string.user_info_title_right_text));
@@ -89,7 +95,9 @@ public class UserInfoActivity extends BaseActivity {
             switch (requestCode) {
                 case 100:
                     String picPath = data.getStringExtra(Constant.KEY_PHOTO_PATH);
-
+                    Bitmap bitmap = BitmapFactory.decodeFile(picPath);
+                    user_info_head_img.setImageBitmap(bitmap);
+                    Util.pLog("KEY_PHOTO_PATH:"+picPath);
                     break;
                 case 102:
                     String sex = data.getStringExtra("result");

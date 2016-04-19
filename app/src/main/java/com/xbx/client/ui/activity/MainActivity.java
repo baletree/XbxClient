@@ -34,6 +34,7 @@ import com.xbx.client.ui.fragment.GuidesFragment;
 import com.xbx.client.ui.fragment.NativesFragment;
 import com.xbx.client.ui.fragment.TogetherFragment;
 import com.xbx.client.ui.fragment.WithtourFragment;
+import com.xbx.client.utils.AESCrypt;
 import com.xbx.client.utils.Constant;
 import com.xbx.client.utils.RequestBackLisener;
 import com.xbx.client.utils.SharePrefer;
@@ -79,16 +80,19 @@ public class MainActivity extends BaseActivity {
 
     private TipsDialog tipsDialog = null;
     private boolean isFromLogin = false;
-    private int cancelType = 0;
+    private int cancelType = 0; //1-导游 2-土著  3-随游
     private String orderNum = "";
 
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
-                case TaskFlag.PAGEREQUESFIVE:
-
+            switch (msg.what) {
+                case TaskFlag.PAGEREQUESFIVE: //取消订单成功
+                    cancel_order_tv.setVisibility(View.GONE);
+                    Intent intent = new Intent();
+                    intent.setAction(Constant.ACTION_GCANCELUIDEORDSUC);
+                    lBManager.sendBroadcast(intent);
                     break;
             }
         }
@@ -99,6 +103,14 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_layout);
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
+        try {
+            AESCrypt aes = new AESCrypt("key123");
+            String txtResult = aes.encrypt("123");
+            aes.decrypt(txtResult);
+        } catch (Exception e) {
+            Util.pLog(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -110,14 +122,14 @@ public class MainActivity extends BaseActivity {
         String registerId = JPushInterface.getRegistrationID(this);
         Set<String> tagSet = new LinkedHashSet<String>();
         tagSet.add(registerId);
-        JPushInterface.setTags(this,tagSet,null);
-        Util.pLog("RegisterId:" + registerId+" uid:"+SharePrefer.getUserInfo(MainActivity.this).getUid());
+        JPushInterface.setTags(this, tagSet, null);
+        Util.pLog("RegisterId:" + registerId + " uid:" + SharePrefer.getUserInfo(MainActivity.this).getUid());
     }
 
     @Override
     protected void initViews() {
         super.initViews();
-        api = new Api(MainActivity.this,handler);
+        api = new Api(MainActivity.this, handler);
         drawerLayout = (DrawerLayout) findViewById(R.id.main_drawerLayout);
         drawerLayout.setScrimColor(0x32000000);// 设置半透明度
         mToolbar = (Toolbar) findViewById(R.id.toolBar);
@@ -263,7 +275,7 @@ public class MainActivity extends BaseActivity {
                 list.add(bean4);
                 list.add(bean5);
                 Intent intent = new Intent(MainActivity.this, TogetherActivity.class);
-                intent.putExtra("data",(Serializable) list);
+                intent.putExtra("data", (Serializable) list);
                 startActivity(intent);
                 toggleLeftLayout();
                 break;
@@ -301,7 +313,7 @@ public class MainActivity extends BaseActivity {
             String action = intent.getAction();
             if (Constant.ACTION_GCANCELORD.equals(action)) {
                 cancel_order_tv.setVisibility(View.VISIBLE);
-                cancelType = intent.getIntExtra("cancelType",0);
+                cancelType = intent.getIntExtra("cancelType", 0);
                 orderNum = intent.getStringExtra("theOrderNum");
             }
         }

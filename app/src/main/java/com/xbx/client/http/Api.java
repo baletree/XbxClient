@@ -39,7 +39,6 @@ public class Api {
         params.put("lon", currentLalng.longitude + "");
         params.put("lat", currentLalng.latitude + "");
         params.put("uid", uid);
-//        Util.pLog("lon:"+currentLalng.longitude+" lat:"+currentLalng.latitude);
         IRequest.post(context, nearGuideUrl, params, new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
@@ -102,8 +101,8 @@ public class Api {
      * @param userNum
      * @param cityId
      */
-    public void findGuide(String uid, String startInfo,String startTime, String endTime, String serverTye,
-                          String guideType, String userNum,String cityId) {
+    public void findGuide(String uid, String startInfo, String startTime, String endTime, String serverTye,
+                          String guideType, String userNum, String cityId) {
         if (context == null)
             return;
         RequestParams params = new RequestParams();
@@ -115,7 +114,7 @@ public class Api {
         params.put("server_type", serverTye);
         params.put("guide_type", guideType);
         params.put("number", userNum);
-        Util.pLog("uid:" + uid + " start_addr_lnglat:" + startInfo +" server_start_time:" + startTime + " server_end_time:" + endTime + " server_type:" + serverTye + " guideType:" + guideType + " number:" + userNum+" cityId"+cityId);
+        Util.pLog("uid:" + uid + " start_addr_lnglat:" + startInfo + " server_start_time:" + startTime + " server_end_time:" + endTime + " server_type:" + serverTye + " guideType:" + guideType + " number:" + userNum + " cityId" + cityId);
         String findUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_findGuide));
         IRequest.post(context, findUrl, params, "", new RequestBackLisener(context) {
             @Override
@@ -130,7 +129,6 @@ public class Api {
         if (context == null)
             return;
         String isFindUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_isFindGuide)).concat("?uid=" + uid).concat("&order_number=" + orderNum);
-//        Util.pLog("isFindUrl:"+isFindUrl);
         IRequest.get(context, isFindUrl, new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
@@ -144,28 +142,19 @@ public class Api {
         });
     }
 
-    public void cancelFindGuide(String orderNum) {
-        if (context == null)
-            return;
-        String isFindUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_cancelFindGuide)).concat("?order_number=" + orderNum);
-        IRequest.get(context, isFindUrl, context.getString(R.string.stop_find), new RequestBackLisener(context) {
-            @Override
-            public void requestSuccess(String json) {
-                Util.pLog("取消寻找导游:" + json);
-                sendShowMsg(TaskFlag.PAGEREQUESFIVE, json);
-            }
-        });
-    }
-
+    /**
+     * 取消订单
+     * @param orderNum
+     */
     public void cancelOrder(String orderNum) {
         if (context == null)
             return;
-        String isFindUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_cancelImmeOrder)).concat("?order_number=" + orderNum);
+        String isFindUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_cancelOrder)).concat("?order_number=" + orderNum);
         IRequest.get(context, isFindUrl, context.getString(R.string.stop_order), new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("取消订单:" + json);
-                sendMsg(TaskFlag.PAGEREQUESFIVE, json);
+                sendShowMsg(TaskFlag.PAGEREQUESFIVE, json);
             }
         });
     }
@@ -199,6 +188,25 @@ public class Api {
                 super.requestSuccess(json);
                 Util.pLog("订单详情:" + json);
                 sendShowMsg(TaskFlag.REQUESTSUCCESS, json);
+            }
+        });
+    }
+
+    public void uploadLatlng(String url, String uid, String lon, String lat) {
+        if (context == null)
+            return;
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("lon", lon);
+        params.put("lat", lat);
+        IRequest.post(context, url, params, new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+                Util.pLog("上传经纬度:" + json);
+            }
+
+            @Override
+            public void requestError(VolleyError e) {
             }
         });
     }

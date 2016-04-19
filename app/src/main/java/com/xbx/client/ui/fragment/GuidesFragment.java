@@ -1,6 +1,8 @@
 package com.xbx.client.ui.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -50,7 +52,9 @@ import com.xbx.client.beans.LocationBean;
 import com.xbx.client.beans.MyGuideInfoBean;
 import com.xbx.client.http.Api;
 import com.xbx.client.jsonparse.GuideParse;
-import com.xbx.client.service.NearGuideService;
+import com.xbx.client.polling.FindGuide;
+import com.xbx.client.polling.MyGuideInfo;
+import com.xbx.client.polling.PollUploadLag;
 import com.xbx.client.ui.activity.ChoicePeoNumActivity;
 import com.xbx.client.ui.activity.ImmediatePayActivity;
 import com.xbx.client.ui.activity.ReservatGuideActivity;
@@ -85,9 +89,11 @@ public class GuidesFragment extends BasedFragment implements
     private LatLng currentLalng = null;
     private List<GuideBean> guideList = null;
     private Api api = null;
-    private NearGuideService nearGuiService = null;
     private MyGuideInfoBean guideInfoBean = null;
     private BitmapDescriptor guideDes = null;
+    private PollUploadLag uploadLag = null;
+    private FindGuide findGuide = null;
+    private MyGuideInfo guideInfo = null;
 
     private TextureMapView mapView;
     private RelativeLayout guide_outset_rl;
@@ -121,15 +127,11 @@ public class GuidesFragment extends BasedFragment implements
     private boolean isVisibaleTouser = false;
     private boolean isInOrder = false; // 是否处在订单中
     private boolean isFirstInOrder = true;
-    private boolean isArrivalTime = false;
-    private int countFindGui = 0;
     private String uid = "";
     private String outsetJson = "";
-    private String destinationJson = null;
     private Marker mMarkerGuide;
     private String userNums = ""; // 出行人数选择
     private String findGuideorderNum;
-    //    private boolean isCancle = false;// 用户是否取消
 
     private Handler handler = new Handler() {
         @Override
@@ -142,29 +144,10 @@ public class GuidesFragment extends BasedFragment implements
                         handler.sendEmptyMessageDelayed(1, 6000);
                     }
                     break;
-                case 10:
-                    if (!isInOrder && !isArrivalTime) { // 未匹配到导游并且没有到达规定时间继续发送
-                        api.isFindGuide(uid, findGuideorderNum);
-                        handler.sendEmptyMessageDelayed(10, 5000);
-                    }
-                    break;
-                case 20:
-                    api.getMyGuideInfo(findGuideorderNum);
-                    handler.sendEmptyMessageDelayed(20, 5000);
-                    break;
                 case 30:
-                    countFindGui = countFindGui + 1;
-                    if (countFindGui < 51) {
-                        handler.sendEmptyMessageDelayed(30, 1000);
-                    } else {
-                        if (isInOrder)
-                            return;
-                        isArrivalTime = true;
-                        countFindGui = 0;
-                        guide_call_layout.setVisibility(View.GONE);
-                        guide_fuc_layout.setVisibility(View.VISIBLE);
-                        loadingFragment.dismiss();
-                    }
+                    guide_call_layout.setVisibility(View.GONE);
+                    guide_fuc_layout.setVisibility(View.VISIBLE);
+                    loadingFragment.dismiss();
                     break;
                 case TaskFlag.REQUESTSUCCESS:
                     String guideData = (String) msg.obj;
@@ -183,8 +166,8 @@ public class GuidesFragment extends BasedFragment implements
                     }
                     break;
                 case TaskFlag.PAGEREQUESTWO://服务我的导游信息
+                    uploadLag.uploadLatlng();
                     String myGuideData = (String) msg.obj;
-                    Util.pLog("MyGuideInfo:" + myGuideData);
                     guideInfoBean = GuideParse.parseMyGuide(myGuideData);
                     if (guideInfoBean != null)
                         if (isFirstInOrder)
@@ -197,13 +180,12 @@ public class GuidesFragment extends BasedFragment implements
                     Util.pLog("oderNum:" + findGuideorderNum);
                     if (Util.isNull(findGuideorderNum))
                         return;
+                    findGuide.toFindGuide(uid, findGuideorderNum);
                     loadingFragment.show(getActivity().getSupportFragmentManager(), "Loading");
                     loadingFragment.setMsg("正在呼叫导游");
-                    loadingFragment.setOncancelFindLisen(GuidesFragment.this);
-                    handler.sendEmptyMessage(10);
-                    handler.sendEmptyMessage(30);
                     break;
                 case TaskFlag.PAGEREQUESFOUR://系统匹配到了导游
+                    findGuide.removeFindGuide();
                     isInOrder = true;
                     Util.showToast(getActivity(), getString(R.string.success_find_guide));
                     setPageLayout();
@@ -240,6 +222,10 @@ public class GuidesFragment extends BasedFragment implements
     }
 
     protected void initDatas() {
+        uploadLag = new PollUploadLag(getActivity());
+        findGuide = new FindGuide(getActivity(), handler);
+        guideInfo = new MyGuideInfo(getActivity(), handler);
+
         guideDes = BitmapDescriptorFactory
                 .fromResource(R.mipmap.guide_locate);
         imageLoader = ImageLoader.getInstance();
@@ -251,7 +237,7 @@ public class GuidesFragment extends BasedFragment implements
         guideBdp = BitmapDescriptorFactory
                 .fromResource(R.mipmap.guide_icon);
         geoCoder = GeoCoder.newInstance();
-        loadingFragment = new FindGuideFragment();
+//        loadingFragment = new FindGuideFragment();
         lBManager = LocalBroadcastManager.getInstance(getActivity());
         nearGuideUrl = getString(R.string.url_conIp).concat(getString(R.string.url_nearGuide));
         initViews();
@@ -381,7 +367,7 @@ public class GuidesFragment extends BasedFragment implements
                 if (poiInfo == null)
                     return;
                 main_destination_tv.setText(poiInfo.name);
-                destinationJson = poiInfo.location.latitude + "," + poiInfo.location.longitude + "," + poiInfo.name;
+//                destinationJson = poiInfo.location.latitude + "," + poiInfo.location.longitude + "," + poiInfo.name;
                 break;
             case callGuideReques:
                 userNums = data.getStringExtra("userNumType");
@@ -399,7 +385,7 @@ public class GuidesFragment extends BasedFragment implements
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.guide_locatemy_img:
-
+                uploadLag.unUploadLatlng();
                 break;
             case R.id.guide_outset_rl://出发地
                 intent.setClass(getActivity(), SearchAddressActivity.class);
@@ -416,11 +402,11 @@ public class GuidesFragment extends BasedFragment implements
                 startActivity(intent);
                 break;
             case R.id.guide_call_rl:
+
                 intent.setClass(getActivity(), ChoicePeoNumActivity.class);
                 startActivityForResult(intent, callGuideReques);
                 break;
             case R.id.guide_call_layout://确认呼叫导游
-                isArrivalTime = false;
                 String setOff = main_outset_tv.getText().toString();
                 if (Util.isNull(setOff)) {
                     Util.showToast(getActivity(), getString(R.string.setoff_null));
@@ -569,7 +555,7 @@ public class GuidesFragment extends BasedFragment implements
      * 找到导游后将页面图重置
      */
     private void setPageLayout() {
-        handler.sendEmptyMessage(20);
+        guideInfo.getMyGuideInfo(findGuideorderNum);
         guide_tOrder_layout.setVisibility(View.VISIBLE);
         guide_call_layout.setVisibility(View.GONE);
         guide_locate_layout.setVisibility(View.GONE);
@@ -600,16 +586,17 @@ public class GuidesFragment extends BasedFragment implements
         mapView.onPause();
     }
 
-    private class NearGuide implements ServiceConnection {
-
+    class LocalReceiver extends BroadcastReceiver {
         @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            nearGuiService = (NearGuideService) service;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Constant.ACTION_GCANCELUIDEORDSUC.equals(action)) {
+                guide_call_layout.setVisibility(View.GONE);
+                guide_tOrder_layout.setVisibility(View.GONE);
+                guide_fuc_layout.setVisibility(View.VISIBLE);
+                guide_center_layout.setVisibility(View.VISIBLE);
+                isInOrder = false;
+            }
         }
     }
 }
