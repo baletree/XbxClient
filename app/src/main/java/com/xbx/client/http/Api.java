@@ -7,6 +7,7 @@ import android.os.Message;
 import com.android.volley.VolleyError;
 import com.baidu.mapapi.model.LatLng;
 import com.xbx.client.R;
+import com.xbx.client.beans.ReservatInfoBean;
 import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.utils.RequestBackLisener;
 import com.xbx.client.utils.SharePrefer;
@@ -69,7 +70,7 @@ public class Api {
             @Override
             public void requestSuccess(String json) {
                 super.requestSuccess(json);
-                Util.pLog("服务我的导游:"+json);
+                Util.pLog("服务我的导游:" + json);
                 sendShowMsg(TaskFlag.PAGEREQUESTWO, json);
             }
         });
@@ -206,6 +207,38 @@ public class Api {
             @Override
             public void requestSuccess(String json) {
 //                Util.pLog("上传经纬度:" + json);
+            }
+
+            @Override
+            public void requestError(VolleyError e) {
+            }
+        });
+    }
+
+    /**
+     * 获取预约导游列表
+     *
+     * @param reservatBean
+     * @param pageIndex
+     * @param pageNum
+     */
+    public void getReserveGuideList(ReservatInfoBean reservatBean, String pageIndex, String pageNum) {
+        if (context == null)
+            return;
+        RequestParams params = new RequestParams();
+        params.put("server_city_id", reservatBean.getCityId());
+        params.put("server_addr_lnglat", reservatBean.getAddress());
+        params.put("sex", reservatBean.getSexType());
+        params.put("lang_type", reservatBean.getLanguageType());
+        params.put("server_start_time", reservatBean.getStartTime());
+        params.put("server_end_time", reservatBean.getEndTime());
+        params.put("now_page", pageIndex);
+        params.put("page_number", pageNum);
+        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_guideList));
+        IRequest.post(context, url, params, new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+
             }
 
             @Override

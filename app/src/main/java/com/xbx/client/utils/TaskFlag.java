@@ -5,6 +5,7 @@ package com.xbx.client.utils;
  */
 public class TaskFlag {
     public static final int REQUESTSUCCESS = 1050;
+    public static final int REQUESTERROR = 1000;
     public static final int PAGEREQUESTWO = 1060;
     public static final int PAGEREQUESTHREE = 1070;
     public static final int PAGEREQUESFOUR = 1080;

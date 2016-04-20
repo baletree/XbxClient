@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 import com.xbx.client.R;
 import com.xbx.client.adapter.ChoiceGuideAdapter;
+import com.xbx.client.beans.ReservatInfoBean;
+import com.xbx.client.http.Api;
+import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.RecycleViewDivider;
 
@@ -23,8 +26,9 @@ import java.util.List;
 
 /**
  * Created by EricPeng on 2016/4/11.
+ * 预约导游选择导游
  */
-public class ChoiceGuideActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener,ChoiceGuideAdapter.ItemLisener {
+public class ChoiceGuideActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, ChoiceGuideAdapter.ItemLisener {
     private TextView title_txt_tv;
     private ImageView title_left_img;
     private RecyclerView reserve_guide_rv;
@@ -33,30 +37,30 @@ public class ChoiceGuideActivity extends BaseActivity implements SwipeRefreshLay
     private LinearLayoutManager layoutManager = null;
     private ChoiceGuideAdapter choiceAdapter = null;
     private List<String> infoList = null;
+    private ReservatInfoBean reservatBean = null;
+    private Api api = null;
 
     private boolean isLoading = false;
     private int maxCount = 6;
+    private int pageIndex = 0;
+    private int pageNum = 10;
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case 10:
-                    if(isLoading){
-                        choiceAdapter.notifyItemRemoved(choiceAdapter.getItemCount());
-                        isLoading = false;
-                    }
+                case TaskFlag.REQUESTSUCCESS:
+
                     break;
-                case 20:
-                    reserve_guide_swipe.setRefreshing(false);
+                case TaskFlag.REQUESTERROR:
+
                     break;
-                case 30:
-                    getData();
-                    choiceAdapter.notifyDataSetChanged();
-                    choiceAdapter.notifyItemRemoved(choiceAdapter.getItemCount());
-                    isLoading = false;
-                    break;
+            }
+            reserve_guide_swipe.setRefreshing(false);
+            if (isLoading) {
+                choiceAdapter.notifyItemRemoved(choiceAdapter.getItemCount());
+                isLoading = false;
             }
         }
     };
@@ -72,13 +76,10 @@ public class ChoiceGuideActivity extends BaseActivity implements SwipeRefreshLay
         super.initDatas();
         layoutManager = new LinearLayoutManager(this);
         infoList = new ArrayList<>();
-        getData();
-    }
+        reservatBean = (ReservatInfoBean) getIntent().getSerializableExtra("ReservatInfo");
+        api = new Api(ChoiceGuideActivity.this, handler);
+        api.getReserveGuideList(reservatBean, pageIndex + "", pageNum + "");
 
-    private void getData(){
-        for (int i = 0; i < maxCount; i++) {
-            infoList.add("11");
-        }
     }
 
     @Override
@@ -114,13 +115,13 @@ public class ChoiceGuideActivity extends BaseActivity implements SwipeRefreshLay
                     }
                     if (!isLoading) {
                         isLoading = true;
-                        handler.sendEmptyMessageDelayed(10, 2000);
-                        handler.sendEmptyMessageDelayed(30, 1500);
+                        pageIndex++;
+                        api.getReserveGuideList(reservatBean, pageIndex + "", pageNum + "");
                     }
                 }
             }
         });
-        choiceAdapter = new ChoiceGuideAdapter(ChoiceGuideActivity.this,infoList);
+        choiceAdapter = new ChoiceGuideAdapter(ChoiceGuideActivity.this, infoList);
         reserve_guide_rv.setAdapter(choiceAdapter);
         choiceAdapter.setOnItemLisener(this);
     }
@@ -138,12 +139,13 @@ public class ChoiceGuideActivity extends BaseActivity implements SwipeRefreshLay
 
     @Override
     public void onRefresh() {
-        handler.sendEmptyMessageDelayed(20,1500);
+        pageIndex = 0;
+        api.getReserveGuideList(reservatBean, pageIndex + "", pageNum + "");
     }
 
     @Override
     public void clickDetail() {
-        startActivity(new Intent(ChoiceGuideActivity.this,GuideDetailActivity.class));
+        startActivity(new Intent(ChoiceGuideActivity.this, GuideDetailActivity.class));
     }
 
     @Override

@@ -15,10 +15,12 @@ import com.baidu.mapapi.search.core.PoiInfo;
 import com.xbx.client.R;
 import com.xbx.client.adapter.DateShowAdapter;
 import com.xbx.client.beans.DateItemBean;
+import com.xbx.client.beans.ReservatInfoBean;
 import com.xbx.client.http.Api;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,7 +30,7 @@ import java.util.List;
  * Created by EricYuan on 2016/4/11.
  * 预约导游
  */
-public class ReservatGuideActivity extends BaseActivity implements DateShowAdapter.OnRecyItemClickListener ,RadioGroup.OnCheckedChangeListener{
+public class ReservatGuideActivity extends BaseActivity implements DateShowAdapter.OnRecyItemClickListener, RadioGroup.OnCheckedChangeListener {
     private TextView title_txt_tv;
     private ImageView title_left_img;
     private TextView title_rtxt_tv;
@@ -42,10 +44,14 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
     private DateShowAdapter dateAdapter = null;
     private PoiInfo poiInfoRe = null;
     private Api api = null;
+    private List<String> choiceDateList = null;
 
     private int nowWeek;
     private int maxDay = 0;
     private String choiceCityId = "";
+    private String sexType = "2";
+    private String languageType = "0";
+    private String destCity = "";//目的地
 
     private Handler handler = new Handler() {
         @Override
@@ -69,7 +75,7 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
     @Override
     protected void initDatas() {
         super.initDatas();
-        api = new Api(this,handler);
+        api = new Api(this, handler);
     }
 
     @Override
@@ -124,9 +130,11 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
             return;
         switch (requestCode) {
             case 1000://目的地选择
-                String destCity = data.getStringExtra("choiceCityName");
+                destCity = data.getStringExtra("choiceCityName");
                 choiceCityId = data.getStringExtra("choiceCityId");
                 poiInfoRe = data.getParcelableExtra("destResult");
+                if (Util.isNull(destCity))
+                    return;
                 if (poiInfoRe == null)
                     return;
                 user_destination_tv.setText(destCity + "·" + poiInfoRe.name);
@@ -142,8 +150,33 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
                 finish();
                 break;
             case R.id.title_rtxt_tv:
-//                startActivity(new Intent(ReservatGuideActivity.this, ChoiceGuideActivity.class));
-
+                String destination = user_destination_tv.getText().toString();
+                if (poiInfoRe == null) {
+                    Util.showToast(ReservatGuideActivity.this, getString(R.string.end_null));
+                    return;
+                }
+                choiceDateList = new ArrayList<>();
+                for (int i = 0; i < dateList.size(); i++) {
+                    if (dateList.get(i).isChoice())
+                        choiceDateList.add(dateList.get(i).getDateReal());
+                }
+                if (dateList.size() == 0) {
+                    Util.showToast(ReservatGuideActivity.this, getString(R.string.setReservatTime));
+                    return;
+                }
+                ReservatInfoBean reservatBean = new ReservatInfoBean();
+                if (Util.isNull(choiceCityId))
+                    reservatBean.setCityId(poiInfoRe.name);
+                else
+                    reservatBean.setCityId(choiceCityId);
+                reservatBean.setAddress(poiInfoRe.location.latitude + "," + poiInfoRe.location.longitude + "," + poiInfoRe.name);
+                reservatBean.setSexType(sexType);
+                reservatBean.setLanguageType(languageType);
+                reservatBean.setStartTime(choiceDateList.get(0));
+                reservatBean.setEndTime(choiceDateList.get(choiceDateList.size() - 1));
+                Intent guideIntent = new Intent(ReservatGuideActivity.this, ChoiceGuideActivity.class);
+                guideIntent.putExtra("ReservatInfo",reservatBean);
+                startActivity(guideIntent);
                 break;
             case R.id.user_destination_tv:
                 startActivityForResult(new Intent(ReservatGuideActivity.this, SerachInCityActvity.class), 1000);
@@ -198,24 +231,24 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId){
+        switch (checkedId) {
             case R.id.mail_rb:
-                Util.showToast(ReservatGuideActivity.this,"选择男性");
+                sexType = "0";
                 break;
             case R.id.femail_rb:
-
+                sexType = "1";
                 break;
             case R.id.not_limitsex_rb:
-
+                sexType = "2";
                 break;
             case R.id.chinese_rb:
-
+                languageType = "0";
                 break;
             case R.id.english_rb:
-
+                languageType = "1";
                 break;
             case R.id.not_limitlangu_rb:
-
+                languageType = "2";
                 break;
         }
     }
