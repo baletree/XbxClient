@@ -1,13 +1,11 @@
 package com.xbx.client.ui.fragment;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -55,6 +53,7 @@ import com.xbx.client.jsonparse.GuideParse;
 import com.xbx.client.polling.FindGuide;
 import com.xbx.client.polling.MyGuideInfo;
 import com.xbx.client.polling.PollUploadLag;
+import com.xbx.client.ui.activity.ChocieCityActivity;
 import com.xbx.client.ui.activity.ChoicePeoNumActivity;
 import com.xbx.client.ui.activity.ImmediatePayActivity;
 import com.xbx.client.ui.activity.ReservatGuideActivity;
@@ -65,7 +64,7 @@ import com.xbx.client.utils.ImageLoaderConfigFactory;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
-import com.xbx.client.view.FindGuideFragment;
+import com.xbx.client.view.LoadingDialog;
 
 import java.util.List;
 
@@ -73,13 +72,13 @@ import java.util.List;
  * Created by EricYuan on 2016/3/29.
  */
 public class GuidesFragment extends BasedFragment implements
-        BaiduMap.OnMapStatusChangeListener, OnGetGeoCoderResultListener, BaiduMap.OnMapLoadedCallback, FindGuideFragment.OnCancelGuiFindLisener {
+        BaiduMap.OnMapStatusChangeListener, OnGetGeoCoderResultListener, BaiduMap.OnMapLoadedCallback {
     private static GuidesFragment fragment = null;
     private View view = null;
     private BitmapDescriptor bdMyself = null;
     private BitmapDescriptor guideBdp = null;
     private GeoCoder geoCoder;
-    private FindGuideFragment loadingFragment = null;
+    private LoadingDialog loadingDialog = null;
     private LocationMode mCurrentMode;
     private LocationClient mLocClient;
     private BaiduMap mBaiduMap;
@@ -94,6 +93,9 @@ public class GuidesFragment extends BasedFragment implements
     private PollUploadLag uploadLag = null;
     private FindGuide findGuide = null;
     private MyGuideInfo guideInfo = null;
+    private String[] peopleNum = null;
+    private CancleOrderReceiver canOrderReciver;
+    private IntentFilter intentFilter;
 
     private TextureMapView mapView;
     private RelativeLayout guide_outset_rl;
@@ -102,10 +104,10 @@ public class GuidesFragment extends BasedFragment implements
     private TextView main_destination_tv; //目的地
     private ImageView guide_locatemy_img;
     private LinearLayout guide_locate_layout;
-    private LinearLayout guide_fuc_layout;
+    private LinearLayout guide_fuc_layout; //预约和即时呼叫按钮布局
     private RelativeLayout guide_reserve_rl; // 预约导游
     private RelativeLayout guide_call_rl;//呼叫导游
-    private LinearLayout guide_call_layout;//确认呼叫
+    private LinearLayout guide_call_layout;//确认呼叫布局
 
     private RelativeLayout guide_tOrder_layout;//呼叫导游成功后
     private RoundedImageView guide_head_img;
@@ -132,6 +134,7 @@ public class GuidesFragment extends BasedFragment implements
     private Marker mMarkerGuide;
     private String userNums = ""; // 出行人数选择
     private String findGuideorderNum;
+    private boolean isMainviewStop = false;
 
     private Handler handler = new Handler() {
         @Override
@@ -147,7 +150,8 @@ public class GuidesFragment extends BasedFragment implements
                 case 30:
                     guide_call_layout.setVisibility(View.GONE);
                     guide_fuc_layout.setVisibility(View.VISIBLE);
-                    loadingFragment.dismiss();
+                    if (loadingDialog != null && loadingDialog.isShowing())
+                        loadingDialog.dismiss();
                     break;
                 case TaskFlag.REQUESTSUCCESS:
                     String guideData = (String) msg.obj;
@@ -166,7 +170,6 @@ public class GuidesFragment extends BasedFragment implements
                     }
                     break;
                 case TaskFlag.PAGEREQUESTWO://服务我的导游信息
-                    uploadLag.uploadLatlng();
                     String myGuideData = (String) msg.obj;
                     guideInfoBean = GuideParse.parseMyGuide(myGuideData);
                     if (guideInfoBean != null)
@@ -181,14 +184,28 @@ public class GuidesFragment extends BasedFragment implements
                     if (Util.isNull(findGuideorderNum))
                         return;
                     findGuide.toFindGuide(uid, findGuideorderNum);
-                    loadingFragment.show(getActivity().getSupportFragmentManager(), "Loading");
-                    loadingFragment.setMsg("正在呼叫导游");
+                    loadingDialog.setMessage(getString(R.string.call_sure_tips));
+                    loadingDialog.show();
                     break;
                 case TaskFlag.PAGEREQUESFOUR://系统匹配到了导游
                     findGuide.removeFindGuide();
                     isInOrder = true;
                     Util.showToast(getActivity(), getString(R.string.success_find_guide));
                     setPageLayout();
+                    break;
+                case TaskFlag.PAGEREQUESFIVE://请求选择的出行人数
+                    String peopleData = (String) msg.obj;
+                    peopleNum = GuideParse.getChoiceNum(peopleData);
+                    if (peopleNum == null)
+                        Util.showToast(getActivity(), getString(R.string.choice_null));
+                    else {
+                        Intent poeIntent = new Intent(getActivity(), ChoicePeoNumActivity.class);
+                        poeIntent.putExtra("peopleNumArray", peopleNum);
+                        startActivityForResult(poeIntent, callGuideReques);
+                    }
+                    break;
+                case TaskFlag.RMOVEHANDLERONE:
+                    handler.removeMessages(1);
                     break;
             }
         }
@@ -237,8 +254,12 @@ public class GuidesFragment extends BasedFragment implements
         guideBdp = BitmapDescriptorFactory
                 .fromResource(R.mipmap.guide_icon);
         geoCoder = GeoCoder.newInstance();
-//        loadingFragment = new FindGuideFragment();
+        loadingDialog = new LoadingDialog(getActivity());
         lBManager = LocalBroadcastManager.getInstance(getActivity());
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(Constant.ACTION_GCANCELUIDEORDSUC);
+        canOrderReciver = new CancleOrderReceiver();
+        lBManager.registerReceiver(canOrderReciver, intentFilter);
         nearGuideUrl = getString(R.string.url_conIp).concat(getString(R.string.url_nearGuide));
         initViews();
         initLisener();
@@ -332,11 +353,16 @@ public class GuidesFragment extends BasedFragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Util.pLog("onDestroyView");
+        guideInfo.removeGetInfo();
         isFirstLoc = true;
         isInOrder = false;
-        if (mLocClient != null && mLocClient.isStarted())
-            if (myListener != null)
-                mLocClient.unRegisterLocationListener(myListener);
+        if (mLocClient != null && mLocClient.isStarted()) {
+
+            mLocClient.unRegisterLocationListener(myListener);
+        }
+        if (myListener != null) {
+        }
         mLocClient.stop();
         mapView.onDestroy();
         currentLalng = null;
@@ -367,7 +393,6 @@ public class GuidesFragment extends BasedFragment implements
                 if (poiInfo == null)
                     return;
                 main_destination_tv.setText(poiInfo.name);
-//                destinationJson = poiInfo.location.latitude + "," + poiInfo.location.longitude + "," + poiInfo.name;
                 break;
             case callGuideReques:
                 userNums = data.getStringExtra("userNumType");
@@ -402,9 +427,7 @@ public class GuidesFragment extends BasedFragment implements
                 startActivity(intent);
                 break;
             case R.id.guide_call_rl:
-
-                intent.setClass(getActivity(), ChoicePeoNumActivity.class);
-                startActivityForResult(intent, callGuideReques);
+                api.getSetoffNum();
                 break;
             case R.id.guide_call_layout://确认呼叫导游
                 String setOff = main_outset_tv.getText().toString();
@@ -468,11 +491,6 @@ public class GuidesFragment extends BasedFragment implements
                 .location(mapStatus.target));
     }
 
-    @Override
-    public void cancelGuiFind() {
-
-    }
-
     public class MyLocationListenner implements BDLocationListener {
         @Override
         public void onReceiveLocation(BDLocation location) {
@@ -529,6 +547,7 @@ public class GuidesFragment extends BasedFragment implements
      */
     private void setMyGuideInfo() {
         isFirstInOrder = false;
+        uploadLag.uploadLatlng();
         imageLoader.displayImage(guideInfoBean.getGuideHeadImg(), guide_head_img, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
         guide_name_tv.setText(guideInfoBean.getGuideName());
         guide_code_tv.setText(guideInfoBean.getGuideNum());
@@ -545,8 +564,12 @@ public class GuidesFragment extends BasedFragment implements
         if (guideInfoBean.getStartTime() != 0) {
             if (user_stroke_tv == null)
                 return;
-            user_stroke_tv.setText(getString(R.string.stork_time) + getString(R.string.not_start));
+            user_stroke_tv.setText(getString(R.string.stork_time) + guideInfoBean.getCurrentTime());
+            Util.pLog("updateGuide()");
+            mBaiduMap.clear();
+//            guideInfo.removeGetInfo();
         }
+
         if (mMarkerGuide != null)
             mMarkerGuide.setPosition(new LatLng(guideInfoBean.getGuideLat(), guideInfoBean.getGuideLon()));
     }
@@ -566,12 +589,10 @@ public class GuidesFragment extends BasedFragment implements
         intent.putExtra("cancelType", 1);
         intent.setAction(Constant.ACTION_GCANCELORD);
         lBManager.sendBroadcast(intent);
-        if (loadingFragment != null) {
-            loadingFragment.dismiss();
-        }
-        if (mBaiduMap != null) {
+        if (loadingDialog != null && loadingDialog.isShowing())
+            loadingDialog.dismiss();
+        if (mBaiduMap != null)
             mBaiduMap.clear();
-        }
     }
 
     @Override
@@ -586,17 +607,44 @@ public class GuidesFragment extends BasedFragment implements
         mapView.onPause();
     }
 
-    class LocalReceiver extends BroadcastReceiver {
+    class CancleOrderReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (Constant.ACTION_GCANCELUIDEORDSUC.equals(action)) {
-                guide_call_layout.setVisibility(View.GONE);
-                guide_tOrder_layout.setVisibility(View.GONE);
-                guide_fuc_layout.setVisibility(View.VISIBLE);
-                guide_center_layout.setVisibility(View.VISIBLE);
-                isInOrder = false;
+                Util.pLog(getString(R.string.cancel_order_suc));
+                cancelOrderSuc();
             }
         }
+    }
+
+    private void cancelOrderSuc() {
+        mBaiduMap.clear();
+        guide_call_layout.setVisibility(View.GONE);
+        guide_tOrder_layout.setVisibility(View.GONE);
+        guide_fuc_layout.setVisibility(View.VISIBLE);
+        guide_center_layout.setVisibility(View.VISIBLE);
+        guide_locate_layout.setVisibility(View.VISIBLE);
+        isInOrder = false;
+        if (uploadLag != null)
+            uploadLag.unUploadLatlng();
+        guideInfo.removeGetInfo();
+        LatLng latLng = SharePrefer.getLatlng(getActivity());
+        if (latLng != null) {
+            currentLalng = latLng;
+            handler.sendEmptyMessage(1);
+            MapStatus mMapstatus = new MapStatus.Builder().target(currentLalng).zoom(18f)
+                    .build();
+            MapStatusUpdate u = MapStatusUpdateFactory.newMapStatus(mMapstatus);
+            mBaiduMap.setMapStatus(u);
+        }
+    }
+
+    public void setMainViewStop(boolean isMainviewStop) {
+        this.isMainviewStop = isMainviewStop;
+    }
+
+    public void setLoadingStop() {
+
     }
 }

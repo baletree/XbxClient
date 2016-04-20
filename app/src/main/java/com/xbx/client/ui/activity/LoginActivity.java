@@ -77,6 +77,7 @@ public class LoginActivity extends BaseActivity {
         login_code_btn.setOnClickListener(this);
         String userPhone = SharePrefer.getUserPhone(LoginActivity.this);
         if(!Util.isNull(userPhone)){
+            Util.pLog("LoginInput:"+userPhone);
             login_phone_et.setText(userPhone);
             login_phone_et.setSelection(userPhone.length());
         }

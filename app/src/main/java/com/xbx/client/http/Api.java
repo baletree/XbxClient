@@ -47,6 +47,7 @@ public class Api {
                     Util.pLog("MainguideList:" + json);
                     isFirst = false;
                 }
+
                 sendMsg(TaskFlag.REQUESTSUCCESS, json);
             }
 
@@ -68,6 +69,7 @@ public class Api {
             @Override
             public void requestSuccess(String json) {
                 super.requestSuccess(json);
+                Util.pLog("服务我的导游:"+json);
                 sendShowMsg(TaskFlag.PAGEREQUESTWO, json);
             }
         });
@@ -80,12 +82,12 @@ public class Api {
         if (context == null)
             return;
         String setoffNumUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_setoffNum));
-        IRequest.get(context, setoffNumUrl, new RequestBackLisener(context) {
+        IRequest.get(context, setoffNumUrl, "", new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 super.requestSuccess(json);
                 Util.pLog("出行人数选择:" + json);
-                sendShowMsg(TaskFlag.REQUESTSUCCESS, json);
+                sendShowMsg(TaskFlag.PAGEREQUESFIVE, json);
             }
         });
     }
@@ -119,7 +121,7 @@ public class Api {
         IRequest.post(context, findUrl, params, "", new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
-                Util.pLog("呼叫导游:" + json);
+                Util.pLog("是否有导游:" + json);
                 sendShowMsg(TaskFlag.PAGEREQUESTHREE, json);
             }
         });
@@ -132,7 +134,7 @@ public class Api {
         IRequest.get(context, isFindUrl, new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
-                Util.pLog("是否找到导游:" + json);
+                Util.pLog("是否匹配到了导游:" + json);
                 sendMsg(TaskFlag.PAGEREQUESFOUR, json);
             }
 
@@ -144,6 +146,7 @@ public class Api {
 
     /**
      * 取消订单
+     *
      * @param orderNum
      */
     public void cancelOrder(String orderNum) {
@@ -192,7 +195,7 @@ public class Api {
         });
     }
 
-    public void uploadLatlng(String url, String uid, String lon, String lat) {
+    public void toUploadLatlng(String url, String uid, String lon, String lat) {
         if (context == null)
             return;
         RequestParams params = new RequestParams();
@@ -202,7 +205,7 @@ public class Api {
         IRequest.post(context, url, params, new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
-                Util.pLog("上传经纬度:" + json);
+//                Util.pLog("上传经纬度:" + json);
             }
 
             @Override

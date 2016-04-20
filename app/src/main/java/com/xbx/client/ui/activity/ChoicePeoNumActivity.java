@@ -28,25 +28,7 @@ public class ChoicePeoNumActivity extends Activity implements View.OnClickListen
     private WheelView peonum_wheelView;
 
     private String[] peopleNum = null;
-    private Api api = null;
     private int selectIndex = 0;
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case TaskFlag.REQUESTSUCCESS:
-                    String data = (String) msg.obj;
-                    peopleNum = GuideParse.getChoiceNum(data);
-                    if (peopleNum == null)
-                        return;
-                    peonum_wheelView.setOffset(1);
-                    peonum_wheelView.setItems(Arrays.asList(peopleNum));
-                    break;
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +39,12 @@ public class ChoicePeoNumActivity extends Activity implements View.OnClickListen
     }
 
     private void initViews() {
-        api = new Api(this, handler);
         peo_cancel_txt = (TextView) findViewById(R.id.peo_cancel_txt);
         peo_sure_txt = (TextView) findViewById(R.id.peo_sure_txt);
         peonum_wheelView = (WheelView) findViewById(R.id.peonum_wheelView);
-        api.getSetoffNum();
+        peopleNum = getIntent().getStringArrayExtra("peopleNumArray");
+        peonum_wheelView.setOffset(1);
+        peonum_wheelView.setItems(Arrays.asList(peopleNum));
     }
 
     private void initLisener() {

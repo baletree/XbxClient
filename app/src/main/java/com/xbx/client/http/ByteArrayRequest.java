@@ -16,6 +16,7 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.xbx.client.app.App;
+import com.xbx.client.utils.AESCrypt;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.Util;
 
@@ -57,8 +58,12 @@ class ByteArrayRequest extends Request<byte[]> {
         Map<String, String> headers = super.getHeaders();
         if (null == headers || headers.equals(Collections.emptyMap())) {
             headers = new HashMap<String, String>();
-            headers.put("deviceid", "131212232323");
-//            Util.pLog("deviceid:"+SharePrefer.getPhoneId(App.getContext()));
+            String deviceId = SharePrefer.getPhoneId(App.getContext());
+            String uid = SharePrefer.getUserInfo(App.getContext()).getUid();
+            AESCrypt aesCrypt = new AESCrypt(deviceId);
+            headers.put("deviceid", deviceId);
+            headers.put("uuid", aesCrypt.encrypt(uid));
+//            Util.pLog("uuid:"+aesCrypt.encrypt(uid));
         }
         return headers;
     }

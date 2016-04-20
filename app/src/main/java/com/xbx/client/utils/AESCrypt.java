@@ -1,12 +1,19 @@
 package com.xbx.client.utils;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import android.util.Base64;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
 
 /**
@@ -17,19 +24,29 @@ import java.security.spec.AlgorithmParameterSpec;
  *         <p/>
  */
 public class AESCrypt {
-    private final Cipher cipher;
-    private final SecretKeySpec key;
+    private Cipher cipher;
+    private SecretKeySpec key;
     private AlgorithmParameterSpec spec;
 
-    public AESCrypt(String keys) throws Exception {
+    public AESCrypt(String keys){
         // hash password with SHA-256 and crop the output to 128-bit for key
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        digest.update(keys.getBytes("UTF-8"));
-        byte[] keyBytes = new byte[32];
-        System.arraycopy(digest.digest(), 0, keyBytes, 0, keyBytes.length);
-        cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
-        key = new SecretKeySpec(keyBytes, "AES");
-        spec = getIV();
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+            digest.update(keys.getBytes("UTF-8"));
+            byte[] keyBytes = new byte[32];
+            System.arraycopy(digest.digest(), 0, keyBytes, 0, keyBytes.length);
+            cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
+            key = new SecretKeySpec(keyBytes, "AES");
+            spec = getIV();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public AlgorithmParameterSpec getIV() {
@@ -39,13 +56,25 @@ public class AESCrypt {
         return ivParameterSpec;
     }
 
-    public String encrypt(String plainText) throws Exception {
-        cipher.init(Cipher.ENCRYPT_MODE, key, spec);
-        byte[] encrypted = cipher.doFinal(plainText.getBytes("UTF-8"));
-        String encryptedText = new String(Base64.encode(encrypted,
-                Base64.DEFAULT), "UTF-8");
-        Util.pLog("AESCrypt: " + encryptedText + " spec" + spec);
-        return encryptedText;
+    public String encrypt(String plainText){
+        try {
+            cipher.init(Cipher.ENCRYPT_MODE, key, spec);
+            byte[] encrypted = cipher.doFinal(plainText.getBytes("UTF-8"));
+            String encryptedText = new String(Base64.encode(encrypted,
+                    Base64.DEFAULT), "UTF-8");
+            return encryptedText;
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public String decrypt(String cryptedText) throws Exception {

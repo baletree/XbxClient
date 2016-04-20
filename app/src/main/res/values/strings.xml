@@ -108,6 +108,7 @@
     <string name="stork_time">行程时间：</string>
     <string name="not_start">未开始</string>
     <string name="guide_sex">导游性别</string>
+    <string name="not_limit">不限</string>
     <string name="male">男性</string>
     <string name="female">女性</string>
     <string name="type_Language">语言种类</string>
@@ -164,4 +165,6 @@
     <string name="user_guide_cancel_order">取消订单</string>
     <string name="together_price">价格</string>
     <string name="together_num">导游</string>
+    <string name="city_Name">市</string>
+    <string name="cancel_order_suc">取消订单成功</string>
 </resources>

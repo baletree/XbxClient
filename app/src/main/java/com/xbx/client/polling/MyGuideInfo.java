@@ -38,6 +38,7 @@ public class MyGuideInfo {
     public void getMyGuideInfo(String findGuideorderNum){
         this.findGuideorderNum = findGuideorderNum;
         api = new Api(context,pHandler);
+        handler.sendEmptyMessage(1);
     }
 
     public void removeGetInfo(){

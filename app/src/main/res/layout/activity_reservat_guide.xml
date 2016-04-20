@@ -128,20 +128,33 @@
                 android:textSize="@dimen/sp_fifteen" />
 
             <RadioGroup
+                android:id="@+id/sex_rg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <RadioButton
+                    android:id="@+id/not_limitsex_rb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:button="@null"
                     android:drawableLeft="@drawable/radiobtn_select"
                     android:drawablePadding="@dimen/dp_six"
+                    android:text="@string/not_limit" />
+
+                <RadioButton
+                    android:id="@+id/mail_rb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:layout_marginLeft="@dimen/dp_sixteen"
+                    android:drawableLeft="@drawable/radiobtn_select"
+                    android:drawablePadding="@dimen/dp_six"
                     android:text="@string/male" />
 
                 <RadioButton
+                    android:id="@+id/femail_rb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_sixteen"
@@ -175,12 +188,14 @@
                 android:textSize="@dimen/sp_fifteen" />
 
             <RadioGroup
+                android:id="@+id/language_rg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <RadioButton
+                    android:id="@+id/chinese_rb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:button="@null"
@@ -189,6 +204,7 @@
                     android:text="@string/chinese" />
 
                 <RadioButton
+                    android:id="@+id/english_rb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_sixteen"
@@ -198,6 +214,7 @@
                     android:text="@string/english" />
 
                 <RadioButton
+                    android:id="@+id/not_limitlangu_rb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_sixteen"

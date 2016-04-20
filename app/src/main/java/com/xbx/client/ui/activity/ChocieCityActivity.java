@@ -43,7 +43,8 @@ public class ChocieCityActivity extends BaseActivity implements CityListAdapter.
     private List<City> mAllCities;
     private DBManager dbManager;
 
-    private String KEY_PICKED_CITY = "choiceCity_name";
+    private String KEY_PICKED_CITY = "choiceCity_Name";
+    private String KEY_PICKED_CITYID = "choiceCity_Id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,16 +110,17 @@ public class ChocieCityActivity extends BaseActivity implements CityListAdapter.
         mResultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                back(mResultAdapter.getItem(position).getName());
+                back(mResultAdapter.getItem(position).getName(),mResultAdapter.getItem(position).getId());
             }
         });
         imgBack.setOnClickListener(this);
     }
 
-    private void back(String city){
-        Util.showToast(this, "搜索点击的城市：" + city);
+    private void back(String cityName,String cityId){
+        Util.showToast(this, "搜索点击的城市：" + cityName);
         Intent data = new Intent();
-        data.putExtra(KEY_PICKED_CITY, city);
+        data.putExtra(KEY_PICKED_CITY, cityName);
+        data.putExtra(KEY_PICKED_CITYID, cityId);
         setResult(RESULT_OK, data);
         finish();
     }
@@ -145,10 +147,11 @@ public class ChocieCityActivity extends BaseActivity implements CityListAdapter.
     }
 
     @Override
-    public void onCityClick(String name) {
-        Util.showToast(this, "点击的城市：" + name);
+    public void onCityClick(String cityName,String cityId) {
+        Util.showToast(this, "点击的城市：" + cityName);
         Intent data = new Intent();
-        data.putExtra(KEY_PICKED_CITY, name);
+        data.putExtra(KEY_PICKED_CITY, cityName);
+        data.putExtra(KEY_PICKED_CITYID, cityId);
         setResult(RESULT_OK, data);
         finish();
     }

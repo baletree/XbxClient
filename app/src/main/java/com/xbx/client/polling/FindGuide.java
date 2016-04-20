@@ -57,5 +57,6 @@ public class FindGuide {
 
     public void removeFindGuide(){
         handler.removeMessages(1);
+        handler.removeMessages(2);
     }
 }

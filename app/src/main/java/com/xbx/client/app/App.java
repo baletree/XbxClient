@@ -12,6 +12,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.xbx.client.utils.Constant;
 import com.xbx.client.utils.MapLocate;
+import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.Util;
 
 import java.io.File;
@@ -38,7 +39,7 @@ public class App extends Application {
     private void getPhoneId() {
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 //        Util.encrypt(tm.getDeviceId(),"key123");
-//        SharePrefer.savePhone();
+        SharePrefer.savePhoneId(mContext,tm.getDeviceId());
     }
 
     private void initImageLoader() {

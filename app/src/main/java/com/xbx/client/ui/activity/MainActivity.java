@@ -12,6 +12,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
@@ -27,14 +28,13 @@ import com.xbx.client.beans.UserInfo;
 import com.xbx.client.http.Api;
 import com.xbx.client.http.IRequest;
 import com.xbx.client.http.RequestParams;
-import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.jsonparse.UserInfoParse;
+import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.ui.fragment.BowenFragment;
 import com.xbx.client.ui.fragment.GuidesFragment;
 import com.xbx.client.ui.fragment.NativesFragment;
 import com.xbx.client.ui.fragment.TogetherFragment;
 import com.xbx.client.ui.fragment.WithtourFragment;
-import com.xbx.client.utils.AESCrypt;
 import com.xbx.client.utils.Constant;
 import com.xbx.client.utils.RequestBackLisener;
 import com.xbx.client.utils.SharePrefer;
@@ -51,7 +51,7 @@ import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     /**
      * 控件名称定义
      */
@@ -103,19 +103,10 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_layout);
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
-        try {
-            AESCrypt aes = new AESCrypt("key123");
-            String txtResult = aes.encrypt("123");
-            aes.decrypt(txtResult);
-        } catch (Exception e) {
-            Util.pLog(e.getMessage());
-            e.printStackTrace();
-        }
+        initDatas();
     }
 
-    @Override
     protected void initDatas() {
-        super.initDatas();
         isFromLogin = getIntent().getBooleanExtra("isFromLoin", false);
         if (!isFromLogin)
             checkLoginState();
@@ -124,11 +115,23 @@ public class MainActivity extends BaseActivity {
         tagSet.add(registerId);
         JPushInterface.setTags(this, tagSet, null);
         Util.pLog("RegisterId:" + registerId + " uid:" + SharePrefer.getUserInfo(MainActivity.this).getUid());
+        initViews();
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (guidesFragment == null)
+            return;
+        guidesFragment.setLoadingStop();
+    }
+
     protected void initViews() {
-        super.initViews();
         api = new Api(MainActivity.this, handler);
         drawerLayout = (DrawerLayout) findViewById(R.id.main_drawerLayout);
         drawerLayout.setScrimColor(0x32000000);// 设置半透明度
@@ -242,7 +245,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onClick(View v) {
-        super.onClick(v);
         switch (v.getId()) {
             case R.id.main_menu_img:
                 toggleLeftLayout();
@@ -298,6 +300,12 @@ public class MainActivity extends BaseActivity {
             }
         });
         tipsDialog.show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        guidesFragment.setMainViewStop(true);
     }
 
     @Override

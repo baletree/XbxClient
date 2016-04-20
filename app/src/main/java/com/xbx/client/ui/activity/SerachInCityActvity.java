@@ -49,7 +49,8 @@ public class SerachInCityActvity extends BaseActivity implements
     private SearchResultAdapter searchResultAdapter = null;
     private List<PoiInfo> poiList = null;
 
-    private String choiceCity = "";
+    private String choiceCityName = "";
+    private String choiceCityId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,16 +61,18 @@ public class SerachInCityActvity extends BaseActivity implements
     @Override
     protected void initDatas() {
         super.initDatas();
-        choiceCity = getString(R.string.default_city);
+        choiceCityName = getString(R.string.default_city);
         layoutManager = new LinearLayoutManager(this);
         mPoiSearch = PoiSearch.newInstance();
         mPoiSearch.setOnGetPoiSearchResultListener(this);
         geoCoder = GeoCoder.newInstance();
         geoCoder.setOnGetGeoCodeResultListener(this);
         String locateCity = SharePrefer.getLocate(SerachInCityActvity.this).getCity();
+        if(locateCity.contains(getString(R.string.city_Name)))
+            locateCity = locateCity.replace(getString(R.string.city_Name),"");
         Util.pLog("city:"+locateCity);
         if (!Util.isNull(locateCity))
-            choiceCity = locateCity;
+            choiceCityName = locateCity;
     }
 
     @Override
@@ -80,7 +83,7 @@ public class SerachInCityActvity extends BaseActivity implements
         inCity_city_ll = (LinearLayout) findViewById(R.id.inCity_city_ll);
         inCity_city_ll.setOnClickListener(this);
         inCity_city_tv = (TextView) findViewById(R.id.inCity_city_tv);
-        inCity_city_tv.setText(choiceCity);
+        inCity_city_tv.setText(choiceCityName);
         search_input_et = (EditText) findViewById(R.id.search_input_et);
         inCity_locate_rv = (RecyclerView) findViewById(R.id.inCity_locate_rv);
         inCity_locate_rv.setLayoutManager(layoutManager);
@@ -104,12 +107,12 @@ public class SerachInCityActvity extends BaseActivity implements
                 if (cs.length() <= 0) {
                     return;
                 }
-                if (Util.isNull(choiceCity)) {
+                if (Util.isNull(choiceCityName)) {
                     Util.showToast(SerachInCityActvity.this, getString(R.string.set_city));
                     return;
                 }
                 PoiCitySearchOption poiCityOption = new PoiCitySearchOption();
-                poiCityOption.city(choiceCity);
+                poiCityOption.city(choiceCityName);
                 poiCityOption.keyword(cs.toString());
                 poiCityOption.pageCapacity(50);
                 mPoiSearch.searchInCity(poiCityOption);
@@ -127,8 +130,9 @@ public class SerachInCityActvity extends BaseActivity implements
             return;
         switch (requestCode) {
             case 1000:
-                choiceCity = data.getStringExtra("choiceCity_name");
-                inCity_city_tv.setText(choiceCity);
+                choiceCityName = data.getStringExtra("choiceCity_Name");
+                choiceCityId = data.getStringExtra("choiceCity_Id");
+                inCity_city_tv.setText(choiceCityName);
                 break;
         }
     }
@@ -177,6 +181,7 @@ public class SerachInCityActvity extends BaseActivity implements
             return;
         Intent intent = new Intent();
         intent.putExtra("choiceCityName",inCity_city_tv.getText().toString());
+        intent.putExtra("choiceCityId",choiceCityId);
         intent.putExtra("destResult", poiList.get(position));
         setResult(RESULT_OK, intent);
         finish();

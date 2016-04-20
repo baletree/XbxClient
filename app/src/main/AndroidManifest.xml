@@ -54,6 +54,7 @@
             android:theme="@style/AppThemeCustorm" />
         <activity
             android:name=".ui.activity.MainActivity"
+            android:theme="@style/AppTheme"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.SearchAddressActivity"
