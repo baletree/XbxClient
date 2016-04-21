@@ -6,22 +6,31 @@ package com.xbx.client.beans;
 public class OrderDetailBean {
     private String guideName;
     private String headImg;
-    private String guideType;
+    private String guideType; //导游类型
     private String guideNumber;
     private String guidePhone;
     private String orderNum;
-    private String orderState;
+    private String orderState; //订单状态
     private String orderPayState;
-    private String orderOrignalPay;
+    private String orderOrignalPay;//原始价格
     private String rebateMoney;// 优惠价格
     private String rewardMoney;//打赏
-    private String orderPay;
+    private String orderPay;//实际支付
     private String orderPayType;
     private String orderStartTime;
     private String orderEndtTime;
     private String guideTag;
     private String guideCotent;
     private String guideStart;
+    private String serverType;
+
+    public String getServerType() {
+        return serverType;
+    }
+
+    public void setServerType(String serverType) {
+        this.serverType = serverType;
+    }
 
     public String getGuideTag() {
         return guideTag;

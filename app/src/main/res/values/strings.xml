@@ -168,4 +168,7 @@
     <string name="city_Name">市</string>
     <string name="cancel_order_suc">取消订单成功</string>
     <string name="setReservatTime">请设置预约时间</string>
+    <string name="tour_detail_order">下单</string>
+    <string name="server_day">/天</string>
+    <string name="server_times">次</string>
 </resources>

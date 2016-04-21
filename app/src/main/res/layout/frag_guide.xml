@@ -16,6 +16,7 @@
         android:layout_alignParentBottom="true"
         android:src="@mipmap/main_locself" />
     <RelativeLayout
+        android:id="@+id/onMap_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <include

@@ -90,12 +90,13 @@ public class GuidesFragment extends BasedFragment implements
     private Api api = null;
     private MyGuideInfoBean guideInfoBean = null;
     private BitmapDescriptor guideDes = null;
-    private PollUploadLag uploadLag = null;
-    private FindGuide findGuide = null;
-    private MyGuideInfo guideInfo = null;
+    private PollUploadLag uploadLag = null; //上传经纬度
+    private FindGuide findGuide = null;// 获取为我服务的导游
+    private MyGuideInfo guideInfo = null;// 获取服务于我的导游信息
     private String[] peopleNum = null;
-    private CancleOrderReceiver canOrderReciver;
-    private IntentFilter intentFilter;
+    private CancleOrderReceiver canOrderReciver = null;
+    private IntentFilter intentFilter = null;
+    private Marker mMarkerGuide = null;//服务于我的导游图标
 
     private TextureMapView mapView;
     private RelativeLayout guide_outset_rl;
@@ -103,11 +104,11 @@ public class GuidesFragment extends BasedFragment implements
     private TextView main_outset_tv; // 出发地
     private TextView main_destination_tv; //目的地
     private ImageView guide_locatemy_img;
-    private LinearLayout guide_locate_layout;
     private LinearLayout guide_fuc_layout; //预约和即时呼叫按钮布局
     private RelativeLayout guide_reserve_rl; // 预约导游
     private RelativeLayout guide_call_rl;//呼叫导游
     private LinearLayout guide_call_layout;//确认呼叫布局
+    private RelativeLayout onMap_layout;
 
     private RelativeLayout guide_tOrder_layout;//呼叫导游成功后
     private RoundedImageView guide_head_img;
@@ -117,24 +118,32 @@ public class GuidesFragment extends BasedFragment implements
     private RatingBar guide_ratingbar;
     private TextView user_stroke_tv;//行程状态
     private RelativeLayout guide_phone_rl;
-    private LinearLayout guide_center_layout; //地图中心点
 
     private final int outsetReques = 1000;
     private final int destReques = 1001;
     private final int callGuideReques = 1002;
     private static final int accuracyCircleFillColor = 0x00000000;
     private static final int accuracyCircleStrokeColor = 0x00000000;
-    private boolean isFirstLoc = true; // 是否是第一次像用户定位
+
+    private String uid = "";
     private String nearGuideUrl = "";
     private boolean isVisibaleTouser = false;
+    private boolean isFirstLoc = true; // 是否是第一次像用户定位
     private boolean isInOrder = false; // 是否处在订单中
     private boolean isFirstInOrder = true;
-    private String uid = "";
-    private String outsetJson = "";
-    private Marker mMarkerGuide;
+    private String outsetJson = ""; //当前地址的拼接
     private String userNums = ""; // 出行人数选择
     private String findGuideorderNum;
-    private boolean isMainviewStop = false;
+
+    public GuidesFragment() {
+    }
+
+    public static GuidesFragment newInstance() {
+        if (fragment == null) {
+            fragment = new GuidesFragment();
+        }
+        return fragment;
+    }
 
     private Handler handler = new Handler() {
         @Override
@@ -211,23 +220,10 @@ public class GuidesFragment extends BasedFragment implements
         }
     };
 
-    public GuidesFragment() {
-    }
-
-    public static GuidesFragment newInstance() {
-        if (fragment == null) {
-            fragment = new GuidesFragment();
-        }
-        return fragment;
-    }
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser)
-            isVisibaleTouser = true;
-        else
-            isVisibaleTouser = false;
+        this.isVisibaleTouser = isVisibleToUser;
     }
 
     @Nullable
@@ -273,7 +269,6 @@ public class GuidesFragment extends BasedFragment implements
         main_destination_tv = (TextView) view.findViewById(R.id.main_destination_tv);
         guide_locatemy_img = (ImageView) view.findViewById(R.id.guide_locatemy_img);
 
-        guide_locate_layout = (LinearLayout) view.findViewById(R.id.guide_locate_layout);
         guide_fuc_layout = (LinearLayout) view.findViewById(R.id.guide_fuc_layout);
         guide_call_layout = (LinearLayout) view.findViewById(R.id.guide_call_layout);
         guide_tOrder_layout = (RelativeLayout) view.findViewById(R.id.guide_tOrder_layout);
@@ -288,7 +283,7 @@ public class GuidesFragment extends BasedFragment implements
         user_stroke_tv = (TextView) view.findViewById(R.id.user_stroke_tv);
         guide_ratingbar = (RatingBar) view.findViewById(R.id.guide_ratingbar);
         guide_phone_rl = (RelativeLayout) view.findViewById(R.id.guide_phone_rl);
-        guide_center_layout = (LinearLayout) view.findViewById(R.id.guide_center_layout);
+        onMap_layout = (RelativeLayout) view.findViewById(R.id.onMap_layout);
 
         mBaiduMap = mapView.getMap();
         lBean = SharePrefer.getLocate(getActivity());
@@ -348,24 +343,6 @@ public class GuidesFragment extends BasedFragment implements
         mapView.getMap().setOnMapLoadedCallback(this);
         mapView.getMap().setOnMapStatusChangeListener(this);
         geoCoder.setOnGetGeoCodeResultListener(this);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Util.pLog("onDestroyView");
-        guideInfo.removeGetInfo();
-        isFirstLoc = true;
-        isInOrder = false;
-        if (mLocClient != null && mLocClient.isStarted()) {
-
-            mLocClient.unRegisterLocationListener(myListener);
-        }
-        if (myListener != null) {
-        }
-        mLocClient.stop();
-        mapView.onDestroy();
-        currentLalng = null;
     }
 
     @Override
@@ -447,11 +424,6 @@ public class GuidesFragment extends BasedFragment implements
     }
 
     @Override
-    public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
-
-    }
-
-    @Override
     public void onGetReverseGeoCodeResult(ReverseGeoCodeResult rGeoCodeResult) {
         if (rGeoCodeResult == null)
             return;
@@ -462,20 +434,9 @@ public class GuidesFragment extends BasedFragment implements
         currentLalng = rGeoCodeResult.getLocation();
         if (!isInOrder) {
             api.getNearGuide(currentLalng, nearGuideUrl, uid);
-            Util.pLog("拖拽地图结果");
         }
         main_outset_tv.setText(rGeoCodeResult.getPoiList().get(0).name);
         outsetJson = rGeoCodeResult.getLocation().latitude + "," + rGeoCodeResult.getLocation().longitude + "," + main_outset_tv.getText().toString();
-    }
-
-    @Override
-    public void onMapLoaded() {
-
-    }
-
-    @Override
-    public void onMapStatusChangeStart(MapStatus mapStatus) {
-
     }
 
     @Override
@@ -486,46 +447,8 @@ public class GuidesFragment extends BasedFragment implements
 
     @Override
     public void onMapStatusChangeFinish(MapStatus mapStatus) {
-//        Util.pLog("拖动地图结束");
         geoCoder.reverseGeoCode(new ReverseGeoCodeOption()
                 .location(mapStatus.target));
-    }
-
-    public class MyLocationListenner implements BDLocationListener {
-        @Override
-        public void onReceiveLocation(BDLocation location) {
-            // map view 销毁后不在处理新接收的位置
-            if (location == null || mapView == null) {
-                return;
-            }
-            MyLocationData locData = new MyLocationData.Builder()
-                    .accuracy(location.getRadius())
-                    // 此处设置开发者获取到的方向信息，顺时针0-360
-                    .direction(100).latitude(location.getLatitude())
-                    .longitude(location.getLongitude()).build();
-            mBaiduMap.setMyLocationData(locData);
-            SharePrefer.saveLatlng(getActivity(), location.getLongitude() + "", location.getLatitude() + "");
-            if (isFirstLoc && !Util.isNull(location.getAddrStr())) {
-                Util.pLog("LocateLisen:" + location.getLatitude() + "," + location.getLongitude() + " adr:" + location.getAddrStr() + " isFirstLoc:" + isFirstLoc);
-                isFirstLoc = false;
-                LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-                handler.sendEmptyMessage(1);
-                geoCoder.reverseGeoCode(new ReverseGeoCodeOption()
-                        .location(ll));
-                MapStatus mMapstatus = new MapStatus.Builder().target(ll).zoom(15f)
-                        .build();
-                MapStatusUpdate u = MapStatusUpdateFactory.newMapStatus(mMapstatus);
-                mBaiduMap.animateMapStatus(u);
-                mBaiduMap.setMapStatus(u);
-                mCurrentMode = LocationMode.NORMAL;
-                mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
-                        mCurrentMode, true, bdMyself, accuracyCircleFillColor, accuracyCircleStrokeColor));
-                mBaiduMap.setMyLocationEnabled(true);//开启定位图层
-            }
-        }
-
-        public void onReceivePoi(BDLocation poiLocation) {
-        }
     }
 
     /**
@@ -560,16 +483,16 @@ public class GuidesFragment extends BasedFragment implements
         mMarkerGuide = (Marker) mBaiduMap.addOverlay(ooA);
     }
 
+    /**
+     * 设置为我服务的导游位置和行程
+     */
     private void updateGuide() {
         if (guideInfoBean.getStartTime() != 0) {
-            if (user_stroke_tv == null)
-                return;
-            user_stroke_tv.setText(getString(R.string.stork_time) + guideInfoBean.getCurrentTime());
-            Util.pLog("updateGuide()");
+            if (isInOrder)
+                user_stroke_tv.setText(getString(R.string.stork_time) + guideInfoBean.getCurrentTime());
+            guideInfo.removeGetInfo();
             mBaiduMap.clear();
-//            guideInfo.removeGetInfo();
         }
-
         if (mMarkerGuide != null)
             mMarkerGuide.setPosition(new LatLng(guideInfoBean.getGuideLat(), guideInfoBean.getGuideLon()));
     }
@@ -580,10 +503,8 @@ public class GuidesFragment extends BasedFragment implements
     private void setPageLayout() {
         guideInfo.getMyGuideInfo(findGuideorderNum);
         guide_tOrder_layout.setVisibility(View.VISIBLE);
-        guide_call_layout.setVisibility(View.GONE);
-        guide_locate_layout.setVisibility(View.GONE);
-        guide_center_layout.setVisibility(View.GONE);
-        guide_fuc_layout.setVisibility(View.GONE);
+        guide_fuc_layout.setVisibility(View.VISIBLE);
+        onMap_layout.setVisibility(View.GONE);
         Intent intent = new Intent();
         intent.putExtra("theOrderNum", findGuideorderNum);
         intent.putExtra("cancelType", 1);
@@ -593,6 +514,91 @@ public class GuidesFragment extends BasedFragment implements
             loadingDialog.dismiss();
         if (mBaiduMap != null)
             mBaiduMap.clear();
+    }
+
+    /**
+     * 取消订单成功后的操作
+     */
+    private void cancelOrderSuc() {
+        mBaiduMap.clear();
+        guide_tOrder_layout.setVisibility(View.GONE);
+        onMap_layout.setVisibility(View.VISIBLE);
+        isInOrder = false;
+        if (uploadLag != null)
+            uploadLag.unUploadLatlng();
+        guideInfo.removeGetInfo();
+        LatLng latLng = SharePrefer.getLatlng(getActivity());
+        if (latLng != null) {
+            currentLalng = latLng;
+            handler.sendEmptyMessage(1);
+            MapStatus mMapstatus = new MapStatus.Builder().target(currentLalng).zoom(18f)
+                    .build();
+            MapStatusUpdate u = MapStatusUpdateFactory.newMapStatus(mMapstatus);
+            mBaiduMap.setMapStatus(u);
+            geoCoder.reverseGeoCode(new ReverseGeoCodeOption()
+                    .location(currentLalng));
+        }
+    }
+
+    /**
+     * 定位的监听类
+     */
+    class MyLocationListenner implements BDLocationListener {
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            // map view 销毁后不在处理新接收的位置
+            if (location == null || mapView == null) {
+                return;
+            }
+            MyLocationData locData = new MyLocationData.Builder()
+                    .accuracy(location.getRadius())
+                    // 此处设置开发者获取到的方向信息，顺时针0-360
+                    .direction(100).latitude(location.getLatitude())
+                    .longitude(location.getLongitude()).build();
+            mBaiduMap.setMyLocationData(locData);
+            SharePrefer.saveLatlng(getActivity(), location.getLongitude() + "", location.getLatitude() + "");
+            if (isFirstLoc && !Util.isNull(location.getAddrStr())) {
+                Util.pLog("LocateLisen:" + location.getLatitude() + "," + location.getLongitude() + " adr:" + location.getAddrStr() + " isFirstLoc:" + isFirstLoc);
+                isFirstLoc = false;
+                LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+                handler.sendEmptyMessage(1);
+                geoCoder.reverseGeoCode(new ReverseGeoCodeOption()
+                        .location(ll));
+                MapStatus mMapstatus = new MapStatus.Builder().target(ll).zoom(15f)
+                        .build();
+                MapStatusUpdate u = MapStatusUpdateFactory.newMapStatus(mMapstatus);
+                mBaiduMap.animateMapStatus(u);
+                mBaiduMap.setMapStatus(u);
+                mCurrentMode = LocationMode.NORMAL;
+                mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
+                        mCurrentMode, true, bdMyself, accuracyCircleFillColor, accuracyCircleStrokeColor));
+                mBaiduMap.setMyLocationEnabled(true);//开启定位图层
+            }
+        }
+    }
+
+    class CancleOrderReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Constant.ACTION_GCANCELUIDEORDSUC.equals(action)) {
+                Util.pLog(getString(R.string.cancel_order_suc));
+                cancelOrderSuc();
+            }
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        guideInfo.removeGetInfo();
+        isInOrder = false;
+        isFirstLoc = true;
+        if (mLocClient != null && mLocClient.isStarted())
+            mLocClient.unRegisterLocationListener(myListener);
+        mLocClient.stop();
+        mapView.onDestroy();
+        currentLalng = null;
     }
 
     @Override
@@ -607,44 +613,18 @@ public class GuidesFragment extends BasedFragment implements
         mapView.onPause();
     }
 
-    class CancleOrderReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (Constant.ACTION_GCANCELUIDEORDSUC.equals(action)) {
-                Util.pLog(getString(R.string.cancel_order_suc));
-                cancelOrderSuc();
-            }
-        }
+    @Override
+    public void onMapLoaded() {
+
     }
 
-    private void cancelOrderSuc() {
-        mBaiduMap.clear();
-        guide_call_layout.setVisibility(View.GONE);
-        guide_tOrder_layout.setVisibility(View.GONE);
-        guide_fuc_layout.setVisibility(View.VISIBLE);
-        guide_center_layout.setVisibility(View.VISIBLE);
-        guide_locate_layout.setVisibility(View.VISIBLE);
-        isInOrder = false;
-        if (uploadLag != null)
-            uploadLag.unUploadLatlng();
-        guideInfo.removeGetInfo();
-        LatLng latLng = SharePrefer.getLatlng(getActivity());
-        if (latLng != null) {
-            currentLalng = latLng;
-            handler.sendEmptyMessage(1);
-            MapStatus mMapstatus = new MapStatus.Builder().target(currentLalng).zoom(18f)
-                    .build();
-            MapStatusUpdate u = MapStatusUpdateFactory.newMapStatus(mMapstatus);
-            mBaiduMap.setMapStatus(u);
-        }
+    @Override
+    public void onMapStatusChangeStart(MapStatus mapStatus) {
+
     }
 
-    public void setMainViewStop(boolean isMainviewStop) {
-        this.isMainviewStop = isMainviewStop;
-    }
-
-    public void setLoadingStop() {
+    @Override
+    public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
 
     }
 }

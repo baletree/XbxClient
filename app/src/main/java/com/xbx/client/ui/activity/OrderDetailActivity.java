@@ -3,11 +3,15 @@ package com.xbx.client.ui.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xbx.client.R;
+import com.xbx.client.beans.OrderDetailBean;
 import com.xbx.client.http.Api;
+import com.xbx.client.jsonparse.OrderParse;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.view.FlowLayout;
 
@@ -23,6 +27,7 @@ public class OrderDetailActivity extends BaseActivity {
 
     private List<String> tagList = null;
     private Api api = null;
+    private OrderDetailBean detailBean = null;
 
     private String orderNuber = "";
 
@@ -32,7 +37,11 @@ public class OrderDetailActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case TaskFlag.REQUESTSUCCESS:
-
+                    String dataDetail = (String) msg.obj;
+                    detailBean = OrderParse.getDetailOrder(dataDetail);
+                    if(detailBean == null)
+                        return;
+                    setOderInfo();
                     break;
             }
         }
@@ -64,6 +73,7 @@ public class OrderDetailActivity extends BaseActivity {
         super.initViews();
         title_txt = (TextView) findViewById(R.id.title_txt_tv);
         title_txt.setText(getString(R.string.order_detail_title));
+        findViewById(R.id.title_left_img).setOnClickListener(this);
         guide_tag_flayout = (FlowLayout) findViewById(R.id.guide_tag_flayout);
         for (int i = 0; i < tagList.size(); i++) {
             guide_tag_flayout.addView(addTextView(tagList.get(i)));
@@ -84,4 +94,17 @@ public class OrderDetailActivity extends BaseActivity {
         return textView;
     }
 
+    private void setOderInfo(){
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        switch (v.getId()){
+            case R.id.title_left_img:
+                finish();
+                break;
+        }
+    }
 }

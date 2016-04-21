@@ -118,19 +118,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initViews();
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (guidesFragment == null)
-            return;
-        guidesFragment.setLoadingStop();
-    }
-
     protected void initViews() {
         api = new Api(MainActivity.this, handler);
         drawerLayout = (DrawerLayout) findViewById(R.id.main_drawerLayout);
@@ -146,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         viewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager(), this);
         findViewById(R.id.menu_setting_layout).setOnClickListener(this);
         findViewById(R.id.menu_recruit_layout).setOnClickListener(this);
+        findViewById(R.id.menu_msg_layout).setOnClickListener(this);
         main_menu_img.setOnClickListener(this);
         cancel_order_tv.setOnClickListener(this);
         menu_order_layout.setOnClickListener(this);
@@ -252,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.cancel_order_tv://取消订单
                 initDialog();
                 break;
-            case R.id.menu_order_layout:
+            case R.id.menu_order_layout://我的订单
                 startActivity(new Intent(MainActivity.this, MyOrderActivity.class));
                 toggleLeftLayout();
                 break;
@@ -262,6 +250,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.menu_setting_layout: //设置
                 startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                toggleLeftLayout();
+                break;
+            case R.id.menu_msg_layout://消息中心
+                startActivity(new Intent(MainActivity.this, TourDetailActivity.class));
                 toggleLeftLayout();
                 break;
             case R.id.menu_recruit_layout: //导游招募
@@ -300,12 +292,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         tipsDialog.show();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        guidesFragment.setMainViewStop(true);
     }
 
     @Override

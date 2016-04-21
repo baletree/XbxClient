@@ -41,6 +41,7 @@
     <dimen name="dp_thirty_six">36dp</dimen>
     <dimen name="dp_forty">40dp</dimen>
     <dimen name="dp_forty_four">44dp</dimen>
+    <dimen name="dp_forty_five">45dp</dimen>
     <dimen name="dp_forty_eight">48dp</dimen>
     <dimen name="dp_fifty">50dp</dimen>
     <dimen name="dp_sixty">60dp</dimen>

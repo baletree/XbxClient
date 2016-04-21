@@ -185,8 +185,9 @@ public class Api {
     public void getOrderDetail(String orderNum) {
         if (context == null)
             return;
-        String orderListUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_orderDetail)).concat("?order_number=" + orderNum);
-        IRequest.get(context, orderListUrl, new RequestBackLisener(context) {
+        String orderDetailUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_orderDetail)).concat("?order_number=" + orderNum);
+        Util.pLog("orderDetailUrl:"+orderDetailUrl);
+        IRequest.get(context, orderDetailUrl,"",new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 super.requestSuccess(json);
@@ -225,24 +226,22 @@ public class Api {
     public void getReserveGuideList(ReservatInfoBean reservatBean, String pageIndex, String pageNum) {
         if (context == null)
             return;
-        RequestParams params = new RequestParams();
-        params.put("server_city_id", reservatBean.getCityId());
-        params.put("server_addr_lnglat", reservatBean.getAddress());
-        params.put("sex", reservatBean.getSexType());
-        params.put("lang_type", reservatBean.getLanguageType());
-        params.put("server_start_time", reservatBean.getStartTime());
-        params.put("server_end_time", reservatBean.getEndTime());
-        params.put("now_page", pageIndex);
-        params.put("page_number", pageNum);
-        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_guideList));
-        IRequest.post(context, url, params, new RequestBackLisener(context) {
+        String paramsData = "?server_city_id=" + reservatBean.getCityId() + "&server_addr_lnglat=" + reservatBean.getAddress() + "&sex=" + reservatBean.getSexType()
+                + "&lang_type=" + reservatBean.getLanguageType() + "&server_start_time=" + reservatBean.getStartTime() + "&server_end_time=" + reservatBean.getEndTime()
+                + "&now_page=" + pageIndex + "&page_number=" + pageNum;
+        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_guideList)).concat(paramsData);
+        Util.pLog(paramsData);
+        IRequest.get(context, url, "", new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
-
+                Util.pLog("预约导游列表:" + json);
+                sendShowMsg(TaskFlag.REQUESTSUCCESS,json);
             }
 
             @Override
             public void requestError(VolleyError e) {
+                super.requestError(e);
+                mHandler.sendEmptyMessage(TaskFlag.REQUESTERROR);
             }
         });
     }
@@ -269,6 +268,7 @@ public class Api {
             msg.what = flag;
             mHandler.sendMessage(msg);
         } else {
+            mHandler.sendEmptyMessage(TaskFlag.REQUESTERROR);
             String showMsg = UtilParse.getRequestMsg(json);
             if (!Util.isNull(showMsg))
                 Util.showToast(context, showMsg);

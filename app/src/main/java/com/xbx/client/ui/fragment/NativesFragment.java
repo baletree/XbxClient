@@ -27,8 +27,9 @@ import java.util.List;
 public class NativesFragment extends BaseFragment {
     private static NativesFragment fragment = null;
     private View view = null;
-    private EditText login_phone_et;
     private TextureMapView mMapView;
+
+    private boolean isVisibleToUser = false;
 
     public NativesFragment() {
     }
@@ -42,6 +43,7 @@ public class NativesFragment extends BaseFragment {
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
+        this.isVisibleToUser = isVisibleToUser;
         super.setUserVisibleHint(isVisibleToUser);
     }
 

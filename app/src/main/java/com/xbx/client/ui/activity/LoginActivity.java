@@ -144,7 +144,7 @@ public class LoginActivity extends BaseActivity {
         params.put("mobile", phone);
         params.put("password", code);
         params.put("user_type", "0");//代表用户端
-        params.put("push_id", JPushInterface.getRegistrationID(this));//代表用户端
+        params.put("push_id", pushId);//代表用户端
         IRequest.post(this, postUrl, params, "", new RequestBackLisener(LoginActivity.this){
             @Override
             public void requestSuccess(String json) {

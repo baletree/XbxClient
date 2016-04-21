@@ -43,7 +43,6 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
     private List<DateItemBean> dateList = null;
     private DateShowAdapter dateAdapter = null;
     private PoiInfo poiInfoRe = null;
-    private Api api = null;
     private List<String> choiceDateList = null;
 
     private int nowWeek;
@@ -52,18 +51,6 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
     private String sexType = "2";
     private String languageType = "0";
     private String destCity = "";//目的地
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case TaskFlag.REQUESTSUCCESS:
-
-                    break;
-            }
-        }
-    };
 
 
     @Override
@@ -75,7 +62,6 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
     @Override
     protected void initDatas() {
         super.initDatas();
-        api = new Api(this, handler);
     }
 
     @Override
@@ -160,13 +146,13 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
                     if (dateList.get(i).isChoice())
                         choiceDateList.add(dateList.get(i).getDateReal());
                 }
-                if (dateList.size() == 0) {
+                if (choiceDateList.size() == 0) {
                     Util.showToast(ReservatGuideActivity.this, getString(R.string.setReservatTime));
                     return;
                 }
                 ReservatInfoBean reservatBean = new ReservatInfoBean();
                 if (Util.isNull(choiceCityId))
-                    reservatBean.setCityId(poiInfoRe.name);
+                    reservatBean.setCityId(poiInfoRe.city);
                 else
                     reservatBean.setCityId(choiceCityId);
                 reservatBean.setAddress(poiInfoRe.location.latitude + "," + poiInfoRe.location.longitude + "," + poiInfoRe.name);
