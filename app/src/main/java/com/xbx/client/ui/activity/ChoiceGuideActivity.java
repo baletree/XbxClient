@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.xbx.client.R;
 import com.xbx.client.adapter.ChoiceGuideAdapter;
+import com.xbx.client.adapter.ChoicedGuideAdapter;
 import com.xbx.client.beans.ReservatInfoBean;
 import com.xbx.client.beans.ServerListBean;
 import com.xbx.client.http.Api;
@@ -22,6 +23,8 @@ import com.xbx.client.jsonparse.ServerParse;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.RecycleViewDivider;
+import com.xbx.client.view.pulllistview.PullToRefreshLayout;
+import com.xbx.client.view.pulllistview.PullableListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,21 +33,17 @@ import java.util.List;
  * Created by EricPeng on 2016/4/11.
  * 预约导游选择导游
  */
-public class ChoiceGuideActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, ChoiceGuideAdapter.ItemLisener {
+public class ChoiceGuideActivity extends BaseActivity implements PullToRefreshLayout.OnRefreshListener {
     private TextView title_txt_tv;
     private ImageView title_left_img;
-    private RecyclerView reserve_guide_rv;
-    private SwipeRefreshLayout reserve_guide_swipe;
+    private PullToRefreshLayout choice_refresh_layout;
+    private PullableListView choice_refresh_plv;
 
-    private LinearLayoutManager layoutManager = null;
-    private ChoiceGuideAdapter choiceAdapter = null;
-    private List<String> infoList = null;
+    private ChoicedGuideAdapter choiceAdapter = null;
     private ReservatInfoBean reservatBean = null;
     private Api api = null;
     private List<ServerListBean> sList = null;
-    private List<ServerListBean> ssssList = null;
 
-    private boolean isLoading = false;
     private int pageIndex = 1;
     private int pageNum = 10;
 
@@ -55,25 +54,16 @@ public class ChoiceGuideActivity extends BaseActivity implements SwipeRefreshLay
             switch (msg.what) {
                 case TaskFlag.REQUESTSUCCESS:
                     String sListData = (String) msg.obj;
-                    Util.pLog("setdata=");
                     sList = ServerParse.getServerList(sListData);
                     if (sList == null)
                         return;
-                    ssssList.addAll(sList);
-                    ssssList.addAll(sList);
-                    ssssList.addAll(sList);
-                    ssssList.addAll(sList);
-                    choiceAdapter = new ChoiceGuideAdapter(ChoiceGuideActivity.this, ssssList);
-                    reserve_guide_rv.setAdapter(choiceAdapter);
-                    choiceAdapter.setOnItemLisener(ChoiceGuideActivity.this);
+                    choiceAdapter = new ChoicedGuideAdapter(ChoiceGuideActivity.this,sList);
+                    choice_refresh_plv.setAdapter(choiceAdapter);
                     break;
                 case TaskFlag.REQUESTERROR:
 
                     break;
             }
-            reserve_guide_swipe.setRefreshing(false);
-            Util.pLog("isLoading=" + isLoading);
-            choiceAdapter.notifyItemRemoved(choiceAdapter.getItemCount());
         }
     };
 
@@ -86,12 +76,9 @@ public class ChoiceGuideActivity extends BaseActivity implements SwipeRefreshLay
     @Override
     protected void initDatas() {
         super.initDatas();
-        layoutManager = new LinearLayoutManager(this);
-        infoList = new ArrayList<>();
-        ssssList = new ArrayList<>();
         reservatBean = (ReservatInfoBean) getIntent().getSerializableExtra("ReservatInfo");
         api = new Api(ChoiceGuideActivity.this, handler);
-        api.getReserveGuideList(reservatBean, pageIndex + "", pageNum + "");
+//        api.getReserveGuideList(reservatBean, pageIndex + "", pageNum + "");
     }
 
     @Override
@@ -101,40 +88,23 @@ public class ChoiceGuideActivity extends BaseActivity implements SwipeRefreshLay
         title_txt_tv.setText(getString(R.string.choice_guide));
         title_left_img = (ImageView) findViewById(R.id.title_left_img);
         title_left_img.setOnClickListener(this);
-        reserve_guide_rv = (RecyclerView) findViewById(R.id.reserve_guide_rv);
-        reserve_guide_swipe = (SwipeRefreshLayout) findViewById(R.id.reserve_guide_swipe);
-        reserve_guide_swipe.setColorSchemeColors(R.color.colorTheme);
-        reserve_guide_swipe.setOnRefreshListener(this);
-        reserve_guide_rv.setLayoutManager(layoutManager);
-        reserve_guide_rv.addItemDecoration(new RecycleViewDivider(this, R.drawable.spitline_bg));
-        reserve_guide_rv.setItemAnimator(new DefaultItemAnimator());
-        reserve_guide_rv.addOnScrollListener(new OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
-                if (lastVisibleItemPosition + 1 == choiceAdapter.getItemCount()) {
-                    boolean isRefreshing = reserve_guide_swipe.isRefreshing();
-                    if (isRefreshing) {
-                        isLoading = false;
-                        choiceAdapter.notifyItemRemoved(choiceAdapter.getItemCount());
-                        return;
-                    }
-                    if (!isLoading) {
-                        Util.pLog("in Scrolled isLoading=" + isLoading);
-                        isLoading = true;
-                        pageIndex++;
-                        api.getReserveGuideList(reservatBean, pageIndex + "", pageNum + "");
-                    }
-                }
-            }
-        });
-
+        choice_refresh_layout = (PullToRefreshLayout) findViewById(R.id.choice_refresh_layout);
+        choice_refresh_plv = (PullableListView) findViewById(R.id.choice_refresh_plv);
+        choice_refresh_layout.setOnRefreshListener(this);
+        sList = new ArrayList<>();
+        sList.add(new ServerListBean());
+        sList.add(new ServerListBean());
+        sList.add(new ServerListBean());
+        sList.add(new ServerListBean());
+        sList.add(new ServerListBean());
+        sList.add(new ServerListBean());
+        sList.add(new ServerListBean());
+        sList.add(new ServerListBean());
+        sList.add(new ServerListBean());
+        sList.add(new ServerListBean());
+        sList.add(new ServerListBean());
+        choiceAdapter = new ChoicedGuideAdapter(ChoiceGuideActivity.this,sList);
+        choice_refresh_plv.setAdapter(choiceAdapter);
     }
 
 
@@ -149,18 +119,12 @@ public class ChoiceGuideActivity extends BaseActivity implements SwipeRefreshLay
     }
 
     @Override
-    public void onRefresh() {
-        pageIndex = 1;
-        api.getReserveGuideList(reservatBean, pageIndex + "", pageNum + "");
+    public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+
     }
 
     @Override
-    public void clickDetail() {
-        startActivity(new Intent(ChoiceGuideActivity.this, GuideDetailActivity.class));
-    }
-
-    @Override
-    public void clickGiveOrder() {
+    public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
 
     }
 }

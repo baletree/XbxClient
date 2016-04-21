@@ -6,14 +6,19 @@
 
     <include layout="@layout/page_title" />
 
-    <android.support.v4.widget.SwipeRefreshLayout xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/reserve_guide_swipe"
+    <com.xbx.client.view.pulllistview.PullToRefreshLayout
+        android:id="@+id/choice_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/reserve_guide_rv"
+        <include layout="@layout/refresh_head" />
+        <!-- 支持所有实现Pullable接口的View -->
+        <com.xbx.client.view.pulllistview.PullableListView
+            android:id="@+id/choice_refresh_plv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:divider="@color/color_gray"
+            android:dividerHeight="1dp" />
+        <include layout="@layout/load_more" />
+    </com.xbx.client.view.pulllistview.PullToRefreshLayout>
 </LinearLayout>
