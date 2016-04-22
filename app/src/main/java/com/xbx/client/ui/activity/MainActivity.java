@@ -43,6 +43,9 @@ import com.xbx.client.utils.Util;
 import com.xbx.client.view.BanSlideViewpager;
 import com.xbx.client.view.TipsDialog;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -208,14 +211,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String postUrl = getString(R.string.url_conIp).concat(getString(R.string.url_Login));
         RequestParams params = new RequestParams();
         UserInfo userInfo = SharePrefer.getUserInfo(MainActivity.this);
+        final String pushId = JPushInterface.getRegistrationID(this);
         params.put("mobile", userInfo.getUserPhone());
         params.put("password", userInfo.getLoginToken());
         params.put("user_type", "0");//代表用户端
+        params.put("push_id", pushId);//代表用户端
 //        Util.pLog("Login phone=" + userInfo.getUserPhone()+" token:"+userInfo.getLoginToken());
         IRequest.post(this, postUrl, params, new RequestBackLisener(MainActivity.this) {
             @Override
             public void requestSuccess(String json) {
-                Util.pLog("Login check Result=" + json);
+                Util.pLog(pushId + " Login check Result=" + json);
                 if (UtilParse.getRequestCode(json) == 0) {
                     Util.showToast(MainActivity.this, getString(R.string.login_fail));
                     SharePrefer.saveUserInfo(MainActivity.this, new UserInfo());
@@ -226,6 +231,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (userInfo != null) {
                         SharePrefer.saveUserInfo(MainActivity.this, userInfo);
                     }
+                }
+            }
+        });
+
+        String testUrl = "http://45.33.46.130/api/rest/client/login?&email=xiaoxiao.li@nxeco.com&passwd=e10adc3949ba59abbe56e057f20f883e";
+        IRequest.get(this,testUrl,new RequestBackLisener(this) {
+            @Override
+            public void requestSuccess(String json) {
+                Util.pLog("test:"+json);
+                try {
+                    JSONObject jsonObject = new JSONObject(json);
+                    if(jsonObject.has("data"))
+                        Util.pLog("data:"+jsonObject.getString("data"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });

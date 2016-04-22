@@ -20,6 +20,7 @@ import com.xbx.client.beans.ReservatInfoBean;
 import com.xbx.client.beans.ServerListBean;
 import com.xbx.client.http.Api;
 import com.xbx.client.jsonparse.ServerParse;
+import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.RecycleViewDivider;
@@ -33,7 +34,7 @@ import java.util.List;
  * Created by EricPeng on 2016/4/11.
  * 预约导游选择导游
  */
-public class ChoiceGuideActivity extends BaseActivity implements PullToRefreshLayout.OnRefreshListener {
+public class ChoiceGuideActivity extends BaseActivity implements PullToRefreshLayout.OnRefreshListener, ChoicedGuideAdapter.ClickLisener {
     private TextView title_txt_tv;
     private ImageView title_left_img;
     private PullToRefreshLayout choice_refresh_layout;
@@ -43,9 +44,14 @@ public class ChoiceGuideActivity extends BaseActivity implements PullToRefreshLa
     private ReservatInfoBean reservatBean = null;
     private Api api = null;
     private List<ServerListBean> sList = null;
+    private List<ServerListBean> sCashList = null;
 
     private int pageIndex = 1;
     private int pageNum = 10;
+    private boolean isRefresh = false;
+    private boolean isLoadMore = false;
+
+    private String uid = "";
 
     private Handler handler = new Handler() {
         @Override
@@ -57,11 +63,43 @@ public class ChoiceGuideActivity extends BaseActivity implements PullToRefreshLa
                     sList = ServerParse.getServerList(sListData);
                     if (sList == null)
                         return;
-                    choiceAdapter = new ChoicedGuideAdapter(ChoiceGuideActivity.this,sList);
+                    if (isRefresh) {
+                        isRefresh = false;
+                        if (sList.size() == 0) {
+                            choice_refresh_layout.refreshFinish(choice_refresh_layout.FAIL);
+                        } else {
+                            choice_refresh_layout.refreshFinish(choice_refresh_layout.SUCCEED);
+                        }
+                    }
+                    choiceAdapter = new ChoicedGuideAdapter(ChoiceGuideActivity.this, sList);
                     choice_refresh_plv.setAdapter(choiceAdapter);
+                    choiceAdapter.setOnCicks(ChoiceGuideActivity.this);
                     break;
                 case TaskFlag.REQUESTERROR:
-
+                    if (isRefresh) {
+                        isRefresh = false;
+                        choice_refresh_layout.refreshFinish(choice_refresh_layout.FAIL);
+                    }
+                    if (isLoadMore) {
+                        isLoadMore = false;
+                        choice_refresh_layout.loadmoreFinish(choice_refresh_layout.FAIL);
+                    }
+                    break;
+                case TaskFlag.REQUESTLOADMORE:
+                    if (isLoadMore) {
+                        sCashList = ServerParse.getServerList((String) msg.obj);
+                        if (sCashList.size() == 0) {
+                            pageIndex--;
+                            choice_refresh_layout.loadmoreFinish(choice_refresh_layout.NOMORE);
+                        } else {
+                            sList.addAll(sCashList);
+                            choiceAdapter.notifyDataSetChanged();
+                        }
+                        isLoadMore = false;
+                    }
+                    break;
+                case TaskFlag.PAGEREQUESTHREE://下单成功
+                    startActivity(new Intent(ChoiceGuideActivity.this, ReservatPayActivity.class));
                     break;
             }
         }
@@ -78,7 +116,7 @@ public class ChoiceGuideActivity extends BaseActivity implements PullToRefreshLa
         super.initDatas();
         reservatBean = (ReservatInfoBean) getIntent().getSerializableExtra("ReservatInfo");
         api = new Api(ChoiceGuideActivity.this, handler);
-//        api.getReserveGuideList(reservatBean, pageIndex + "", pageNum + "");
+        uid = SharePrefer.getUserInfo(this).getUid();
     }
 
     @Override
@@ -91,20 +129,7 @@ public class ChoiceGuideActivity extends BaseActivity implements PullToRefreshLa
         choice_refresh_layout = (PullToRefreshLayout) findViewById(R.id.choice_refresh_layout);
         choice_refresh_plv = (PullableListView) findViewById(R.id.choice_refresh_plv);
         choice_refresh_layout.setOnRefreshListener(this);
-        sList = new ArrayList<>();
-        sList.add(new ServerListBean());
-        sList.add(new ServerListBean());
-        sList.add(new ServerListBean());
-        sList.add(new ServerListBean());
-        sList.add(new ServerListBean());
-        sList.add(new ServerListBean());
-        sList.add(new ServerListBean());
-        sList.add(new ServerListBean());
-        sList.add(new ServerListBean());
-        sList.add(new ServerListBean());
-        sList.add(new ServerListBean());
-        choiceAdapter = new ChoicedGuideAdapter(ChoiceGuideActivity.this,sList);
-        choice_refresh_plv.setAdapter(choiceAdapter);
+        api.getReserveGuideList(reservatBean, pageIndex + "", pageNum + "", TaskFlag.REQUESTSUCCESS);
     }
 
 
@@ -120,11 +145,25 @@ public class ChoiceGuideActivity extends BaseActivity implements PullToRefreshLa
 
     @Override
     public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
-
+        isRefresh = true;
+        pageIndex = 1;
+        api.getReserveGuideList(reservatBean, pageIndex + "", pageNum + "", TaskFlag.REQUESTSUCCESS);
     }
 
     @Override
     public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+        isLoadMore = true;
+        pageIndex++;
+        api.getReserveGuideList(reservatBean, pageIndex + "", pageNum + "", TaskFlag.REQUESTLOADMORE);
+    }
 
+    @Override
+    public void downOrder(int position) {
+        api.findGuide(uid, reservatBean.getAddress(), reservatBean.getStartTime(), reservatBean.getEndTime(), "1", "1", "", reservatBean.getCityId(), sList.get(position).getServerId());
+    }
+
+    @Override
+    public void lookGuide(int position) {
+        startActivity(new Intent(ChoiceGuideActivity.this, TourDetailActivity.class));
     }
 }

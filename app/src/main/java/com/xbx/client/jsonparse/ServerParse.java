@@ -17,9 +17,9 @@ public class ServerParse {
     public static List<ServerListBean> getServerList(String json) {
         List<ServerListBean> sList = null;
         try {
+            sList = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(json);
             if (jsonArray.length() > 0) {
-                sList = new ArrayList<>();
                 for (int i = 0; i < jsonArray.length(); i++) {
                     ServerListBean sListBean = new ServerListBean();
                     JSONObject jsonObject = (JSONObject) jsonArray.get(i);

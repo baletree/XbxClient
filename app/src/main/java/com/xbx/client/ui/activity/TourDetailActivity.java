@@ -65,8 +65,8 @@ public class TourDetailActivity extends BaseActivity {
     protected void initDatas() {
         tagList = new ArrayList<>();
         tagList.add("大胆");
-        tagList.add("脾气大");
         tagList.add("路线熟悉活地图");
+        tagList.add("脾气大");
         tagList.add("管吃管住管穿");
         tagList.add("管吃管住");
         tagList.add("路线熟悉活地图的能忍");

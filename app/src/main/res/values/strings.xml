@@ -48,6 +48,7 @@
     <string name="code_tips">请输入验证码</string>
     <string name="myorder_title">我的订单</string>
     <string name="login_fail">登录失效，请重新登录</string>
+    <string name="no_guide">暂无导游接单</string>
     <string name="cancel_success">取消成功</string>
     <string name="cancel_order">取消订单</string>
     <string name="cancel_time">取消时间:</string>
@@ -181,6 +182,7 @@
     <string name="pullup_to_load">上拉加载更多</string>
     <string name="release_to_load">释放立即加载</string>
     <string name="loading">正在加载...</string>
-    <string name="load_succeed">加载成功</string>
+    <string name="load_nomore">没有更多数据</string>
     <string name="load_fail">加载失败</string>
+    <string name="load_succeed">加载成功</string>
 </resources>

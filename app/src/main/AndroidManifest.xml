@@ -123,6 +123,10 @@
             android:name=".ui.activity.TourDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeCustorm" />
+        <activity
+            android:name=".ui.activity.ReservatPayActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeCustorm" />
         <!--作为Dialog-->
         <activity
             android:name=".ui.activity.ChoicePeoNumActivity"

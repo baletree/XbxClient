@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     android:orientation="vertical">
 
     <include layout="@layout/page_title" />
@@ -17,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorWhite"
-            android:divider="@color/color_gray"
+            android:divider="@color/colorLine"
             android:dividerHeight="1dp" />
         <include layout="@layout/load_more" />
     </com.xbx.client.view.pulllistview.PullToRefreshLayout>

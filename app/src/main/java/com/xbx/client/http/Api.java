@@ -99,13 +99,14 @@ public class Api {
      * @param startInfo
      * @param startTime
      * @param endTime
-     * @param serverTye 即时或者预约
+     * @param serverTye 0即时或者1预约
      * @param guideType 导游或者伴游和土著
      * @param userNum
      * @param cityId
+     * @param guideId 导游Id
      */
     public void findGuide(String uid, String startInfo, String startTime, String endTime, String serverTye,
-                          String guideType, String userNum, String cityId) {
+                          String guideType, String userNum, String cityId,String guideId) {
         if (context == null)
             return;
         RequestParams params = new RequestParams();
@@ -117,7 +118,8 @@ public class Api {
         params.put("server_type", serverTye);
         params.put("guide_type", guideType);
         params.put("number", userNum);
-        Util.pLog("uid:" + uid + " start_addr_lnglat:" + startInfo + " server_start_time:" + startTime + " server_end_time:" + endTime + " server_type:" + serverTye + " guideType:" + guideType + " number:" + userNum + " cityId" + cityId);
+        params.put("guid", guideId);
+        Util.pLog("用户:" + uid + " 用户预约目的:" + startInfo + " 开始时间:" + startTime + " 结束时间:" + endTime + " 服务类型:" + serverTye + " 导游类型:" + guideType + " 人数:" + userNum + " 城市ID：" + cityId+" 导游id:"+guideId);
         String findUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_findGuide));
         IRequest.post(context, findUrl, params, "", new RequestBackLisener(context) {
             @Override
@@ -223,7 +225,7 @@ public class Api {
      * @param pageIndex
      * @param pageNum
      */
-    public void getReserveGuideList(ReservatInfoBean reservatBean, String pageIndex, String pageNum) {
+    public void getReserveGuideList(ReservatInfoBean reservatBean, String pageIndex, String pageNum, final int requestFlag) {
         if (context == null)
             return;
         String paramsData = "?server_city_id=" + reservatBean.getCityId() + "&server_addr_lnglat=" + reservatBean.getAddress() + "&sex=" + reservatBean.getSexType()
@@ -235,7 +237,7 @@ public class Api {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("预约导游列表:" + json);
-                sendShowMsg(TaskFlag.REQUESTSUCCESS,json);
+                sendShowMsg(requestFlag,json);
             }
 
             @Override

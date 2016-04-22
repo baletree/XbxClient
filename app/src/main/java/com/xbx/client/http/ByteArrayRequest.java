@@ -62,7 +62,7 @@ class ByteArrayRequest extends Request<byte[]> {
             String uid = SharePrefer.getUserInfo(App.getContext()).getUid();
             AESCrypt aesCrypt = new AESCrypt(deviceId);
             headers.put("deviceid", deviceId);
-            headers.put("uuid", aesCrypt.encrypt(uid));
+//            headers.put("uuid", aesCrypt.encrypt(uid));
 //            Util.pLog("uuid:"+aesCrypt.encrypt(uid));
         }
         return headers;

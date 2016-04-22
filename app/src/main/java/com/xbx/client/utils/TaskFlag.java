@@ -11,4 +11,6 @@ public class TaskFlag {
     public static final int PAGEREQUESFOUR = 1080;
     public static final int PAGEREQUESFIVE = 1090;
     public static final int RMOVEHANDLERONE = 1100;
+    public static final int REQUESTREFRESH = 1110;
+    public static final int REQUESTLOADMORE = 1120;
 }

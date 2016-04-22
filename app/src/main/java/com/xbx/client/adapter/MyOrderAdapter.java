@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.xbx.client.R;
 import com.xbx.client.beans.OrderBean;
+import com.xbx.client.utils.StringUtil;
 import com.xbx.client.utils.Util;
 
 import java.util.List;
@@ -47,12 +48,8 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
             holder.order_type_tv.setText(context.getString(R.string.immediaServer));
         else
             holder.order_type_tv.setText(context.getString(R.string.reserveServer));
-        if ("1".equals(orderBean.getOrderType()))
-            holder.order_guidetype_tv.setText(context.getString(R.string.main_guide));
-        else if ("2".equals(orderBean.getOrderType()))
-            holder.order_guidetype_tv.setText(context.getString(R.string.main_native));
-        else
-            holder.order_guidetype_tv.setText(context.getString(R.string.main_withTour));
+        if (!Util.isNull(orderBean.getOrderType()))
+            holder.order_guidetype_tv.setText(StringUtil.getGuideType(context, Integer.parseInt(orderBean.getOrderType())));
         if ("0".equals(orderBean.getOrderState()))
             holder.order_state_tv.setText(context.getString(R.string.orderWaitSure));
         else if ("1".equals(orderBean.getOrderState()))
@@ -64,7 +61,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
         else if ("4".equals(orderBean.getOrderState()))
             holder.order_state_tv.setText(context.getString(R.string.orderFinish));
         holder.order_address_tv.setText(orderBean.getOrderAddress());
-        holder.order_pay_tv.setText("￥"+orderBean.getOrderPay());
+        holder.order_pay_tv.setText("￥" + orderBean.getOrderPay());
         holder.order_item_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -159,6 +159,7 @@ public class GuidesFragment extends BasedFragment implements
                 case 30:
                     guide_call_layout.setVisibility(View.GONE);
                     guide_fuc_layout.setVisibility(View.VISIBLE);
+                    Util.showToast(getActivity(),getString(R.string.no_guide));
                     if (loadingDialog != null && loadingDialog.isShowing())
                         loadingDialog.dismiss();
                     break;
@@ -412,7 +413,7 @@ public class GuidesFragment extends BasedFragment implements
                     Util.showToast(getActivity(), getString(R.string.setoff_null));
                     return;
                 }
-                api.findGuide(uid, outsetJson, "", "", "0", "1", userNums, "");
+                api.findGuide(uid, outsetJson, "", "", "0", "1", userNums, "","");
                 break;
             case R.id.guide_head_img://头像
 

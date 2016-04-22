@@ -199,7 +199,7 @@
             android:paddingTop="@dimen/dp_eight"
             android:text="我是一个对理想有着执着追求的人，坚信是金子总会发光。为人热情，活泼，大方， 本人好学上进，诚信、敬业、责任心强，有强烈的团体精神，对工作认真积极，严谨负责。"
             android:textColor="@color/colorText"
-            android:textSize="@dimen/sp_twelve" />
+            android:textSize="@dimen/sp_fourteen" />
 
         <View
             android:layout_width="match_parent"
@@ -223,7 +223,7 @@
             android:paddingTop="@dimen/dp_eight"
             android:text="我是一个对理想有着执着追求的人，坚信是金子总会发光。为人热情，活泼，大方， 本人好学上进，诚信、敬业、责任心强，有强烈的团体精神，对工作认真积极，严谨负责。"
             android:textColor="@color/colorText"
-            android:textSize="@dimen/sp_twelve" />
+            android:textSize="@dimen/sp_fourteen" />
 
         <View
             android:layout_width="match_parent"
