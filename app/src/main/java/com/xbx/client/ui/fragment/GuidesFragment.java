@@ -62,6 +62,7 @@ import com.xbx.client.utils.AnimateFirstDisplayListener;
 import com.xbx.client.utils.Constant;
 import com.xbx.client.utils.ImageLoaderConfigFactory;
 import com.xbx.client.utils.SharePrefer;
+import com.xbx.client.utils.StringUtil;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.LoadingDialog;
@@ -124,6 +125,7 @@ public class GuidesFragment extends BasedFragment implements
     private final int callGuideReques = 1002;
     private static final int accuracyCircleFillColor = 0x00000000;
     private static final int accuracyCircleStrokeColor = 0x00000000;
+    private long countTraval = 0;
 
     private String uid = "";
     private String nearGuideUrl = "";
@@ -134,6 +136,8 @@ public class GuidesFragment extends BasedFragment implements
     private String outsetJson = ""; //当前地址的拼接
     private String userNums = ""; // 出行人数选择
     private String findGuideorderNum;
+    private long timeDiff = 0;
+
 
     public GuidesFragment() {
     }
@@ -159,9 +163,14 @@ public class GuidesFragment extends BasedFragment implements
                 case 30:
                     guide_call_layout.setVisibility(View.GONE);
                     guide_fuc_layout.setVisibility(View.VISIBLE);
-                    Util.showToast(getActivity(),getString(R.string.no_guide));
+                    Util.showToast(getActivity(), getString(R.string.no_guide));
                     if (loadingDialog != null && loadingDialog.isShowing())
                         loadingDialog.dismiss();
+                    break;
+                case 99:
+                    countTraval = countTraval + 1;
+                    user_stroke_tv.setText(getString(R.string.stork_time) + StringUtil.getCountTravel((guideInfoBean.getCurrentTime() * 1000 + countTraval*1000) - guideInfoBean.getStartTime() * 1000));
+                    handler.sendEmptyMessageDelayed(99, 1000);
                     break;
                 case TaskFlag.REQUESTSUCCESS:
                     String guideData = (String) msg.obj;
@@ -239,7 +248,7 @@ public class GuidesFragment extends BasedFragment implements
         uploadLag = new PollUploadLag(getActivity());
         findGuide = new FindGuide(getActivity(), handler);
         guideInfo = new MyGuideInfo(getActivity(), handler);
-
+        Util.pLog(" main sexType=" + SharePrefer.getUserInfo(getActivity()).getUserHead());
         guideDes = BitmapDescriptorFactory
                 .fromResource(R.mipmap.guide_locate);
         imageLoader = ImageLoader.getInstance();
@@ -324,7 +333,7 @@ public class GuidesFragment extends BasedFragment implements
         LocationClientOption option = new LocationClientOption();
         option.setOpenGps(true); // 打开gps
         option.setCoorType("bd09ll"); // 设置坐标类型
-        option.setScanSpan(1000);
+        option.setScanSpan(2000);
         mLocClient.setLocOption(option);
         mLocClient.start();
     }
@@ -388,7 +397,6 @@ public class GuidesFragment extends BasedFragment implements
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.guide_locatemy_img:
-                uploadLag.unUploadLatlng();
                 break;
             case R.id.guide_outset_rl://出发地
                 intent.setClass(getActivity(), SearchAddressActivity.class);
@@ -413,7 +421,7 @@ public class GuidesFragment extends BasedFragment implements
                     Util.showToast(getActivity(), getString(R.string.setoff_null));
                     return;
                 }
-                api.findGuide(uid, outsetJson, "", "", "0", "1", userNums, "","");
+                api.findGuide(uid, outsetJson, "", "", "0", "1", userNums, "", "");
                 break;
             case R.id.guide_head_img://头像
 
@@ -476,6 +484,7 @@ public class GuidesFragment extends BasedFragment implements
         guide_name_tv.setText(guideInfoBean.getGuideName());
         guide_code_tv.setText(guideInfoBean.getGuideNum());
         guide_star_tv.setText(guideInfoBean.getGuideStarts() + getString(R.string.scole));
+        user_stroke_tv.setText(getString(R.string.stork_time) + getString(R.string.not_start));
         if (!Util.isNull(guideInfoBean.getGuideStarts()))
             guide_ratingbar.setRating(Float.valueOf(guideInfoBean.getGuideStarts()));
         LatLng guideLl = new LatLng(guideInfoBean.getGuideLat(), guideInfoBean.getGuideLon());
@@ -488,14 +497,14 @@ public class GuidesFragment extends BasedFragment implements
      * 设置为我服务的导游位置和行程
      */
     private void updateGuide() {
-        if (guideInfoBean.getStartTime() != 0) {
-            if (isInOrder)
-                user_stroke_tv.setText(getString(R.string.stork_time) + guideInfoBean.getCurrentTime());
+        if (mMarkerGuide != null)
+            mMarkerGuide.setPosition(new LatLng(guideInfoBean.getGuideLat(), guideInfoBean.getGuideLon()));
+        if (guideInfoBean.getStartTime() != 0 && isInOrder) {
+            timeDiff = guideInfoBean.getCurrentTime() - guideInfoBean.getStartTime();
+            handler.sendEmptyMessage(99);
             guideInfo.removeGetInfo();
             mBaiduMap.clear();
         }
-        if (mMarkerGuide != null)
-            mMarkerGuide.setPosition(new LatLng(guideInfoBean.getGuideLat(), guideInfoBean.getGuideLon()));
     }
 
     /**
@@ -522,12 +531,16 @@ public class GuidesFragment extends BasedFragment implements
      */
     private void cancelOrderSuc() {
         mBaiduMap.clear();
+        handler.removeMessages(99);
+        guideInfo.removeGetInfo();
+        uploadLag.removeUploadLatlng();
+        isInOrder = false;
+        isFirstInOrder = true;
+        countTraval = 0;
+        guideInfoBean = null;
         guide_tOrder_layout.setVisibility(View.GONE);
         onMap_layout.setVisibility(View.VISIBLE);
-        isInOrder = false;
-        if (uploadLag != null)
-            uploadLag.unUploadLatlng();
-        guideInfo.removeGetInfo();
+        guide_call_layout.setVisibility(View.GONE);
         LatLng latLng = SharePrefer.getLatlng(getActivity());
         if (latLng != null) {
             currentLalng = latLng;
@@ -593,6 +606,7 @@ public class GuidesFragment extends BasedFragment implements
     public void onDestroyView() {
         super.onDestroyView();
         guideInfo.removeGetInfo();
+        handler.removeMessages(99);
         isInOrder = false;
         isFirstLoc = true;
         if (mLocClient != null && mLocClient.isStarted())

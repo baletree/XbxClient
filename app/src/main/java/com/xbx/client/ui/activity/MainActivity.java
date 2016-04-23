@@ -92,10 +92,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.handleMessage(msg);
             switch (msg.what) {
                 case TaskFlag.PAGEREQUESFIVE: //取消订单成功
+                    String allData = (String) msg.obj;
+                    if(Util.isNull(allData))
+                        return;
                     cancel_order_tv.setVisibility(View.GONE);
                     Intent intent = new Intent();
                     intent.setAction(Constant.ACTION_GCANCELUIDEORDSUC);
-                    lBManager.sendBroadcast(intent);
+                    int codes = UtilParse.getRequestCode(allData);
+                    switch (codes){
+                        case 1:
+                            lBManager.sendBroadcast(intent);
+                            break;
+                        case 2:
+                            lBManager.sendBroadcast(intent);
+                            startActivity(new Intent(MainActivity.this,CancelOrderSucActivity.class));
+                            break;
+                        case 3:
+                            break;
+                    }
+                    Util.showToast(MainActivity.this,UtilParse.getRequestMsg(allData));
                     break;
             }
         }
@@ -216,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         params.put("password", userInfo.getLoginToken());
         params.put("user_type", "0");//代表用户端
         params.put("push_id", pushId);//代表用户端
-//        Util.pLog("Login phone=" + userInfo.getUserPhone()+" token:"+userInfo.getLoginToken());
+        Util.pLog("Login phone=" + userInfo.getUserPhone()+" token:"+userInfo.getLoginToken());
         IRequest.post(this, postUrl, params, new RequestBackLisener(MainActivity.this) {
             @Override
             public void requestSuccess(String json) {
@@ -227,25 +242,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
                 } else if (UtilParse.getRequestCode(json) == 1) {
-                    UserInfo userInfo = UserInfoParse.getUserInfo(UtilParse.getRequestData(json));
-                    if (userInfo != null) {
-                        SharePrefer.saveUserInfo(MainActivity.this, userInfo);
-                    }
-                }
-            }
-        });
 
-        String testUrl = "http://45.33.46.130/api/rest/client/login?&email=xiaoxiao.li@nxeco.com&passwd=e10adc3949ba59abbe56e057f20f883e";
-        IRequest.get(this,testUrl,new RequestBackLisener(this) {
-            @Override
-            public void requestSuccess(String json) {
-                Util.pLog("test:"+json);
-                try {
-                    JSONObject jsonObject = new JSONObject(json);
-                    if(jsonObject.has("data"))
-                        Util.pLog("data:"+jsonObject.getString("data"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
             }
         });

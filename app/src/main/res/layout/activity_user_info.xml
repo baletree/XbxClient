@@ -73,12 +73,14 @@
                 android:textColor="@color/colorText"
                 android:textSize="@dimen/sp_fifteen" />
 
-            <TextView
+            <EditText
                 android:id="@+id/user_info_nickname_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dp_hundred_fifty"
+                android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
+                android:gravity="center_vertical|right"
+                android:background="@android:color/white"
                 android:textColor="@color/colorText"
                 android:textSize="@dimen/sp_fifteen" />
         </RelativeLayout>
@@ -157,13 +159,15 @@
                 android:textColor="@color/colorText"
                 android:textSize="@dimen/sp_fifteen" />
 
-            <TextView
+            <EditText
                 android:id="@+id/user_info_name_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dp_hundred_fifty"
+                android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:textColor="@color/colorText"
+                android:background="@android:color/white"
+                android:gravity="center_vertical|right"
                 android:textSize="@dimen/sp_fifteen" />
         </RelativeLayout>
 
@@ -181,7 +185,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/user_info_nickname_text"
+                android:text="@string/user_info_phone_text"
                 android:textColor="@color/colorText"
                 android:textSize="@dimen/sp_fifteen" />
 

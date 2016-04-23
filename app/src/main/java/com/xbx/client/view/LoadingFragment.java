@@ -26,8 +26,6 @@ public class LoadingFragment extends DialogFragment {
     private String mMsg = "";
     // 均匀旋转动画
     private RotateAnimation refreshingAnimation;
-    // 下拉箭头的转180°动画
-    private RotateAnimation rotateAnimation;
 
     @SuppressLint("InflateParams")
     @Override
@@ -40,20 +38,11 @@ public class LoadingFragment extends DialogFragment {
         dialog_loading_icon = (ImageView) view.findViewById(R.id.dialog_loading_icon);
         refreshingAnimation = (RotateAnimation) AnimationUtils.loadAnimation(
                 getActivity(), R.anim.rotating);
-        rotateAnimation = (RotateAnimation) AnimationUtils.loadAnimation(
-                getActivity(), R.anim.reverse_anim_dialog);
         LinearInterpolator lir = new LinearInterpolator();
-        rotateAnimation.setInterpolator(lir);
+        refreshingAnimation.setInterpolator(lir);
         dialog_loading_icon.startAnimation(refreshingAnimation);
         if (!Util.isNull(mMsg))
             vLoading_text.setText(mMsg);
-        /*if(Integer.valueOf(android.os.Build.VERSION.SDK_INT) >= 23){
-            loading_bar2.setVisibility(View.VISIBLE);
-            loading_bar.setVisibility(View.GONE);
-        }else{
-            loading_bar2.setVisibility(View.GONE);
-            loading_bar.setVisibility(View.VISIBLE);
-        }*/
         Dialog dialog = new Dialog(getActivity(), R.style.MyLoadDialog);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setContentView(view);
@@ -63,6 +52,12 @@ public class LoadingFragment extends DialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        dialog_loading_icon.clearAnimation();
     }
 
     @Override

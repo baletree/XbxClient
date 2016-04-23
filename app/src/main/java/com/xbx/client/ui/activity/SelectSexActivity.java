@@ -31,10 +31,12 @@ public class SelectSexActivity extends Activity implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.select_sex_male:
                 intent.putExtra("result", getString(R.string.select_sex_male));
+                intent.putExtra("resultCode", 1);
                 setResult(RESULT_OK, intent);
                 break;
             case R.id.select_sex_female:
                 intent.putExtra("result", getString(R.string.select_sex_female));
+                intent.putExtra("resultCode", 2);
                 setResult(RESULT_OK, intent);
                 break;
         }

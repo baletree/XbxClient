@@ -76,6 +76,9 @@ public class SharePrefer {
         spHelper.setSP("userNickname", userInfo.getNickName());
         spHelper.setSP("userHead", userInfo.getUserHead());
         spHelper.setSP("userLoginToken", userInfo.getLoginToken());
+        spHelper.setSP("userSexType", userInfo.getUserSex());
+        spHelper.setSP("userBirthday", userInfo.getUserBirthday());
+        spHelper.setSP("userRealName", userInfo.getUserRealName());
     }
 
     public static UserInfo getUserInfo(Context context){
@@ -88,6 +91,9 @@ public class SharePrefer {
         userInfo.setNickName(spHelper.getSP("userNickname"));
         userInfo.setUserHead(spHelper.getSP("userHead"));
         userInfo.setLoginToken(spHelper.getSP("userLoginToken"));
+        userInfo.setUserSex(spHelper.getSP("userSexType"));
+        userInfo.setUserBirthday(spHelper.getSP("userBirthday"));
+        userInfo.setUserRealName(spHelper.getSP("userRealName"));
         return userInfo;
     }
 

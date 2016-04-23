@@ -19,9 +19,7 @@ public class StringUtil {
         }
     }
 
-    public static long[] getCountTravel(long diff) {
-        long[] timeRecode = new long[4];
-        String dayStr = "";
+    public static String getCountTravel(long diff) {
         long dayUnit = 24 * 60 * 60 * 1000;
         long hourUnit = 60 * 60 * 1000;
         long minUnit = 60 * 1000;
@@ -31,29 +29,9 @@ public class StringUtil {
         long hour = diff % dayUnit / hourUnit;
         long min = diff % dayUnit % hourUnit / minUnit;
         long second = diff % dayUnit % hourUnit % minUnit / secondUnit;
-
-        timeRecode[0] = day;
-        timeRecode[1] = hour;
-        timeRecode[2] = min;
-        timeRecode[3] = second;
-//        dayStr = day + "天" + hour + "小时" + min + "分" + second + "秒";
-        return timeRecode;
+        if (day == 0)
+            return hour + "小时" + min + "分" + second + "秒";
+        else
+            return day + "天" + hour + "小时" + min + "分" + second + "秒";
     }
-
-    /*public static String getCountStrTravel(long timeArra[], long countTime) {
-        long dayUnit = 24 * 60 * 6;
-        long hourUnit = 60 * 60;
-        long minUnit = 60;
-        long secondUnit = 1;
-        if (countTime % dayUnit > 0) {
-            timeArra[0] = countTime % dayUnit + timeArra[0];
-        }else if(countTime%hourUnit > 0){
-            timeArra[1] = countTime % hourUnit + timeArra[0];
-        }else if(countTime%minUnit > 0){
-            timeArra[2] = countTime % hourUnit + timeArra[0];
-        }else if(countTime%minUnit > 0){
-
-        }
-
-    }*/
 }

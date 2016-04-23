@@ -10,6 +10,33 @@ public class UserInfo {
     private String userPhone;
     private String loginToken;
     private String userHead;
+    private String userSex;
+    private String userBirthday;
+    private String userRealName;
+
+    public String getUserSex() {
+        return userSex;
+    }
+
+    public void setUserSex(String userSex) {
+        this.userSex = userSex;
+    }
+
+    public String getUserBirthday() {
+        return userBirthday;
+    }
+
+    public void setUserBirthday(String userBirthday) {
+        this.userBirthday = userBirthday;
+    }
+
+    public String getUserRealName() {
+        return userRealName;
+    }
+
+    public void setUserRealName(String userRealName) {
+        this.userRealName = userRealName;
+    }
 
     public String getUid() {
         return uid;

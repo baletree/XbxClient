@@ -13,10 +13,10 @@
         android:orientation="vertical">
         <ImageView
             android:id="@+id/dialog_loading_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_fifty"
+            android:layout_height="@dimen/dp_fifty"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/loading" />
+            android:background="@drawable/loading1" />
         <ProgressBar
             android:id="@+id/find_loading_bar"
             style="@style/loading_small"

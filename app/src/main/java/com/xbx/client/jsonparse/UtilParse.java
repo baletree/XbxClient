@@ -9,13 +9,13 @@ import org.json.JSONObject;
  * Created by Eric on 2016/2/26.
  */
 public class UtilParse {
-    public static int getRequestCode(String responseResult){
-        if(Util.isNull(responseResult))
+    public static int getRequestCode(String responseResult) {
+        if (Util.isNull(responseResult))
             return -1;
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(responseResult);
-            if(checkTag(jsonObject,"code")){
+            if (checkTag(jsonObject, "code")) {
                 return jsonObject.getInt("code");
             }
         } catch (JSONException e) {
@@ -24,13 +24,13 @@ public class UtilParse {
         return 0;
     }
 
-    public static String getRequestMsg(String responseResult){
-        if(Util.isNull(responseResult))
+    public static String getRequestMsg(String responseResult) {
+        if (Util.isNull(responseResult))
             return "";
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(responseResult);
-            if(checkTag(jsonObject,"msg")){
+            if (checkTag(jsonObject, "msg")) {
                 return jsonObject.getString("msg");
             }
         } catch (JSONException e) {
@@ -39,12 +39,12 @@ public class UtilParse {
         return "数据异常";
     }
 
-    public static String getRequestData(String responseResult){
-        if(Util.isNull(responseResult))
+    public static String getRequestData(String responseResult) {
+        if (Util.isNull(responseResult))
             return "";
         try {
             JSONObject jsonObject = new JSONObject(responseResult);
-            if(checkTag(jsonObject,"data")){
+            if (checkTag(jsonObject, "data")) {
                 return jsonObject.getString("data");
             }
         } catch (JSONException e) {
@@ -53,8 +53,8 @@ public class UtilParse {
         return "";
     }
 
-    public static boolean checkTag(JSONObject jObject,String jsonTag) throws JSONException {
-        if(jObject.has(jsonTag) && !Util.isNull(jObject.getString(jsonTag))){
+    public static boolean checkTag(JSONObject jObject, String jsonTag) throws JSONException {
+        if (jObject.has(jsonTag) && !Util.isNull(jObject.getString(jsonTag))) {
             return true;
         }
         return false;

@@ -160,7 +160,7 @@ public class Api {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("取消订单:" + json);
-                sendShowMsg(TaskFlag.PAGEREQUESFIVE, json);
+                sendAllDatas(TaskFlag.PAGEREQUESFIVE, json);
             }
         });
     }
@@ -249,6 +249,35 @@ public class Api {
     }
 
     /**
+     *
+     * @param uid
+     * @param realname
+     * @param sex
+     * @param idcard
+     * @param nickname
+     * @param birthday
+     */
+    public void modifyInfo(String uid,String realname,String sex,String idcard,String nickname,String birthday){
+        if (context == null)
+            return;
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("realname", realname);
+        params.put("sex", sex);
+        params.put("idcard", idcard);
+        params.put("nickname", nickname);
+        params.put("birthday", birthday);
+        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_modifyUserinfo));
+        IRequest.post(context, url, params, new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+                Util.pLog("修改个人信息:" + json);
+                sendShowMsg(TaskFlag.REQUESTSUCCESS,json);
+            }
+        });
+    }
+
+    /**
      * 无判断code=0的情况
      */
     private void sendMsg(int flag, String json) {
@@ -275,5 +304,12 @@ public class Api {
             if (!Util.isNull(showMsg))
                 Util.showToast(context, showMsg);
         }
+    }
+
+    private void sendAllDatas(int flag, String json){
+        Message msg = mHandler.obtainMessage();
+        msg.obj = json;
+        msg.what = flag;
+        mHandler.sendMessage(msg);
     }
 }

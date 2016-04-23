@@ -30,8 +30,6 @@ public class LoadingDialog extends Dialog implements DialogInterface.OnKeyListen
     private String msg = "";
     // 均匀旋转动画
     private RotateAnimation refreshingAnimation;
-    // 下拉箭头的转180°动画
-    private RotateAnimation rotateAnimation;
 
     public LoadingDialog(Context context) {
         super(context, R.style.DialogStyleBottom);
@@ -53,18 +51,9 @@ public class LoadingDialog extends Dialog implements DialogInterface.OnKeyListen
         dialog_loading_icon = (ImageView) findViewById(R.id.dialog_loading_icon);
         refreshingAnimation = (RotateAnimation) AnimationUtils.loadAnimation(
                 context, R.anim.rotating);
-        rotateAnimation = (RotateAnimation) AnimationUtils.loadAnimation(
-                context, R.anim.reverse_anim_dialog);
         LinearInterpolator lir = new LinearInterpolator();
-        rotateAnimation.setInterpolator(lir);
+        refreshingAnimation.setInterpolator(lir);
         dialog_loading_icon.startAnimation(refreshingAnimation);
-        /*if (Integer.valueOf(android.os.Build.VERSION.SDK_INT) >= 23) {
-            find_loading_bar2.setVisibility(View.VISIBLE);
-            find_loading_bar.setVisibility(View.GONE);
-        } else {
-            find_loading_bar.setVisibility(View.GONE);
-            find_loading_bar2.setVisibility(View.VISIBLE);
-        }*/
         if (!Util.isNull(msg))
             vLoading_text.setText(msg);
     }

@@ -172,6 +172,9 @@
     <string name="tour_detail_order">下单</string>
     <string name="server_day">/天</string>
     <string name="server_times">次</string>
+    <string name="check_birthday">请检查生日的正确性</string>
+    <string name="not_modify">您未做任何修改</string>
+    <string name="modify_success">个人信息修改成功</string>
     <!--LoadingListView-->
     <string name="head">这里是HeadView</string>
     <string name="pull_to_refresh">下拉刷新</string>
