@@ -38,7 +38,7 @@ public class PollUploadLag {
                 case 1050:
                     latLng = SharePrefer.getLatlng(context);
                     if (latLng != null) {
-                        Util.showToast(context,latLng.longitude + "," + latLng.latitude);
+//                        Util.showToast(context,latLng.longitude + "," + latLng.latitude);
                         count++;
                         if (previousLag != null) {
                             double distance = Util.getDistance(previousLag.longitude, previousLag.latitude, latLng.longitude, latLng.latitude);
