@@ -19,9 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
@@ -30,21 +27,18 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
-import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.PoiInfo;
-import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
-import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xbx.client.R;
 import com.xbx.client.beans.GuideBean;
-import com.xbx.client.beans.LocationBean;
 import com.xbx.client.beans.MyGuideInfoBean;
+import com.xbx.client.beans.TogetherBean;
 import com.xbx.client.http.Api;
 import com.xbx.client.jsonparse.GuideParse;
 import com.xbx.client.linsener.AnimateFirstDisplayListener;
@@ -56,6 +50,7 @@ import com.xbx.client.ui.activity.ChoicePeoNumActivity;
 import com.xbx.client.ui.activity.PayOrderActivity;
 import com.xbx.client.ui.activity.ReservatGuideActivity;
 import com.xbx.client.ui.activity.SearchAddressActivity;
+import com.xbx.client.ui.activity.TogetherActivity;
 import com.xbx.client.utils.Constant;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.StringUtil;
@@ -63,12 +58,14 @@ import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.LoadingDialog;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by EricYuan on 2016/3/29.
  */
-public class GuidesFragment extends BasedFragment {
+public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerClickListener{
     private static GuidesFragment fragment = null;
     private View view = null;
     private GeoCoder geoCoder = null;
@@ -91,9 +88,7 @@ public class GuidesFragment extends BasedFragment {
 
     private TextureMapView mapView;
     private RelativeLayout guide_outset_rl;
-    private RelativeLayout guide_destination_rl;
     private TextView main_outset_tv; // 出发地
-    private TextView main_destination_tv; //目的地
     private ImageView guide_locatemy_img;
     private LinearLayout guide_fuc_layout; //预约和即时呼叫按钮布局
     private RelativeLayout guide_reserve_rl; // 预约导游
@@ -110,6 +105,9 @@ public class GuidesFragment extends BasedFragment {
     private TextView user_stroke_tv;//行程状态
     private RelativeLayout guide_phone_rl;
 
+    private TextView reservat_tv;//预约文字
+    private TextView Immedia_tv;//即时服务文字
+
     private final int outsetReques = 1000;
     private final int destReques = 1001;
     private final int callGuideReques = 1002;
@@ -124,6 +122,7 @@ public class GuidesFragment extends BasedFragment {
     private String outsetJson = ""; //当前地址的拼接
     private String userNums = ""; // 出行人数选择
     private String findGuideorderNum;
+    private int guideType = 1;
 
     public GuidesFragment() {
     }
@@ -142,7 +141,7 @@ public class GuidesFragment extends BasedFragment {
             switch (msg.what) {
                 case 1:
                     if (isVisibaleTouser && !isInOrder && !Util.isNull(main_outset_tv.getText().toString())) {
-                        api.getNearGuide(currentLalng, nearGuideUrl, Constant.guideType);
+                        api.getNearGuide(currentLalng, nearGuideUrl, Constant.guideType + "");
 //                        handler.sendEmptyMessageDelayed(1, 6000);
                     }
                     break;
@@ -162,17 +161,10 @@ public class GuidesFragment extends BasedFragment {
                     String guideData = (String) msg.obj;
                     if (Util.isNull(guideData))
                         return;
-                    switch (GuideParse.getDataType(guideData)) {
-                        case 1://导游
-                            guideList = GuideParse.getGuideList(guideData);
-                            if (guideList == null)
-                                return;
-                            addOverlyGuide();
-                            break;
-                        case 2://订单信息
-
-                            break;
-                    }
+                    guideList = GuideParse.getGuideList(guideData);
+                    if (guideList == null)
+                        return;
+                    addOverlyGuide();
                     break;
                 case TaskFlag.PAGEREQUESTWO://服务我的导游信息
                     String myGuideData = (String) msg.obj;
@@ -256,9 +248,7 @@ public class GuidesFragment extends BasedFragment {
     protected void initViews() {
         mapView = (TextureMapView) view.findViewById(R.id.guide_map);
         guide_outset_rl = (RelativeLayout) view.findViewById(R.id.guide_outset_rl);
-        guide_destination_rl = (RelativeLayout) view.findViewById(R.id.guide_destination_rl);
         main_outset_tv = (TextView) view.findViewById(R.id.main_outset_tv);
-        main_destination_tv = (TextView) view.findViewById(R.id.main_destination_tv);
         guide_locatemy_img = (ImageView) view.findViewById(R.id.guide_locatemy_img);
 
         guide_fuc_layout = (LinearLayout) view.findViewById(R.id.guide_fuc_layout);
@@ -276,6 +266,8 @@ public class GuidesFragment extends BasedFragment {
         guide_ratingbar = (RatingBar) view.findViewById(R.id.guide_ratingbar);
         guide_phone_rl = (RelativeLayout) view.findViewById(R.id.guide_phone_rl);
         onMap_layout = (RelativeLayout) view.findViewById(R.id.onMap_layout);
+        reservat_tv = (TextView) view.findViewById(R.id.reservat_tv);
+        Immedia_tv = (TextView) view.findViewById(R.id.Immedia_tv);
 
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationEnabled(true);//开启定位图层
@@ -286,7 +278,6 @@ public class GuidesFragment extends BasedFragment {
     protected void initLisener() {
         guide_locatemy_img.setOnClickListener(this);
         guide_outset_rl.setOnClickListener(this);
-        guide_destination_rl.setOnClickListener(this);
         guide_reserve_rl.setOnClickListener(this);
         guide_call_rl.setOnClickListener(this);
         guide_call_layout.setOnClickListener(this);
@@ -299,6 +290,7 @@ public class GuidesFragment extends BasedFragment {
         mapView.getMap().setOnMapLoadedCallback(this);
         mapView.getMap().setOnMapStatusChangeListener(this);
         geoCoder.setOnGetGeoCodeResultListener(this);
+        mBaiduMap.setOnMarkerClickListener(this);
     }
 
     @Override
@@ -307,10 +299,9 @@ public class GuidesFragment extends BasedFragment {
         if (data == null) {
             return;
         }
-        PoiInfo poiInfo = null;
         switch (requestCode) {
             case outsetReques: // 出发地
-                poiInfo = data.getParcelableExtra("outsetResult");
+                PoiInfo poiInfo = data.getParcelableExtra("outsetResult");
                 if (poiInfo == null)
                     return;
                 main_outset_tv.setText(poiInfo.name);
@@ -320,12 +311,6 @@ public class GuidesFragment extends BasedFragment {
                         .build();
                 MapStatusUpdate u = MapStatusUpdateFactory.newMapStatus(mMapstatus);
                 mBaiduMap.setMapStatus(u);
-                break;
-            case destReques://目的地
-                poiInfo = data.getParcelableExtra("destResult");
-                if (poiInfo == null)
-                    return;
-                main_destination_tv.setText(poiInfo.name);
                 break;
             case callGuideReques:
                 userNums = data.getStringExtra("userNumType");
@@ -349,26 +334,23 @@ public class GuidesFragment extends BasedFragment {
                 intent.putExtra("guide_code", Constant.outsetFlag);
                 startActivityForResult(intent, outsetReques);
                 break;
-            case R.id.guide_destination_rl://目的地
-                intent.setClass(getActivity(), SearchAddressActivity.class);
-                intent.putExtra("guide_code", Constant.destFlag);
-                startActivityForResult(intent, destReques);
-                break;
             case R.id.guide_reserve_rl://预约导游
                 intent.setClass(getActivity(), ReservatGuideActivity.class);
                 startActivity(intent);
                 break;
             case R.id.guide_call_rl:
-                api.getSetoffNum();
+                if (guideType == Constant.togetherType)
+                    moniData();
+                else
+                    api.getSetoffNum();
                 break;
             case R.id.guide_call_layout://确认呼叫导游
                 String setOff = main_outset_tv.getText().toString();
-                String guideType = Constant.guideType;
                 if (Util.isNull(setOff)) {
                     Util.showToast(getActivity(), getString(R.string.setoff_null));
                     return;
                 }
-                api.hasGuide(uid, outsetJson, guideType, userNums, "");
+                api.hasGuide(uid, outsetJson, guideType + "", userNums, "");
                 break;
             case R.id.guide_head_img://头像
 
@@ -389,7 +371,7 @@ public class GuidesFragment extends BasedFragment {
             return;
         currentLalng = rGeoCodeResult.getLocation();
         if (!isInOrder) {
-            api.getNearGuide(currentLalng, nearGuideUrl, Constant.guideType);
+            api.getNearGuide(currentLalng, nearGuideUrl, guideType + "");
         }
         main_outset_tv.setText(rGeoCodeResult.getPoiList().get(0).name);
         outsetJson = rGeoCodeResult.getLocation().latitude + "," + rGeoCodeResult.getLocation().longitude + "," + main_outset_tv.getText().toString();
@@ -448,7 +430,6 @@ public class GuidesFragment extends BasedFragment {
         if (mMarkerGuide != null)
             mMarkerGuide.setPosition(new LatLng(guideInfoBean.getGuideLat(), guideInfoBean.getGuideLon()));
         if (guideInfoBean.getStartTime() != 0 && isInOrder) {
-//            timeDiff = guideInfoBean.getCurrentTime() - guideInfoBean.getStartTime();
             handler.sendEmptyMessage(99);
             uploadLag.removeUploadLatlng();
             guideInfo.removeGetInfo();
@@ -531,6 +512,12 @@ public class GuidesFragment extends BasedFragment {
         }
     }
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        moniData();
+        return true;
+    }
+
     class CancleOrderReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -580,5 +567,43 @@ public class GuidesFragment extends BasedFragment {
     @Override
     public void onPause() {
         super.onPause();
+        mapView.onPause();
+    }
+
+    public void setPageChange(int tabPosition) {
+        switch (tabPosition) {
+            case 0:
+                guideType = Constant.guideType;
+                guide_reserve_rl.setVisibility(View.VISIBLE);
+                break;
+            case 1:
+                guideType = Constant.nativeType;
+                guide_reserve_rl.setVisibility(View.GONE);
+                Immedia_tv.setText(getString(R.string.immedia_native));
+                break;
+            case 2:
+                guideType = Constant.togetherType;
+                guide_reserve_rl.setVisibility(View.VISIBLE);
+                Immedia_tv.setText(getString(R.string.immedia_together));
+                reservat_tv.setText(getString(R.string.reservat_together));
+                break;
+        }
+    }
+
+    private void moniData(){
+        List<TogetherBean> list = new ArrayList<>();
+        TogetherBean bean1 = new TogetherBean();
+        TogetherBean bean2 = new TogetherBean();
+        TogetherBean bean3 = new TogetherBean();
+        TogetherBean bean4 = new TogetherBean();
+        TogetherBean bean5 = new TogetherBean();
+        list.add(bean1);
+        list.add(bean2);
+        list.add(bean3);
+        list.add(bean4);
+        list.add(bean5);
+        Intent intent = new Intent(getActivity(), TogetherActivity.class);
+        intent.putExtra("data", (Serializable) list);
+        startActivity(intent);
     }
 }

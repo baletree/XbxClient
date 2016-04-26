@@ -51,6 +51,7 @@ import com.xbx.client.view.LoadingDialog;
 
 /**
  * Created by EricYuan on 2016/3/29.
+ * 土著
  */
 public class NativesFragment extends BasedFragment {
     private static NativesFragment fragment = null;
@@ -84,7 +85,7 @@ public class NativesFragment extends BasedFragment {
     private MyGuideInfo nativeInfoPoll = null;
     private LocalBroadcastManager lBManager = null;
     private IntentFilter intentFilter = null;
-    private CancleOrderReceiver canOrderReciver = null;
+//    private CancleOrderReceiver canOrderReciver = null;
     private MyGuideInfoBean guideInfoBean = null;
     private PollUploadLag uploadLag = null; //上传经纬度
     private Marker mMarkerGuide = null;//服务于我的导游图标
@@ -115,7 +116,7 @@ public class NativesFragment extends BasedFragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what) {
+            /*switch (msg.what) {
                 case TaskFlag.HTTPERROR:
                 case TaskFlag.REQUESTERROR://返回code为0的情况
                     if (loadDialog.isShowing())
@@ -172,11 +173,11 @@ public class NativesFragment extends BasedFragment {
                         else
                             updateGuide();
                     break;
-            }
+            }*/
         }
     };
 
-    @Override
+    /*@Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         this.isVisibleToUser = isVisibleToUser;
         super.setUserVisibleHint(isVisibleToUser);
@@ -198,21 +199,21 @@ public class NativesFragment extends BasedFragment {
         uid = SharePrefer.getUserInfo(getActivity()).getUid();
         geoCoder = GeoCoder.newInstance();
         findNativePoll = new FindGuide(getActivity(), handler);
-        nativeInfoPoll = new MyGuideInfo(getActivity(),handler);
+        nativeInfoPoll = new MyGuideInfo(getActivity(), handler);
         uploadLag = new PollUploadLag(getActivity());
-        nearGuideUrl = "http://192.168.1.27/yueyou/Api/".concat(getString(R.string.url_nearGuide));
+        nearGuideUrl = getString(R.string.url_conIp).concat(getString(R.string.url_nearGuide));
         initView();
     }
 
-    private void initBroadcast(){
+    private void initBroadcast() {
         lBManager = LocalBroadcastManager.getInstance(getActivity());
+        intentFilter = new IntentFilter();
         intentFilter.addAction(Constant.ACTION_GCANCELUIDEORDSUC);
         intentFilter.addAction(Constant.ACTION_GUIDEINORDER);
         intentFilter.addAction(Constant.ACTION_GUIDEOVERSERVER);
         canOrderReciver = new CancleOrderReceiver();
         lBManager.registerReceiver(canOrderReciver, intentFilter);
     }
-
 
     private void initView() {
         mLocClient.registerLocationListener(this);
@@ -270,9 +271,9 @@ public class NativesFragment extends BasedFragment {
         }
     }
 
-    /**
+    *//**
      * 找到导游后将页面图重置
-     */
+     *//*
     private void setPageLayout() {
         nativeInfoPoll.getMyGuideInfo(nativeOrderNum);//请求该土著的个人信息
         guide_tOrder_layout.setVisibility(View.VISIBLE);
@@ -343,18 +344,18 @@ public class NativesFragment extends BasedFragment {
                 break;
             case R.id.guide_call_layout:
                 String setOff = main_outset_tv.getText().toString();
-                String nativeType = Constant.nativeType;
+                String togetherType = Constant.togetherType;
                 if (Util.isNull(setOff)) {
                     Util.showToast(getActivity(), getString(R.string.setoff_null));
                     return;
                 }
                 loadDialog.setMessage(getString(R.string.find_Native));
-                api.hasGuide(uid, outsetJson, nativeType, userNums, "");
+//                api.hasGuide(uid, outsetJson, nativeType, userNums, "");
                 break;
         }
     }
 
-    private void setMyGuideInfo(){
+    private void setMyGuideInfo() {
         isFirstInOrder = false;
         if (guideInfoBean.getStartTime() == 0)
             uploadLag.uploadLatlng();
@@ -371,7 +372,7 @@ public class NativesFragment extends BasedFragment {
         mMarkerGuide = (Marker) mBaiduMap.addOverlay(ooA);
     }
 
-    private void updateGuide(){
+    private void updateGuide() {
         if (mMarkerGuide != null)
             mMarkerGuide.setPosition(new LatLng(guideInfoBean.getGuideLat(), guideInfoBean.getGuideLon()));
         if (guideInfoBean.getStartTime() != 0 && isInOrder) {
@@ -381,6 +382,7 @@ public class NativesFragment extends BasedFragment {
             mBaiduMap.clear();
         }
     }
+
     class CancleOrderReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -401,9 +403,9 @@ public class NativesFragment extends BasedFragment {
         }
     }
 
-    /**
+    *//**
      * 取消订单成功后的操作
-     */
+     *//*
     private void cancelOrderSuc() {
         mBaiduMap.clear();
         handler.removeMessages(99);
@@ -434,6 +436,8 @@ public class NativesFragment extends BasedFragment {
     public void onDestroyView() {
         super.onDestroyView();
         isFirstLoc = true;
+        isInOrder = false;
+        isFirstInOrder = false;
     }
 
     @Override
@@ -444,7 +448,7 @@ public class NativesFragment extends BasedFragment {
 
     @Override
     public void onPause() {
-//        mapView.onPause();
+        mapView.onPause();
         super.onPause();
     }
 
@@ -456,5 +460,5 @@ public class NativesFragment extends BasedFragment {
     @Override
     public void onMapLoaded() {
 
-    }
+    }*/
 }

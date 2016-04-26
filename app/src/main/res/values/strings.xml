@@ -181,8 +181,11 @@
     <string name="submit_to_pay">支付</string>
     <!--土著-->
     <string name="find_Native">正在呼叫土著</string>
+    <string name="immedia_native">呼叫\n土著</string>
     <string name="no_native">暂无土著接单</string>
     <string name="success_find_native">已成功为您找到土著</string>
+    <string name="immedia_together">呼叫\n随游</string>
+    <string name="reservat_together">预约\n随游</string>
     <!--LoadingListView-->
     <string name="head">这里是HeadView</string>
     <string name="pull_to_refresh">下拉刷新</string>

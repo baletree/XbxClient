@@ -62,7 +62,7 @@ public class Api {
     /**
      * 获取附近的导游
      */
-    public void getNearGuide(LatLng currentLalng, String nearGuideUrl,String guideType) {
+    public void getNearGuide(LatLng currentLalng, String nearGuideUrl, String guideType) {
         if (currentLalng == null)
             return;
         if (context == null)
@@ -233,7 +233,7 @@ public class Api {
      *
      * @param uid
      */
-    public void getMyOrderList(String uid,boolean isShow) {
+    public void getMyOrderList(String uid, boolean isShow) {
         if (context == null)
             return;
         String orderListUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_orderList)).concat("?uid=" + uid + "&now_page=1" + "&page_number=250");
@@ -311,10 +311,10 @@ public class Api {
         });
     }
 
-    public void getGuideDetail(String guideId){
+    public void getGuideDetail(String guideId) {
         if (context == null)
             return;
-        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_guideDetail)).concat("?uid="+guideId);
+        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_guideDetail)).concat("?uid=" + guideId);
         IRequest.get(context, url, "", new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
@@ -371,7 +371,7 @@ public class Api {
     public void moniPayOrder(String orderNum) {
         if (context == null)
             return;
-        String url = "http://192.168.1.24/yueyou/Api/Order/confirm_pay.json?order_number=" + orderNum;
+        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_payOrder)).concat("?order_number=" + orderNum);
         IRequest.get(context, url, "", new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {

@@ -29,6 +29,7 @@
                 android:background="@drawable/main_findguide_bg" />
 
             <TextView
+                android:id="@+id/reservat_tv"
                 style="@style/textView_White"
                 android:layout_centerInParent="true"
                 android:text="@string/main_reserve"
@@ -48,6 +49,7 @@
                 android:background="@drawable/main_findguide_bg" />
 
             <TextView
+                android:id="@+id/Immedia_tv"
                 style="@style/textView_White"
                 android:layout_centerInParent="true"
                 android:text="@string/main_call"

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.baidu.mapapi.map.TextureMapView
+        android:id="@+id/together_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true" />
+    <ImageView
+        android:id="@+id/together_locatemy_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_eighty"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_alignParentBottom="true"
+        android:src="@mipmap/main_locself" />
+    <RelativeLayout
+        android:id="@+id/together_onMap_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include
+            android:id="@+id/together_locate_layout"
+            layout="@layout/frag_guide_locate"/>
+        <include
+            android:id="@+id/together_center_layout"
+            layout="@layout/frag_guide_map"/>
+        <include
+            android:id="@+id/together_fuc_layout"
+            layout="@layout/frag_guide_fuc"/>
+        <include
+            android:id="@+id/together_call_layout"
+            layout="@layout/frag_call_guide" />
+    </RelativeLayout>
+    <include
+        android:id="@+id/together_tOrder_layout"
+        layout="@layout/frag_take_sucorder" />
+</RelativeLayout>
