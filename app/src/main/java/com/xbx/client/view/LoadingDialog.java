@@ -50,7 +50,7 @@ public class LoadingDialog extends Dialog implements DialogInterface.OnKeyListen
         find_loading_bar2 = (ProgressBar) findViewById(R.id.find_loading_bar2);
         dialog_loading_icon = (ImageView) findViewById(R.id.dialog_loading_icon);
         refreshingAnimation = (RotateAnimation) AnimationUtils.loadAnimation(
-                context, R.anim.rotating);
+                context, R.anim.reverse_anim_dialog);
         LinearInterpolator lir = new LinearInterpolator();
         refreshingAnimation.setInterpolator(lir);
         dialog_loading_icon.startAnimation(refreshingAnimation);

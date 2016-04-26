@@ -1,35 +1,56 @@
 package com.xbx.client.beans;
 
+import java.io.Serializable;
+
 /**
  * Created by EricYuan on 2016/4/18.
  */
-public class OrderDetailBean {
+public class OrderDetailBean implements Serializable{
     private String guideName;
     private String headImg;
-    private String guideType; //导游类型
     private String guideNumber;
     private String guidePhone;
     private String orderNum;
-    private String orderState; //订单状态
     private String orderPayState;
-    private String orderOrignalPay;//原始价格
-    private String rebateMoney;// 优惠价格
-    private String rewardMoney;//打赏
-    private String orderPay;//实际支付
-    private String orderPayType;
     private String orderStartTime;
     private String orderEndtTime;
     private String guideTag;
     private String guideCotent;
     private String guideStart;
-    private String serverType;
+    private String userAddress;
+    private String serverDate;
+    private double orderOrignalPay;//原始价格
+    private double rebateMoney;// 优惠价格
+    private double rewardMoney;//打赏
+    private double orderPay;//实际支付
+    private int guideType; //导游类型
+    private int orderState; //订单状态
+    private int serverType;//服务类型
+    private int orderPayType;
+    private String orderCancelTime;
 
-    public String getServerType() {
-        return serverType;
+    public String getOrderCancelTime() {
+        return orderCancelTime;
     }
 
-    public void setServerType(String serverType) {
-        this.serverType = serverType;
+    public void setOrderCancelTime(String orderCancelTime) {
+        this.orderCancelTime = orderCancelTime;
+    }
+
+    public String getServerDate() {
+        return serverDate;
+    }
+
+    public void setServerDate(String serverDate) {
+        this.serverDate = serverDate;
+    }
+
+    public String getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress;
     }
 
     public String getGuideTag() {
@@ -72,14 +93,6 @@ public class OrderDetailBean {
         this.headImg = headImg;
     }
 
-    public String getGuideType() {
-        return guideType;
-    }
-
-    public void setGuideType(String guideType) {
-        this.guideType = guideType;
-    }
-
     public String getGuideNumber() {
         return guideNumber;
     }
@@ -104,14 +117,6 @@ public class OrderDetailBean {
         this.orderNum = orderNum;
     }
 
-    public String getOrderState() {
-        return orderState;
-    }
-
-    public void setOrderState(String orderState) {
-        this.orderState = orderState;
-    }
-
     public String getOrderPayState() {
         return orderPayState;
     }
@@ -120,44 +125,36 @@ public class OrderDetailBean {
         this.orderPayState = orderPayState;
     }
 
-    public String getOrderOrignalPay() {
+    public double getOrderOrignalPay() {
         return orderOrignalPay;
     }
 
-    public void setOrderOrignalPay(String orderOrignalPay) {
+    public void setOrderOrignalPay(double orderOrignalPay) {
         this.orderOrignalPay = orderOrignalPay;
     }
 
-    public String getRebateMoney() {
+    public double getRebateMoney() {
         return rebateMoney;
     }
 
-    public void setRebateMoney(String rebateMoney) {
+    public void setRebateMoney(double rebateMoney) {
         this.rebateMoney = rebateMoney;
     }
 
-    public String getRewardMoney() {
+    public double getRewardMoney() {
         return rewardMoney;
     }
 
-    public void setRewardMoney(String rewardMoney) {
+    public void setRewardMoney(double rewardMoney) {
         this.rewardMoney = rewardMoney;
     }
 
-    public String getOrderPay() {
+    public double getOrderPay() {
         return orderPay;
     }
 
-    public void setOrderPay(String orderPay) {
+    public void setOrderPay(double orderPay) {
         this.orderPay = orderPay;
-    }
-
-    public String getOrderPayType() {
-        return orderPayType;
-    }
-
-    public void setOrderPayType(String orderPayType) {
-        this.orderPayType = orderPayType;
     }
 
     public String getOrderStartTime() {
@@ -174,5 +171,37 @@ public class OrderDetailBean {
 
     public void setOrderEndtTime(String orderEndtTime) {
         this.orderEndtTime = orderEndtTime;
+    }
+
+    public int getGuideType() {
+        return guideType;
+    }
+
+    public void setGuideType(int guideType) {
+        this.guideType = guideType;
+    }
+
+    public int getOrderState() {
+        return orderState;
+    }
+
+    public void setOrderState(int orderState) {
+        this.orderState = orderState;
+    }
+
+    public int getOrderPayType() {
+        return orderPayType;
+    }
+
+    public void setOrderPayType(int orderPayType) {
+        this.orderPayType = orderPayType;
+    }
+
+    public int getServerType() {
+        return serverType;
+    }
+
+    public void setServerType(int serverType) {
+        this.serverType = serverType;
     }
 }

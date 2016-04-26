@@ -1,10 +1,18 @@
 package com.xbx.client.receive;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+
+import com.xbx.client.jsonparse.UtilParse;
+import com.xbx.client.ui.activity.PayOrderActivity;
+import com.xbx.client.ui.activity.ReservatPayActivity;
+import com.xbx.client.utils.Constant;
+import com.xbx.client.utils.Util;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,26 +26,31 @@ import cn.jpush.android.api.JPushInterface;
  */
 public class JPushReceive extends BroadcastReceiver {
     private static final String TAG = "JPush";
+    private NotificationManager notiManaer = null;
+    private LocalBroadcastManager lBManager = null;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
-        Log.i(TAG, "[MyReceiver] onReceiveAction - " + intent.getAction() + ", extras: " + printBundle(bundle));
-
+        notiManaer = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        lBManager = LocalBroadcastManager.getInstance(context);
+        Log.i(TAG, "[Eric] onReceiveAction - " + intent.getAction() + ", extras: " + printBundle(bundle));
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
             String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
             Log.i(TAG, "[MyReceiver] 接收Registration Id : " + regId);
-        }
-        if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
+        } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
             Log.i(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE) + "\n" + bundle.getString(JPushInterface.EXTRA_EXTRA));
-            processCustomMessage(context, bundle);
-        }
-        if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
-            Log.i(TAG, "[MyReceiver] 接收到推送下来的通知");
+//            processCustomMessage(context, bundle);
+        } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
-            Log.i(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
+            String customMsg = bundle.getString(JPushInterface.EXTRA_EXTRA);
+            Log.i(TAG, "[MyReceiver] 接收到推送下来的通知携带了msg:" + customMsg + "\n通知ID:" + notifactionId);
+            if (Util.isNull(customMsg))
+                return;
+            lBManager.sendBroadcast(new Intent().setAction(Constant.ACTION_GUIDEOVERSERVER));
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             Log.i(TAG, "[MyReceiver] 用户点击打开了通知");
+            processCustomMessage(context, bundle);
         } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
             Log.i(TAG, "[MyReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
             //在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity， 打开一个网页等..
@@ -83,23 +96,32 @@ public class JPushReceive extends BroadcastReceiver {
 
     //send msg to MainActivity
     private void processCustomMessage(Context context, Bundle bundle) {
-      /*  if (MainActivity.isForeground) {
-            String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
-            String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
-            Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
-            msgIntent.putExtra(MainActivity.KEY_MESSAGE, message);
-            if (!ExampleUtil.isEmpty(extras)) {
-                try {
-                    JSONObject extraJson = new JSONObject(extras);
-                    if (null != extraJson && extraJson.length() > 0) {
-                        msgIntent.putExtra(MainActivity.KEY_EXTRAS, extras);
-                    }
-                } catch (JSONException e) {
-
-                }
-
-            }
-            context.sendBroadcast(msgIntent);
-        }*/
+        Intent intent = new Intent();
+        String customMsg = bundle.getString(JPushInterface.EXTRA_EXTRA);
+        Util.pLog("customMsg:" + customMsg);
+        int serverType = -1;
+        String ordernum = "";
+        try {
+            JSONObject jsonObject = new JSONObject(customMsg);
+            /*if (UtilParse.checkTag(jsonObject, "server_type"))
+                serverType = jsonObject.getInt("server_type");*/
+            if (UtilParse.checkTag(jsonObject, "order_number"))
+                ordernum = jsonObject.getString("order_number");
+            intent.putExtra("GuideOrderNum", ordernum);
+//            if (serverType == 0) {
+            intent.setClass(context, PayOrderActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+            /*} else if (serverType == 1) {
+                intent.setClass(context, PayOrderActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }*/
+            int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
+            if (notiManaer != null)
+                notiManaer.cancel(notifactionId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

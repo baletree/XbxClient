@@ -18,7 +18,7 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="mainCircle1">#2FA820</color>
     <color name="mainCircle2">#dF3d3e</color>
-    <color name="midTrans">#7F000000</color>
+    <color name="midTrans">#a0000000</color>
     <color name="dialog_msg">#646464</color>
     <color name="colorTag">#eee5ff</color>
     <color name="gray_deep">#5c5c5c</color>

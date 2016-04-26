@@ -29,7 +29,6 @@ public class App extends Application {
         mContext = getApplicationContext();
         getPhoneId();
         SDKInitializer.initialize(mContext);
-        Util.pLog("Init Baidu SDK");
         initImageLoader();
         JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
         JPushInterface.init(mContext);            // 初始化 JPush

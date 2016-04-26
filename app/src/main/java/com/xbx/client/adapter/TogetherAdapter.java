@@ -1,6 +1,5 @@
 package com.xbx.client.adapter;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xbx.client.R;
 import com.xbx.client.beans.TogetherBean;
-import com.xbx.client.utils.AnimateFirstDisplayListener;
-import com.xbx.client.utils.ImageLoaderConfigFactory;
+import com.xbx.client.linsener.ImageLoaderConfigFactory;
 import com.xbx.client.utils.Util;
 
 import java.util.List;

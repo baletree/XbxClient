@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -25,12 +26,15 @@ import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 
 /**
- * Created by EricYuan on 2016/4/22.
- * 预约服务的支付界面
+ * Created by EricYuan on 2016/4/11.
+ * 支付订单界面
+ * 1.推送行程结束进入
+ * 2.订单详情进入
+ * 3.首页检测进入
  */
-public class ReservatPayActivity extends BaseActivity {
-    private RelativeLayout payWay_layout;
-    private RelativeLayout reservat_pay_rl;
+public class PayOrderActivity extends FragmentActivity implements View.OnClickListener {
+    private RelativeLayout immedia_pay_rl;
+    private ImageView reward_img;//打赏按钮
     //导游信息
     private ImageView headImage;
     private TextView guide_typed_tv;
@@ -46,6 +50,7 @@ public class ReservatPayActivity extends BaseActivity {
     private TextView couponMon_tv;
     private RelativeLayout totalMon_rl;//总计
     private TextView totalMon_tv;
+    private RelativeLayout payWay_layout;
 
     private OrderDetailBean detailBean = null;
     private Api api = null;
@@ -54,6 +59,7 @@ public class ReservatPayActivity extends BaseActivity {
 
     private boolean isFromOrder = false;
     private String orderNum = "";
+    private int serverType = 0;
 
     private Handler handler = new Handler() {
         @Override
@@ -67,6 +73,11 @@ public class ReservatPayActivity extends BaseActivity {
                         return;
                     setPayInfo();
                     break;
+                case TaskFlag.PAGEREQUESFIVE:
+                    Util.showToast(PayOrderActivity.this,"支付成功!");
+                    setResult(RESULT_OK,new Intent());
+                    finish();
+                    break;
             }
         }
     };
@@ -74,16 +85,17 @@ public class ReservatPayActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reservat_pay);
+        setContentView(R.layout.activity_immedia_pay);
+        initDatas();
     }
 
-    @Override
-    protected void initDatas() {
-        super.initDatas();
-        api = new Api(ReservatPayActivity.this, handler);
+    private void initDatas() {
+        api = new Api(PayOrderActivity.this, handler);
         orderNum = getIntent().getStringExtra("GuideOrderNum");
+        isFromOrder = getIntent().getBooleanExtra("isFromOrderDetail",false);
         imageLoader = ImageLoader.getInstance();
         configFactory = ImageLoaderConfigFactory.getInstance();
+        initViews();
         if (isFromOrder) {
             detailBean = (OrderDetailBean) getIntent().getSerializableExtra("orderDetailBean");
             if (detailBean == null)
@@ -93,23 +105,24 @@ public class ReservatPayActivity extends BaseActivity {
             api.getOrderDetail(orderNum);
     }
 
-    @Override
     protected void initViews() {
-        super.initViews();
-        reservat_pay_rl = (RelativeLayout) findViewById(R.id.reservat_pay_rl);
-        payWay_layout = (RelativeLayout) findViewById(R.id.payWay_layout);
-        payWay_layout.setVisibility(View.GONE);
-        reservat_pay_rl.setVisibility(View.GONE);
+        immedia_pay_rl = (RelativeLayout) findViewById(R.id.immedia_pay_rl);
+        immedia_pay_rl.setVisibility(View.GONE);
+        reward_img = (ImageView) findViewById(R.id.reward_img);
+        reward_img.setVisibility(View.GONE);
         ((TextView) findViewById(R.id.title_txt_tv)).setText(getString(R.string.order_immedia_pay));
         findViewById(R.id.title_left_img).setOnClickListener(this);
-        findViewById(R.id.reservat_pay_btn).setOnClickListener(this);
         findViewById(R.id.guides_call_img).setOnClickListener(this);
+        findViewById(R.id.reward_img).setOnClickListener(this);
+        findViewById(R.id.immedia_pay_btn).setOnClickListener(this);
+        user_stroke_tv = (TextView) findViewById(R.id.user_stroke_tv);
+        payWay_layout = (RelativeLayout) findViewById(R.id.payWay_layout);
+        payWay_layout.setVisibility(View.GONE);
         headImage = (ImageView) findViewById(R.id.guide_head_img);
         guide_typed_tv = (TextView) findViewById(R.id.guide_typed_tv);
         guide_name_tv = (TextView) findViewById(R.id.guide_name_tv);
         guide_code_tv = (TextView) findViewById(R.id.guide_code_tv);
         guide_ratingbar = (RatingBar) findViewById(R.id.guide_ratingbar);
-        user_stroke_tv = (TextView) findViewById(R.id.user_stroke_tv);
         rewardMon_rl = (RelativeLayout) findViewById(R.id.rewardMon_rl);
         couponMon_rl = (RelativeLayout) findViewById(R.id.couponMon_rl);
         totalMon_rl = (RelativeLayout) findViewById(R.id.totalMon_rl);
@@ -120,7 +133,9 @@ public class ReservatPayActivity extends BaseActivity {
     }
 
     private void setPayInfo() {
-        reservat_pay_rl.setVisibility(View.VISIBLE);
+        immedia_pay_rl.setVisibility(View.VISIBLE);
+        if(detailBean.getServerType() == 1)
+            reward_img.setVisibility(View.VISIBLE);
         imageLoader.displayImage(detailBean.getHeadImg(), headImage, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
         guide_name_tv.setText(detailBean.getGuideName());
         guide_typed_tv.setText(StringUtil.getGuideType(this, detailBean.getGuideType()));
@@ -136,33 +151,37 @@ public class ReservatPayActivity extends BaseActivity {
             rewardMon_rl.setVisibility(View.GONE);
         if (detailBean.getRebateMoney() == 0.0)
             couponMon_rl.setVisibility(View.GONE);
+        Util.pLog(detailBean.getOrderOrignalPay() + " / " + detailBean.getOrderPay());
         if (detailBean.getOrderOrignalPay() == detailBean.getOrderPay())
             totalMon_rl.setVisibility(View.GONE);
     }
 
     @Override
     public void onClick(View v) {
-        super.onClick(v);
         switch (v.getId()) {
             case R.id.title_left_img:
                 finish();
                 break;
-            case R.id.reservat_pay_btn:
+            case R.id.reward_img:
+                Intent intent = new Intent(PayOrderActivity.this, SubCommentActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.immedia_pay_btn:
                 api.moniPayOrder(detailBean.getOrderNum());
-                Util.showToast(ReservatPayActivity.this,"模拟支付："+detailBean.getOrderNum());
+                Util.showToast(PayOrderActivity.this,"模拟支付："+detailBean.getOrderNum());
                 PayInfoBean payBean = new PayInfoBean();
                 payBean.setPayName("途途导由测试");
                 payBean.setPayIntro("北京到成都春熙路旅游费用");
                 payBean.setPayOutTradeNum("TTDY20160412101000231");
                 payBean.setPayPrice("0.02");
                 String notifyurl = "http://notify.msp.hk/notify.htm";
-                Alipay alipay = new Alipay(ReservatPayActivity.this, notifyurl);
+                Alipay alipay = new Alipay(PayOrderActivity.this, notifyurl);
                 alipay.pay(payBean);
                 break;
             case R.id.guides_call_img:
                 if (detailBean != null && !Util.isNull(detailBean.getGuidePhone())) {
-                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + detailBean.getGuidePhone()));
-                    startActivity(intent);
+                    Intent intents = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + detailBean.getGuidePhone()));
+                    startActivity(intents);
                 }
                 break;
         }

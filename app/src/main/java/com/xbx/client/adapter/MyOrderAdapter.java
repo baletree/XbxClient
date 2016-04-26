@@ -44,22 +44,9 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         OrderBean orderBean = orderList.get(position);
         holder.order_time_tv.setText(orderBean.getOrderTime());
-        if ("0".equals(orderBean.getOrderType()))
-            holder.order_type_tv.setText(context.getString(R.string.immediaServer));
-        else
-            holder.order_type_tv.setText(context.getString(R.string.reserveServer));
-        if (!Util.isNull(orderBean.getOrderType()))
-            holder.order_guidetype_tv.setText(StringUtil.getGuideType(context, Integer.parseInt(orderBean.getOrderType())));
-        if ("0".equals(orderBean.getOrderState()))
-            holder.order_state_tv.setText(context.getString(R.string.orderWaitSure));
-        else if ("1".equals(orderBean.getOrderState()))
-            holder.order_state_tv.setText(context.getString(R.string.orderReserve));
-        else if ("2".equals(orderBean.getOrderState()))
-            holder.order_state_tv.setText(context.getString(R.string.orderClose));
-        else if ("3".equals(orderBean.getOrderState()))
-            holder.order_state_tv.setText(context.getString(R.string.orderGeton));
-        else if ("4".equals(orderBean.getOrderState()))
-            holder.order_state_tv.setText(context.getString(R.string.orderFinish));
+        holder.order_type_tv.setText(StringUtil.severType(context, orderBean.getOrderType()));
+        holder.order_guidetype_tv.setText(StringUtil.getGuideType(context, orderBean.getGuideType()));
+        holder.order_state_tv.setText(StringUtil.getOrderState(context, orderBean.getOrderType(), orderBean.getOrderState()));
         holder.order_address_tv.setText(orderBean.getOrderAddress());
         holder.order_pay_tv.setText("￥" + orderBean.getOrderPay());
         holder.order_item_layout.setOnClickListener(new View.OnClickListener() {

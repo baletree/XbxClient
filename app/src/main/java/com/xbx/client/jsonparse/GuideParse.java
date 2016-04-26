@@ -1,6 +1,7 @@
 package com.xbx.client.jsonparse;
 
 import com.xbx.client.beans.GuideBean;
+import com.xbx.client.beans.GuideDetailBean;
 import com.xbx.client.beans.MyGuideInfoBean;
 import com.xbx.client.utils.Util;
 
@@ -114,5 +115,36 @@ public class GuideParse {
             e.printStackTrace();
         }
         return guideInfoBean;
+    }
+
+    public static GuideDetailBean getGuideDetail(String json){
+        GuideDetailBean guideBean = null;
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            guideBean = new GuideDetailBean();
+            if(UtilParse.checkTag(jsonObject,"mobile"))
+                guideBean.setGuideMobile(jsonObject.getString("mobile"));
+            if(UtilParse.checkTag(jsonObject,"realname"))
+                guideBean.setGuideName(jsonObject.getString("realname"));
+            if(UtilParse.checkTag(jsonObject,"head_image"))
+                guideBean.setGuideHead(jsonObject.getString("head_image"));
+            if(UtilParse.checkTag(jsonObject,"guide_number"))
+                guideBean.setGuideNumber(jsonObject.getString("guide_number"));
+            if(UtilParse.checkTag(jsonObject,"guide_instant_price"))
+                guideBean.setGuideImmediaPrice(jsonObject.getString("guide_instant_price"));
+            if(UtilParse.checkTag(jsonObject,"guide_reserve_price"))
+                guideBean.setGuideReservatPrice(jsonObject.getString("guide_reserve_price"));
+            if(UtilParse.checkTag(jsonObject,"server_times"))
+                guideBean.setGuideTimes(jsonObject.getString("server_times"));
+            if(UtilParse.checkTag(jsonObject,"self_introduce"))
+                guideBean.setGuideIntroduce(jsonObject.getString("self_introduce"));
+            if(UtilParse.checkTag(jsonObject,"server_introduce"))
+                guideBean.setGuideStandard(jsonObject.getString("server_introduce"));
+            if(UtilParse.checkTag(jsonObject,"stars"))
+                guideBean.setGuideStar(jsonObject.getString("stars"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return guideBean;
     }
 }

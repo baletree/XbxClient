@@ -25,9 +25,11 @@ import com.xbx.client.R;
 import com.xbx.client.adapter.MyViewPagerAdapter;
 import com.xbx.client.beans.TogetherBean;
 import com.xbx.client.beans.UserInfo;
+import com.xbx.client.beans.UserStateBean;
 import com.xbx.client.http.Api;
 import com.xbx.client.http.IRequest;
 import com.xbx.client.http.RequestParams;
+import com.xbx.client.jsonparse.MainStateParse;
 import com.xbx.client.jsonparse.UserInfoParse;
 import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.ui.fragment.BowenFragment;
@@ -36,7 +38,7 @@ import com.xbx.client.ui.fragment.NativesFragment;
 import com.xbx.client.ui.fragment.TogetherFragment;
 import com.xbx.client.ui.fragment.WithtourFragment;
 import com.xbx.client.utils.Constant;
-import com.xbx.client.utils.RequestBackLisener;
+import com.xbx.client.linsener.RequestBackLisener;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
@@ -51,6 +53,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.SocketHandler;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -90,31 +93,90 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            Intent intent = new Intent();
             switch (msg.what) {
                 case TaskFlag.PAGEREQUESFIVE: //取消订单成功
                     String allData = (String) msg.obj;
-                    if(Util.isNull(allData))
+                    if (Util.isNull(allData)) {
                         return;
+                    }
+                    cancelType = 0;
+                    orderNum = "";
                     cancel_order_tv.setVisibility(View.GONE);
-                    Intent intent = new Intent();
                     intent.setAction(Constant.ACTION_GCANCELUIDEORDSUC);
                     int codes = UtilParse.getRequestCode(allData);
-                    switch (codes){
+                    switch (codes) {
                         case 1:
                             lBManager.sendBroadcast(intent);
                             break;
                         case 2:
                             lBManager.sendBroadcast(intent);
-                            startActivity(new Intent(MainActivity.this,CancelOrderSucActivity.class));
+                            startActivity(new Intent(MainActivity.this, CancelOrderSucActivity.class));
                             break;
                         case 3:
                             break;
                     }
-                    Util.showToast(MainActivity.this,UtilParse.getRequestMsg(allData));
+                    Util.showToast(MainActivity.this, UtilParse.getRequestMsg(allData));
+                    break;
+                case TaskFlag.REQUESTSUCCESS:
+                    String checkData = (String) msg.obj;
+//                    Util.pLog("checkData:" + checkData);
+                    if (UtilParse.getRequestCode(checkData) == 0) {
+                        Util.showToast(MainActivity.this, getString(R.string.login_fail));
+                        SharePrefer.saveUserInfo(MainActivity.this, new UserInfo());
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        finish();
+                    } else if (UtilParse.getRequestCode(checkData) == 1) {
+                        UserInfo userInfo = SharePrefer.getUserInfo(MainActivity.this);
+                        MainStateParse.resetToken(MainActivity.this, userInfo, UtilParse.getRequestData(checkData));
+                        String dataType = MainStateParse.checkDataType(UtilParse.getRequestData(checkData));
+                        if (Util.isNull(dataType))
+                            return;
+                        UserStateBean stateBean = MainStateParse.checkUserState(UtilParse.getRequestData(checkData), dataType);
+                        if (stateBean == null)
+                            return;
+                        if (Util.isNull(stateBean.getOrderNum()))
+                            return;
+                        Util.pLog("dataType=" + dataType + " stateBeanOrder:" + stateBean.getOrderNum());
+                        dealUserState(intent, stateBean, dataType);
+                    }
                     break;
             }
         }
     };
+
+    private void dealUserState(Intent intent, UserStateBean stateBean, String stateKey) {
+        intent.putExtra("stateOrderNumber", stateBean.getOrderNum());
+        orderNum = stateBean.getOrderNum();
+        if (stateKey.equals("unpay")) {
+            /*intent.putExtra("GuideOrderNum", stateBean.getOrderNum());
+            intent.setClass(MainActivity.this, PayOrderActivity.class);*/
+            intent.setClass(MainActivity.this, OrderDetailActivity.class);
+            startActivity(intent);
+        } else if (stateKey.equals("uncomment")) {
+            intent.setClass(MainActivity.this, SubCommentActivity.class);
+            startActivity(intent);
+        } else if (stateKey.equals("going")) {
+            cancel_order_tv.setVisibility(View.VISIBLE);
+            switch (stateBean.getGuideType()) {
+                case 1:
+                    cancelType = 1;
+                    intent.setAction(Constant.ACTION_GUIDEINORDER);
+                    break;
+                case 2:
+                    cancelType = 2;
+                    intent.setAction(Constant.ACTION_NATIVEINORDER);
+                    viewpager.setCurrentItem(1);
+                    break;
+                case 3:
+                    cancelType = 3;
+                    intent.setAction(Constant.ACTION_TOGETHERINORDER);
+                    viewpager.setCurrentItem(2);
+                    break;
+            }
+            lBManager.sendBroadcast(intent);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,21 +187,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     protected void initDatas() {
-        isFromLogin = getIntent().getBooleanExtra("isFromLoin", false);
+        api = new Api(MainActivity.this, handler);
+//        isFromLogin = getIntent().getBooleanExtra("isFromLoin", false);
         if (!isFromLogin)
-            checkLoginState();
+            api.checkLoginState();
+        lBManager = LocalBroadcastManager.getInstance(this);
+        intentFilter = new IntentFilter();
         String registerId = JPushInterface.getRegistrationID(this);
         Set<String> tagSet = new LinkedHashSet<String>();
         tagSet.add(registerId);
         JPushInterface.setTags(this, tagSet, null);
-        Util.pLog("RegisterId:" + registerId + " uid:" + SharePrefer.getUserInfo(MainActivity.this).getUid());
         initViews();
+//        Util.pLog("RegisterId:" + registerId + " uid:" + SharePrefer.getUserInfo(MainActivity.this).getUid());
     }
 
     protected void initViews() {
-        api = new Api(MainActivity.this, handler);
         drawerLayout = (DrawerLayout) findViewById(R.id.main_drawerLayout);
-        drawerLayout.setScrimColor(0x32000000);// 设置半透明度
+        drawerLayout.setScrimColor(0xbe000000);// 设置半透明度
         mToolbar = (Toolbar) findViewById(R.id.toolBar);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         viewpager = (BanSlideViewpager) findViewById(R.id.viewpager);
@@ -161,9 +225,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initBroadcast() {
-        lBManager = LocalBroadcastManager.getInstance(this);
-        intentFilter = new IntentFilter();
         intentFilter.addAction(Constant.ACTION_GCANCELORD);
+        intentFilter.addAction(Constant.ACTION_GUIDEOVERSERVER);
         localReceiver = new LocalReceiver();
         lBManager.registerReceiver(localReceiver, intentFilter);
     }
@@ -181,7 +244,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         viewPagerAdapter.addFragment(bowenFragment, getString(R.string.main_bowen));
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         viewpager.setAdapter(viewPagerAdapter);
-        viewpager.setCurrentItem(0);
         tabLayout.setupWithViewPager(viewpager);
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -199,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+        viewpager.setCurrentItem(1);
     }
 
     @Override
@@ -222,31 +285,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void checkLoginState() {
-        String postUrl = getString(R.string.url_conIp).concat(getString(R.string.url_Login));
-        RequestParams params = new RequestParams();
-        UserInfo userInfo = SharePrefer.getUserInfo(MainActivity.this);
-        final String pushId = JPushInterface.getRegistrationID(this);
-        params.put("mobile", userInfo.getUserPhone());
-        params.put("password", userInfo.getLoginToken());
-        params.put("user_type", "0");//代表用户端
-        params.put("push_id", pushId);//代表用户端
-        Util.pLog("Login phone=" + userInfo.getUserPhone()+" token:"+userInfo.getLoginToken());
-        IRequest.post(this, postUrl, params, new RequestBackLisener(MainActivity.this) {
-            @Override
-            public void requestSuccess(String json) {
-                Util.pLog(pushId + " Login check Result=" + json);
-                if (UtilParse.getRequestCode(json) == 0) {
-                    Util.showToast(MainActivity.this, getString(R.string.login_fail));
-                    SharePrefer.saveUserInfo(MainActivity.this, new UserInfo());
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
-                } else if (UtilParse.getRequestCode(json) == 1) {
-
-                }
-            }
-        });
-    }
 
     @Override
     public void onClick(View v) {
@@ -299,7 +337,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void cancelDialog() {
                 tipsDialog.dismiss();
-//                startActivity(new Intent(MainActivity.this, CancelOrderSucActivity.class));
                 api.cancelOrder(orderNum);
             }
 
@@ -326,6 +363,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 cancel_order_tv.setVisibility(View.VISIBLE);
                 cancelType = intent.getIntExtra("cancelType", 0);
                 orderNum = intent.getStringExtra("theOrderNum");
+            } else if (Constant.ACTION_GUIDEOVERSERVER.equals(action)) {
+                cancel_order_tv.setVisibility(View.GONE);
+                cancelType = 0;
+                orderNum = "";
             }
         }
     }

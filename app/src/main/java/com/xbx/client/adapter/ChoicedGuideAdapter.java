@@ -13,8 +13,8 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xbx.client.R;
 import com.xbx.client.beans.ServerListBean;
-import com.xbx.client.utils.AnimateFirstDisplayListener;
-import com.xbx.client.utils.ImageLoaderConfigFactory;
+import com.xbx.client.linsener.AnimateFirstDisplayListener;
+import com.xbx.client.linsener.ImageLoaderConfigFactory;
 import com.xbx.client.utils.Util;
 
 import java.util.List;

@@ -18,6 +18,13 @@ public class Constant {
     public static final int destFlag = 101;
     public static final String ACTION_GCANCELORD = "com.xbx.client.guide.cancel.order";
     public static final String ACTION_GCANCELUIDEORDSUC = "com.xbx.client.guide.cancel.order.success";
+    public static final String ACTION_GUIDEOVERSERVER = "com.xbx.client.guide.over.order";
+    public static final String ACTION_GUIDEINORDER = "com.xbx.client.guide.into.order";
+    public static final String ACTION_NATIVEINORDER = "com.xbx.client.native.into.order";
+    public static final String ACTION_TOGETHERINORDER = "com.xbx.client.together.into.order";
+    public static final String guideType = "1";
+    public static final String nativeType = "3";
+    public static final String togetherType = "2";
     /**
      * 存储根目录
      */

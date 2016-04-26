@@ -1,4 +1,4 @@
-package com.xbx.client.utils;
+package com.xbx.client.linsener;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.xbx.client.R;

@@ -8,10 +8,10 @@ import java.io.Serializable;
 public class OrderBean implements Serializable{
     private String orderNum;
     private String orderTime;
-    private String orderType;
-    private String orderState;
+    private int orderType;
+    private int orderState;
     private String orderAddress;
-    private String GuideType;
+    private int guideType;
     private String orderPay;
 
     public String getOrderNum() {
@@ -20,14 +20,6 @@ public class OrderBean implements Serializable{
 
     public void setOrderNum(String orderNum) {
         this.orderNum = orderNum;
-    }
-
-    public String getGuideType() {
-        return GuideType;
-    }
-
-    public void setGuideType(String guideType) {
-        GuideType = guideType;
     }
 
     public String getOrderPay() {
@@ -46,20 +38,28 @@ public class OrderBean implements Serializable{
         this.orderTime = orderTime;
     }
 
-    public String getOrderType() {
+    public int getOrderType() {
         return orderType;
     }
 
-    public void setOrderType(String orderType) {
+    public void setOrderType(int orderType) {
         this.orderType = orderType;
     }
 
-    public String getOrderState() {
+    public int getOrderState() {
         return orderState;
     }
 
-    public void setOrderState(String orderState) {
+    public void setOrderState(int orderState) {
         this.orderState = orderState;
+    }
+
+    public int getGuideType() {
+        return guideType;
+    }
+
+    public void setGuideType(int guideType) {
+        this.guideType = guideType;
     }
 
     public String getOrderAddress() {

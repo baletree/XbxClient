@@ -13,6 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_forty_eight"
+        android:visibility="gone"
         android:layout_marginLeft="@dimen/dp_sixteen"
         android:layout_marginRight="@dimen/dp_sixteen">
 
@@ -97,6 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:checked="true"
             android:background="@drawable/select_pay"
             android:button="@null" />
     </RelativeLayout>

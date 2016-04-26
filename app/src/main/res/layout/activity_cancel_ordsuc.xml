@@ -38,8 +38,9 @@
                 android:textSize="@dimen/dp_fifteen"
                 android:layout_gravity="center_vertical"/>
             <TextView
+                android:id="@+id/canOrderTime_tv"
                 style="@style/textView_Black"
-                android:text="@string/cancel_time"
+                android:text=""
                 android:textSize="@dimen/dp_fifteen"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center_vertical"/>
@@ -57,6 +58,7 @@
                 android:textSize="@dimen/dp_fifteen"
                 android:layout_gravity="center_vertical"/>
             <TextView
+                android:id="@+id/canOrderPay_tv"
                 style="@style/textView_Black"
                 android:text=""
                 android:textSize="@dimen/dp_fifteen"

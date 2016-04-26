@@ -20,9 +20,12 @@
             app:riv_oval="true" />
 
         <TextView
+            android:id="@+id/guide_typed_tv"
             android:layout_width="@dimen/dp_nineteen"
             android:layout_height="@dimen/dp_nineteen"
             android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:textSize="@dimen/sp_fourteen"
             android:background="@drawable/guide_type_bg"
             android:textColor="@color/colorWhite" />
     </RelativeLayout>
@@ -79,6 +82,7 @@
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/guides_call_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

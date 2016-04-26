@@ -4,23 +4,34 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:orientation="vertical">
-    <include layout="@layout/page_title"/>
+
+    <include layout="@layout/page_title" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/order_rv"
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/od_refresh_lay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader
-            android:id="@+id/order_head_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|top">
-            <View
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/order_rv"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_sixteen"
-                android:background="@color/colorBackground"/>
-        </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>
+                android:layout_height="wrap_content" />
+
+            <com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader
+                android:id="@+id/order_head_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_sixteen"
+                    android:background="@color/colorBackground" />
+            </com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader>
+        </android.support.v4.widget.SwipeRefreshLayout>
     </FrameLayout>
 </LinearLayout>

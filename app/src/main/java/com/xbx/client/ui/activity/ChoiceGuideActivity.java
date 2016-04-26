@@ -20,12 +20,16 @@ import com.xbx.client.beans.ReservatInfoBean;
 import com.xbx.client.beans.ServerListBean;
 import com.xbx.client.http.Api;
 import com.xbx.client.jsonparse.ServerParse;
+import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.RecycleViewDivider;
 import com.xbx.client.view.pulllistview.PullToRefreshLayout;
 import com.xbx.client.view.pulllistview.PullableListView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +103,11 @@ public class ChoiceGuideActivity extends BaseActivity implements PullToRefreshLa
                     }
                     break;
                 case TaskFlag.PAGEREQUESTHREE://下单成功
-                    startActivity(new Intent(ChoiceGuideActivity.this, ReservatPayActivity.class));
+                    String guideData = (String) msg.obj;
+                    String orderNum = getOrderNum(guideData);
+                    Intent intent = new Intent(ChoiceGuideActivity.this, ReservatPayActivity.class);
+                    intent.putExtra("GuideOrderNum", orderNum);
+                    startActivity(intent);
                     break;
             }
         }
@@ -159,11 +167,29 @@ public class ChoiceGuideActivity extends BaseActivity implements PullToRefreshLa
 
     @Override
     public void downOrder(int position) {
-        api.findGuide(uid, reservatBean.getAddress(), reservatBean.getStartTime(), reservatBean.getEndTime(), "1", "1", "", reservatBean.getCityId(), sList.get(position).getServerId());
+        String guideType = "1";
+        String guideId = sList.get(position).getServerId();
+        api.reservatGuide(uid, guideId, reservatBean.getCityId(), reservatBean.getAddress(), reservatBean.getStartTime(), reservatBean.getEndTime(), guideType);
     }
 
     @Override
     public void lookGuide(int position) {
-        startActivity(new Intent(ChoiceGuideActivity.this, TourDetailActivity.class));
+        Intent intent = new Intent(ChoiceGuideActivity.this, TourDetailActivity.class);
+        String guideId = sList.get(position).getServerId();
+        intent.putExtra("reservatInfo",reservatBean);
+        intent.putExtra("guideId",guideId);
+        startActivity(intent);
+    }
+
+    private String getOrderNum(String json) {
+        String orderNum = "";
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            if (UtilParse.checkTag(jsonObject, "order_number"))
+                orderNum = jsonObject.getString("order_number");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return orderNum;
     }
 }

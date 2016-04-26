@@ -16,7 +16,7 @@ import com.xbx.client.http.IRequest;
 import com.xbx.client.http.RequestParams;
 import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.jsonparse.UserInfoParse;
-import com.xbx.client.utils.RequestBackLisener;
+import com.xbx.client.linsener.RequestBackLisener;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.Util;
 
@@ -41,11 +41,11 @@ public class LoginActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    if(countDown > 0){
+                    if (countDown > 0) {
                         countDown--;
                         login_code_btn.setText(countDown + getString(R.string.login_code_minute));
                         handler.sendEmptyMessageDelayed(1, 1000);
-                    }else {
+                    } else {
                         login_code_btn.setText(getString(R.string.login_code_get));
                         login_code_btn.setClickable(true);
                         login_code_btn.setBackgroundResource(R.drawable.button_bg);
@@ -59,7 +59,7 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Util.pLog("JPushId："+JPushInterface.getRegistrationID(this));
+        Util.pLog("JPushId：" + JPushInterface.getRegistrationID(this));
     }
 
     @Override
@@ -76,8 +76,8 @@ public class LoginActivity extends BaseActivity {
         login_btn.setOnClickListener(this);
         login_code_btn.setOnClickListener(this);
         String userPhone = SharePrefer.getUserPhone(LoginActivity.this);
-        if(!Util.isNull(userPhone)){
-            Util.pLog("LoginInput:"+userPhone);
+        if (!Util.isNull(userPhone)) {
+            Util.pLog("LoginInput:" + userPhone);
             login_phone_et.setText(userPhone);
             login_phone_et.setSelection(userPhone.length());
         }
@@ -108,7 +108,7 @@ public class LoginActivity extends BaseActivity {
                     Util.showToast(LoginActivity.this, getString(R.string.phone_tips));
                     return;
                 }
-                if(!Util.checkTel(phone)){
+                if (!Util.checkTel(phone)) {
                     Util.showToast(LoginActivity.this, getString(R.string.phone_check));
                     return;
                 }
@@ -122,11 +122,11 @@ public class LoginActivity extends BaseActivity {
         RequestParams params = new RequestParams();
         params.put("mobile", phone);
         SharePrefer.savePhone(LoginActivity.this, phone);
-        IRequest.post(this, postUrl, params, "", new RequestBackLisener(LoginActivity.this){
+        IRequest.post(this, postUrl, params, "", new RequestBackLisener(LoginActivity.this) {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("getCode Result=" + json);
-                if(UtilParse.getRequestCode(json) == 1){
+                if (UtilParse.getRequestCode(json) == 1) {
                     countDown = 60;
                     login_code_btn.setBackgroundResource(R.drawable.button_code_bg);
                     login_code_btn.setClickable(false);
@@ -137,7 +137,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void toLogin(String phone,String code){
+    private void toLogin(String phone, String code) {
         String postUrl = getString(R.string.url_conIp).concat(getString(R.string.url_Login));
         final String pushId = JPushInterface.getRegistrationID(this);
         RequestParams params = new RequestParams();
@@ -145,20 +145,20 @@ public class LoginActivity extends BaseActivity {
         params.put("password", code);
         params.put("user_type", "0");//代表用户端
         params.put("push_id", pushId);//代表用户端
-        IRequest.post(this, postUrl, params, "", new RequestBackLisener(LoginActivity.this){
+        IRequest.post(this, postUrl, params, "", new RequestBackLisener(LoginActivity.this) {
             @Override
             public void requestSuccess(String json) {
-                Util.pLog(pushId+"Login Result=" + json);
-                if(UtilParse.getRequestCode(json) == 1){
+                Util.pLog("Login Result=" + json + "\npushId:" + pushId);
+                if (UtilParse.getRequestCode(json) == 1) {
                     UserInfo userInfo = UserInfoParse.getUserInfo(UtilParse.getRequestData(json));
-                    if(userInfo != null){
+                    if (userInfo != null) {
                         SharePrefer.saveUserInfo(LoginActivity.this, userInfo);
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.putExtra("isFromLoin",true);
+                        intent.putExtra("isFromLoin", true);
                         startActivity(intent);
                         finish();
                     }
-                }else{
+                } else {
                     Util.showToast(LoginActivity.this, UtilParse.getRequestMsg(json));
                 }
             }

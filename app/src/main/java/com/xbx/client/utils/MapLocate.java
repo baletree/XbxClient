@@ -71,7 +71,6 @@ public class MapLocate {
     /**停止定位*/
     public void stopLocate() {
         if (mLocationClient != null && mLocationClient.isStarted()) {
-            Util.pLog("stop定位方法"+System.currentTimeMillis());
             mLocationClient.unRegisterLocationListener(myListener);
             mLocationClient.stop();
             isFirstLoc = false;

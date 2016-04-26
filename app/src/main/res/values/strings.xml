@@ -171,10 +171,18 @@
     <string name="setReservatTime">请设置预约时间</string>
     <string name="tour_detail_order">下单</string>
     <string name="server_day">/天</string>
+    <string name="server_hour">/小时</string>
     <string name="server_times">次</string>
     <string name="check_birthday">请检查生日的正确性</string>
     <string name="not_modify">您未做任何修改</string>
     <string name="modify_success">个人信息修改成功</string>
+    <string name="thank_feedback">感谢您的宝贵意见</string>
+    <string name="submit_btn">提交</string>
+    <string name="submit_to_pay">支付</string>
+    <!--土著-->
+    <string name="find_Native">正在呼叫土著</string>
+    <string name="no_native">暂无土著接单</string>
+    <string name="success_find_native">已成功为您找到土著</string>
     <!--LoadingListView-->
     <string name="head">这里是HeadView</string>
     <string name="pull_to_refresh">下拉刷新</string>

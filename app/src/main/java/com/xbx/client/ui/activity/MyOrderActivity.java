@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,10 +30,11 @@ import java.util.List;
  * Created by EricYuan on 2016/4/6.
  * 我的订单
  */
-public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRecyItemClickListener{
+public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRecyItemClickListener,SwipeRefreshLayout.OnRefreshListener{
     private ImageView title_left_img;
     private TextView title_txt_tv;
     private RecyclerView order_rv;
+    private SwipeRefreshLayout od_refresh_lay;
 
     private LinearLayoutManager layoutManager = null;
     private MyOrderAdapter myOrderAdapter = null;
@@ -52,6 +54,7 @@ public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRe
                     myOrderAdapter = new MyOrderAdapter(MyOrderActivity.this,orderList);
                     order_rv.setAdapter(myOrderAdapter);
                     myOrderAdapter.setOnItemClickListener(MyOrderActivity.this);
+                    od_refresh_lay.setRefreshing(false);
                     break;
             }
         }
@@ -77,7 +80,9 @@ public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRe
         super.initViews();
         title_left_img = (ImageView) findViewById(R.id.title_left_img);
         title_txt_tv = (TextView) findViewById(R.id.title_txt_tv);
+        od_refresh_lay = (SwipeRefreshLayout) findViewById(R.id.od_refresh_lay);
         order_rv = (RecyclerView) findViewById(R.id.order_rv);
+        od_refresh_lay.setOnRefreshListener(this);
         title_txt_tv.setText(getString(R.string.myorder_title));
         title_left_img.setOnClickListener(this);
         order_rv.setLayoutManager(layoutManager);
@@ -85,7 +90,7 @@ public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRe
         RecyclerViewHeader recyclerHeader = (RecyclerViewHeader) findViewById(R.id.order_head_layout);
         recyclerHeader.attachTo(order_rv, true);
         order_rv.setItemAnimator(new DefaultItemAnimator());
-        api.getMyOrderList(uid);
+        api.getMyOrderList(uid,true);
     }
 
     @Override
@@ -101,7 +106,12 @@ public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRe
     @Override
     public void onItemClick(View v, int position) {
         Intent intent = new Intent(MyOrderActivity.this,OrderDetailActivity.class);
-        intent.putExtra("orderNumber",orderList.get(position).getOrderNum());
+        intent.putExtra("stateOrderNumber",orderList.get(position).getOrderNum());
         startActivity(intent);
+    }
+
+    @Override
+    public void onRefresh() {
+        api.getMyOrderList(uid,false);
     }
 }

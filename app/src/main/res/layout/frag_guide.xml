@@ -5,7 +5,7 @@
     <com.baidu.mapapi.map.TextureMapView
         android:id="@+id/guide_map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:clickable="true" />
     <ImageView
         android:id="@+id/guide_locatemy_img"

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="url_http">http://naichawaimai.applinzi.com/Takeout/api.php/Users/</string>
-    <string name="url_conIp">http://123.56.194.208/yueyou/index.php/Api/</string>
-    <!--<string name="url_conIp">http://192.168.1.27/yueyou/Api/</string>-->
+    <!--<string name="url_conIp">http://123.56.194.208/yueyou/index.php/Api/</string>-->
+    <string name="url_conIp">http://192.168.1.27/yueyou/Api/</string>
     <string name="url_getCode">user/send_verify_code.json</string>
     <string name="url_Login">user/login.json</string>
     <string name="url_nearGuide">Index/home_page.json</string>
     <string name="url_guideInfo">user/guide_detail.json</string>
     <string name="url_setoffNum">Index/get_people_number.json</string>
-    <string name="url_findGuide">Order/create_order.json</string>
+    <string name="url_immediaGuide">Order/create_instant_order.json</string>
+    <string name="url_reservateGuide">Order/create_reserve_order.json</string>
     <string name="url_orderList">Order/user_my_order.json</string>
     <string name="url_orderDetail">Order/user_order_detail.json</string>
     <string name="url_isFindGuide">Order/get_find_guide_status.json</string>
@@ -17,5 +18,7 @@
     <string name="url_uploadLatlng">user/upload_address.json</string>
     <string name="url_cancelOrder">Order/cancel_order.json</string>
     <string name="url_guideList">Order/guide_list.json</string>
+    <string name="url_guideDetail">user/guide_main.json</string>
     <string name="url_modifyUserinfo">user/user_update_user_info.json</string>
+    <string name="url_feedback">Index/upload_feedback.json</string>
 </resources>

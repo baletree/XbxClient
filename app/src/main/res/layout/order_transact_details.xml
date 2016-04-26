@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
+
     <RelativeLayout
+        android:id="@+id/payExtrueMon_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_sixteen"
         android:layout_marginRight="@dimen/dp_sixteen">
 
         <TextView
+            android:id="@+id/statePay_tv"
             style="@style/textView_Black"
             android:text="@string/pay_money"
             android:textSize="@dimen/sp_fifteen" />
 
         <TextView
+            android:id="@+id/payExtrueMon_tv"
             style="@style/textView_Black"
             android:layout_alignParentRight="true"
             android:text="￥540"
@@ -23,6 +27,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rewardMon_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_sixteen"
@@ -35,6 +40,7 @@
             android:textSize="@dimen/sp_fifteen" />
 
         <TextView
+            android:id="@+id/rewardMon_tv"
             style="@style/textView_Black"
             android:layout_alignParentRight="true"
             android:text="+10"
@@ -43,6 +49,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/couponMon_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_sixteen"
@@ -55,6 +62,7 @@
             android:textSize="@dimen/sp_fifteen" />
 
         <TextView
+            android:id="@+id/couponMon_tv"
             style="@style/textView_Black"
             android:layout_alignParentRight="true"
             android:text="-30"
@@ -63,6 +71,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/totalMon_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_sixteen"
@@ -75,12 +84,14 @@
             android:textSize="@dimen/sp_fifteen" />
 
         <TextView
+            android:id="@+id/totalMon_tv"
             style="@style/textView_Black"
             android:layout_alignParentRight="true"
             android:text="￥520"
             android:textColor="@color/mainCircle2"
             android:textSize="@dimen/sp_fifteen" />
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/payWay_layout"
         android:layout_width="match_parent"
@@ -95,6 +106,7 @@
             android:textSize="@dimen/sp_fifteen" />
 
         <TextView
+            android:id="@+id/payWay_tv"
             style="@style/textView_Black"
             android:layout_alignParentRight="true"
             android:text="@string/pay_wechat"

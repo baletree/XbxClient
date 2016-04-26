@@ -44,24 +44,26 @@ public class SettingActivity extends BaseActivity {
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
-            case R.id.title_left_img :
+            case R.id.title_left_img:
                 finish();
                 break;
-            case R.id.setting_user_guide_layout :
+            case R.id.setting_user_guide_layout:
                 intent.setClass(this, UserGuideActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.setting_consumer_hotline_layout :
+            case R.id.setting_consumer_hotline_layout:
                 break;
-            case R.id.setting_legal_layout :
+            case R.id.setting_legal_layout:
                 break;
-            case R.id.setting_about_layout :
+            case R.id.setting_about_layout:
                 intent.setClass(this, AboutActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.setting_feedback_layout :
+            case R.id.setting_feedback_layout:
+                intent.setClass(this, FeedBackActivity.class);
+                startActivity(intent);
                 break;
-            case R.id.setting_sign_out :
+            case R.id.setting_sign_out:
                 break;
         }
     }

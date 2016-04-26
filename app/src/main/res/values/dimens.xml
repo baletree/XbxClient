@@ -51,7 +51,9 @@
     <dimen name="dp_eighty_four">84dp</dimen>
     <dimen name="dp_ninety_three">93dp</dimen>
     <dimen name="dp_ninety_six">96dp</dimen>
+    <dimen name="dp_ninety_eight">98dp</dimen>
     <dimen name="dp_hundred">100dp</dimen>
+    <dimen name="dp_hundred_twele">112dp</dimen>
     <dimen name="dp_hundred_twenty">120dp</dimen>
     <dimen name="dp_hundred_thirty">130dp</dimen>
     <dimen name="dp_hundred_fifty">150dp</dimen>

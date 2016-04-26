@@ -4,82 +4,97 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_hundred"
     android:background="@color/colorTitle">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:orientation="vertical">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_sixteen"
             android:layout_marginRight="@dimen/dp_sixteen">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/order_time_tv"
                     style="@style/textView_Black"
-                    android:text="4月7号 23：10"
                     android:layout_gravity="center_vertical"
-                    android:textSize="@dimen/sp_fourteen"/>
+                    android:text="4月7号 23：10"
+                    android:textSize="@dimen/sp_fourteen" />
+
                 <TextView
                     android:id="@+id/order_guidetype_tv"
                     android:layout_width="@dimen/dp_thirty_six"
                     android:layout_height="@dimen/dp_seventeen"
-                    android:textColor="@color/colorThemeLight"
-                    android:layout_marginLeft="@dimen/dp_sixteen"
-                    android:textSize="@dimen/sp_twelve"
-                    android:gravity="center"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_sixteen"
                     android:background="@drawable/order_guide_type_bg"
-                    android:text="随游"/>
+                    android:gravity="center"
+                    android:text="随游"
+                    android:textColor="@color/colorThemeLight"
+                    android:textSize="@dimen/sp_twelve" />
             </LinearLayout>
+
             <TextView
                 android:id="@+id/order_state_tv"
                 style="@style/textView_Black"
-                android:textSize="@dimen/sp_fifteen"
-                android:text="已完成"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"/>
+                android:text="已完成"
+                android:textSize="@dimen/sp_fourteen" />
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_sixteen"
             android:layout_marginRight="@dimen/dp_sixteen"
             android:layout_marginTop="@dimen/dp_four">
+
             <TextView
                 android:id="@+id/order_address_tv"
                 style="@style/textView_Black"
                 android:text="青城山前山门"
-                android:textSize="@dimen/sp_fifteen"/>
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:layout_marginRight="@dimen/dp_eight"
+                android:textSize="@dimen/sp_fourteen" />
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/right_arrow"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:src="@mipmap/right_arrow" />
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_sixteen"
             android:layout_marginRight="@dimen/dp_sixteen"
             android:layout_marginTop="@dimen/dp_four">
+
             <TextView
                 android:id="@+id/order_type_tv"
                 style="@style/textView_Black"
                 android:text="即时服务"
-                android:textSize="@dimen/sp_fifteen"/>
+                android:textSize="@dimen/sp_fourteen" />
+
             <TextView
                 android:id="@+id/order_pay_tv"
                 style="@style/textView_Black"
+                android:layout_alignParentRight="true"
                 android:text=""
                 android:textColor="@color/mainCircle2"
-                android:layout_alignParentRight="true"
-                android:textSize="@dimen/sp_fifteen"/>
+                android:textSize="@dimen/sp_fourteen" />
         </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>
