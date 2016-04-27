@@ -239,29 +239,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bowenFragment = BowenFragment.newInstance();
         viewPagerAdapter.addFragment(guidesFragment, getString(R.string.main_guide));
         viewPagerAdapter.addFragment(nativesFragment, getString(R.string.main_native));
-        viewPagerAdapter.addFragment(withtourFragment, getString(R.string.main_withTour));
-        viewPagerAdapter.addFragment(togetherFragment, getString(R.string.main_together));
+        viewPagerAdapter.addFragment(togetherFragment, getString(R.string.main_withTour));
+        viewPagerAdapter.addFragment(withtourFragment, getString(R.string.main_together));
         viewPagerAdapter.addFragment(bowenFragment, getString(R.string.main_bowen));
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         viewpager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewpager);
-        viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewpager.setCurrentItem(0);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()){
+                    case 0:
+                        guidesFragment.setPageChange(tab.getPosition());
+                        viewpager.setCurrentItem(0);
+                        break;
+                    case 1:
+                        guidesFragment.setPageChange(tab.getPosition());
+                        viewpager.setCurrentItem(0);
+                        tab.select();
+                        break;
+                    case 2:
+                        guidesFragment.setPageChange(tab.getPosition());
+                        viewpager.setCurrentItem(0);
+                        tab.select();
+                        break;
+                    case 3:
+                        viewpager.setCurrentItem(3);
+                        break;
+                    case 4:
+                        viewpager.setCurrentItem(4);
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
             }
 
             @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
+            public void onTabReselected(TabLayout.Tab tab) {
 
             }
         });
-        viewpager.setCurrentItem(1);
     }
 
     @Override
@@ -312,20 +333,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 toggleLeftLayout();
                 break;
             case R.id.menu_recruit_layout: //导游招募
-                List<TogetherBean> list = new ArrayList<>();
-                TogetherBean bean1 = new TogetherBean();
-                TogetherBean bean2 = new TogetherBean();
-                TogetherBean bean3 = new TogetherBean();
-                TogetherBean bean4 = new TogetherBean();
-                TogetherBean bean5 = new TogetherBean();
-                list.add(bean1);
-                list.add(bean2);
-                list.add(bean3);
-                list.add(bean4);
-                list.add(bean5);
-                Intent intent = new Intent(MainActivity.this, TogetherActivity.class);
-                intent.putExtra("data", (Serializable) list);
-                startActivity(intent);
+
                 toggleLeftLayout();
                 break;
         }

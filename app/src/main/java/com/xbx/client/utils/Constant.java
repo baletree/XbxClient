@@ -1,8 +1,15 @@
 package com.xbx.client.utils;
 
+import android.content.Intent;
 import android.os.Environment;
 
+import com.xbx.client.beans.TogetherBean;
+import com.xbx.client.ui.activity.TogetherActivity;
+
 import java.io.File;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by EricYuan on 2016/3/30.
@@ -22,9 +29,9 @@ public class Constant {
     public static final String ACTION_GUIDEINORDER = "com.xbx.client.guide.into.order";
     public static final String ACTION_NATIVEINORDER = "com.xbx.client.native.into.order";
     public static final String ACTION_TOGETHERINORDER = "com.xbx.client.together.into.order";
-    public static final String guideType = "1";
-    public static final String nativeType = "3";
-    public static final String togetherType = "2";
+    public static final int guideType = 1;
+    public static final int nativeType = 3;
+    public static final int togetherType = 2;
     /**
      * 存储根目录
      */
@@ -42,5 +49,4 @@ public class Constant {
      * 从Intent获取图片路径的KEY
      */
     public static final String KEY_PHOTO_PATH = "com.xbb.la.client.photo_path";
-
 }
