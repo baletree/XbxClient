@@ -14,4 +14,5 @@ public class TaskFlag {
     public static final int REQUESTREFRESH = 1110;
     public static final int REQUESTLOADMORE = 1120;
     public static final int HTTPERROR = 1130;
+    public static final int CODEZERO = 500;
 }

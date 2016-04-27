@@ -14,6 +14,15 @@ public class ReservatInfoBean implements Serializable {
     private String endTime;
     private String pageIndex;
     private String pageNum;
+    private String guideType;
+
+    public String getGuideType() {
+        return guideType;
+    }
+
+    public void setGuideType(String guideType) {
+        this.guideType = guideType;
+    }
 
     public String getCityId() {
         return cityId;

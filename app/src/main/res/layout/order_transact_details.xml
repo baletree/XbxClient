@@ -79,6 +79,7 @@
         android:layout_marginTop="@dimen/dp_ten">
 
         <TextView
+            android:id="@+id/total_payTip_tv"
             style="@style/textView_Black"
             android:text="@string/pay_total"
             android:textSize="@dimen/sp_fifteen" />
@@ -109,7 +110,7 @@
             android:id="@+id/payWay_tv"
             style="@style/textView_Black"
             android:layout_alignParentRight="true"
-            android:text="@string/pay_wechat"
+            android:text="@string/pay_alipay"
             android:textSize="@dimen/sp_fifteen" />
     </RelativeLayout>
 </LinearLayout>

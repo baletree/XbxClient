@@ -148,10 +148,10 @@ public class TourDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tour_detail_order:
-                String guideType = "1";
                 if (reservatInfo == null)
                     return;
-                api.reservatGuide(uid, guideId, reservatInfo.getCityId(), reservatInfo.getAddress(), reservatInfo.getStartTime(), reservatInfo.getEndTime(), guideType);
+                Util.pLog("详情中下单导游类型：" + reservatInfo.getGuideType());
+                api.reservatGuide(uid, guideId, reservatInfo.getCityId(), reservatInfo.getAddress(), reservatInfo.getStartTime(), reservatInfo.getEndTime(), reservatInfo.getGuideType());
                 break;
         }
     }

@@ -2,7 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/reservat_reward_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/reservat_reward"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        android:layout_marginRight="@dimen/dp_twenty_four"
+        android:layout_above="@+id/dialog_bg"/>
     <LinearLayout
+        android:id="@+id/dialog_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

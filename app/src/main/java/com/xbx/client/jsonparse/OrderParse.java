@@ -1,5 +1,6 @@
 package com.xbx.client.jsonparse;
 
+import com.xbx.client.beans.CancelInfoBean;
 import com.xbx.client.beans.OrderBean;
 import com.xbx.client.beans.OrderDetailBean;
 
@@ -94,5 +95,21 @@ public class OrderParse {
             e.printStackTrace();
         }
         return oDetailBean;
+    }
+
+    public static CancelInfoBean getCancelInfo(String json){
+        CancelInfoBean cancelInfoBean = new CancelInfoBean();
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            if(UtilParse.checkTag(jsonObject,"pay_money"))
+                cancelInfoBean.setCancelPay(jsonObject.getString("pay_money"));
+            if(UtilParse.checkTag(jsonObject,"cancel_time"))
+                cancelInfoBean.setCancelTime(jsonObject.getString("cancel_time"));
+            if(UtilParse.checkTag(jsonObject,"order_number"))
+                cancelInfoBean.setOrderNum(jsonObject.getString("order_number"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return cancelInfoBean;
     }
 }

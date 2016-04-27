@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">XbxClient</string>
+    <string name="app_name">途途导由</string>
     <string name="action_settings">Settings</string>
     <string name="main_title">途途导由</string>
     <string name="default_city">成都</string>
@@ -20,8 +20,8 @@
     <string name="main_withTour">随游</string>
     <string name="main_together">旅游</string>
     <string name="main_bowen">博文</string>
-    <string name="main_reserve">预约\n导游</string>
-    <string name="main_call">呼叫\n导游</string>
+    <string name="main_reserve">预约导游</string>
+    <string name="main_call">呼叫导游</string>
     <string name="main_current_tip">你从哪出发</string>
     <string name="main_destination_hint">输入目的地</string>
     <string name="menu_order">我的订单</string>
@@ -179,13 +179,19 @@
     <string name="thank_feedback">感谢您的宝贵意见</string>
     <string name="submit_btn">提交</string>
     <string name="submit_to_pay">支付</string>
+    <string name="to_reward">打赏</string>
+    <string name="to_reward_tips">感谢您的好评，感觉服务很不错的话就去打赏吧，我们需要您的认可</string>
+    <string name="to_reward_sure">豪气打赏</string>
+    <string name="to_reward_cancel">不想打赏</string>
     <!--土著-->
     <string name="find_Native">正在呼叫土著</string>
-    <string name="immedia_native">呼叫\n土著</string>
+    <string name="find_Togeher">正在呼叫随游</string>
+    <string name="immedia_native">呼叫土著</string>
     <string name="no_native">暂无土著接单</string>
     <string name="success_find_native">已成功为您找到土著</string>
-    <string name="immedia_together">呼叫\n随游</string>
-    <string name="reservat_together">预约\n随游</string>
+    <string name="immedia_together">呼叫随游</string>
+    <string name="reservat_together">预约随游</string>
+    <string name="input_star">请评定星级</string>
     <!--LoadingListView-->
     <string name="head">这里是HeadView</string>
     <string name="pull_to_refresh">下拉刷新</string>

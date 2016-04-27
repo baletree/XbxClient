@@ -45,14 +45,15 @@ public class OrderDetailActivity extends BaseActivity {
     private TextView orderState_tv;//订单状态
     private RelativeLayout serveTime_rl;//服务时间
     private TextView serveTime_tv;
-    private TextView statePay_tv;//消费金额或者取消金额
-    private RelativeLayout payExtrueMon_rl;//消费金额
+    private TextView statePay_tv;//消费金额
+    private RelativeLayout payExtrueMon_rl;//支付金额
     private TextView payExtrueMon_tv;
     private RelativeLayout rewardMon_rl;//小费
     private TextView rewardMon_tv;
     private RelativeLayout couponMon_rl;//优惠
     private TextView couponMon_tv;
-    private RelativeLayout totalMon_rl;//总计
+    private RelativeLayout totalMon_rl;//总计或者取消金额
+    private TextView total_payTip_tv;
     private TextView totalMon_tv;
     private RelativeLayout payWay_layout;//支付方式
     private TextView payWay_tv;
@@ -137,6 +138,7 @@ public class OrderDetailActivity extends BaseActivity {
         payExtrueMon_tv = (TextView) findViewById(R.id.payExtrueMon_tv);
         rewardMon_tv = (TextView) findViewById(R.id.rewardMon_tv);
         couponMon_tv = (TextView) findViewById(R.id.couponMon_tv);
+        total_payTip_tv = (TextView) findViewById(R.id.total_payTip_tv);
         totalMon_tv = (TextView) findViewById(R.id.totalMon_tv);
         payWay_tv = (TextView) findViewById(R.id.payWay_tv);
         oDeail_comment_ll = (LinearLayout) findViewById(R.id.oDeail_comment_ll);
@@ -176,8 +178,8 @@ public class OrderDetailActivity extends BaseActivity {
         guide_name_tv.setText(detailBean.getGuideName());
         guide_typed_tv.setText(StringUtil.getGuideType(this, detailBean.getGuideType()));
         guide_code_tv.setText(detailBean.getGuideNumber());
-        if (!Util.isNull(detailBean.getGuideStart()))
-            guide_ratingbar.setRating(Float.valueOf(detailBean.getGuideStart()));
+        if (!Util.isNull(detailBean.getGuideStar()))
+            guide_ratingbar.setRating(Float.valueOf(detailBean.getGuideStar()));
         user_stroke_tv.setText(detailBean.getUserAddress());
         setStateInfo();
     }
@@ -190,9 +192,9 @@ public class OrderDetailActivity extends BaseActivity {
         rewardMon_tv.setText("￥" + detailBean.getRewardMoney());
         couponMon_tv.setText("￥" + detailBean.getRebateMoney());
         commentCotent_tv.setText(detailBean.getGuideCotent());
-        if (!Util.isNull(detailBean.getGuideStart())) {
+        if (!Util.isNull(detailBean.getGuideStar())) {
             guideComment_rb.setVisibility(View.VISIBLE);
-            guideComment_rb.setRating(Float.valueOf(detailBean.getGuideStart()));
+            guideComment_rb.setRating(Float.valueOf(detailBean.getGuideStar()));
         }
         if (detailBean.getRewardMoney() == 0.0)
             rewardMon_rl.setVisibility(View.GONE);
@@ -254,7 +256,6 @@ public class OrderDetailActivity extends BaseActivity {
 
     private void jumpActivity() {
         Intent intent = new Intent();
-//        intent.putExtra("GuideOrderNum", detailBean.getOrderNum());
         intent.putExtra("isFromOrderDetail", true);
         intent.putExtra("orderDetailBean", detailBean);
         switch (detailBean.getServerType()) {
@@ -279,6 +280,7 @@ public class OrderDetailActivity extends BaseActivity {
                 break;
             case 6:
                 intent.setClass(OrderDetailActivity.this, CancelOrderSucActivity.class);
+                intent.putExtra("isFromOrderDetail",true);
                 startActivityForResult(intent, 1050);
                 break;
         }
@@ -327,21 +329,24 @@ public class OrderDetailActivity extends BaseActivity {
                 oDeail_comment_ll.setVisibility(View.VISIBLE);
                 break;
             case 6:
-                orderState_tv.setText("违约待支付");
+                orderState_tv.setText("取消待支付");
                 oDeatil_state_btn.setText("支付");
+                total_payTip_tv.setText("取消费用");
                 oDeatil_state_ll.setVisibility(View.VISIBLE);
                 serveTime_rl.setVisibility(View.GONE);
                 payWay_layout.setVisibility(View.GONE);
+                payExtrueMon_rl.setVisibility(View.GONE);
                 break;
             case 7:
                 orderState_tv.setText("已关闭");
-                statePay_tv.setText("取消金额");
+                total_payTip_tv.setText("取消费用");
                 if (detailBean.getOrderOrignalPay() == 0.0)
-                    payExtrueMon_tv.setText("免费");
+                    totalMon_tv.setText("免费");
                 else {
                     payWay_layout.setVisibility(View.GONE);
-                    payExtrueMon_tv.setText("￥" + detailBean.getOrderOrignalPay());
+                    totalMon_tv.setText("￥" + detailBean.getOrderOrignalPay());
                 }
+                payExtrueMon_rl.setVisibility(View.GONE);
                 serveTime_rl.setVisibility(View.GONE);
                 oDeail_comment_ll.setVisibility(View.GONE);
                 break;

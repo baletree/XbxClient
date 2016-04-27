@@ -53,6 +53,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/comment_pay_tv"
                     style="@style/textView_Black"
                     android:text="888"
                     android:textSize="@dimen/sp_thirty" />
@@ -86,6 +87,7 @@
             </RelativeLayout>
 
             <RatingBar
+                android:id="@+id/conmment_rtb"
                 style="@style/roomRatingBar_big"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -100,11 +102,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:visibility="gone"
                 android:layout_marginLeft="@dimen/dp_fourteen"
                 android:layout_marginRight="@dimen/dp_ten"
                 android:layout_marginTop="@dimen/dp_ten" />
 
             <EditText
+                android:id="@+id/comment_msg_tv"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_sixty"
                 android:layout_marginBottom="@dimen/dp_thirty"

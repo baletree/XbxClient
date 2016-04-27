@@ -1,59 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_sixty_four"
+    android:layout_height="@dimen/dp_eighty"
     android:layout_alignParentBottom="true"
+    android:background="@color/colorWhite"
     android:orientation="vertical">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_one"
-        android:background="@color/colorLine" />
+        android:background="@color/colorLine"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_sixty_four"
+        android:layout_height="@dimen/dp_eighty"
+        android:layout_gravity="center"
         android:background="@color/colorTextBack"
         android:orientation="horizontal">
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/guide_reserve_rl"
             android:layout_width="@dimen/dp_zero"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@drawable/main_findguide_bg" />
+                android:id="@+id/img_reservat"
+                android:layout_width="@dimen/dp_forty_eight"
+                android:layout_height="@dimen/dp_forty_eight"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/main_findguide_bg" />
 
             <TextView
                 android:id="@+id/reservat_tv"
                 style="@style/textView_White"
-                android:layout_centerInParent="true"
+                android:layout_below="@+id/img_reservat"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_two"
                 android:text="@string/main_reserve"
-                android:textSize="@dimen/dp_fifteen" />
-        </RelativeLayout>
+                android:textColor="@color/colorTheme"
+                android:textSize="@dimen/dp_fourteen" />
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/guide_call_rl"
             android:layout_width="@dimen/dp_zero"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
             android:layout_weight="1">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@drawable/main_findguide_bg" />
+                android:layout_width="@dimen/dp_forty_eight"
+                android:layout_height="@dimen/dp_forty_eight"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/immedia_tv" />
 
             <TextView
                 android:id="@+id/Immedia_tv"
                 style="@style/textView_White"
                 android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/colorTheme"
+                android:layout_marginTop="@dimen/dp_two"
                 android:text="@string/main_call"
-                android:textSize="@dimen/dp_fifteen" />
-        </RelativeLayout>
+                android:textSize="@dimen/dp_fourteen" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

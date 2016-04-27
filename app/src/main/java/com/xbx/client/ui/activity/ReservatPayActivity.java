@@ -130,8 +130,8 @@ public class ReservatPayActivity extends BaseActivity {
         totalMon_tv.setText("￥" + detailBean.getOrderPay());
         rewardMon_tv.setText("￥" + detailBean.getRewardMoney());
         couponMon_tv.setText("￥" + detailBean.getRebateMoney());
-        if (!Util.isNull(detailBean.getGuideStart()))
-            guide_ratingbar.setRating(Float.valueOf(detailBean.getGuideStart()));
+        if (!Util.isNull(detailBean.getGuideStar()))
+            guide_ratingbar.setRating(Float.valueOf(detailBean.getGuideStar()));
         if (detailBean.getRewardMoney() == 0.0)
             rewardMon_rl.setVisibility(View.GONE);
         if (detailBean.getRebateMoney() == 0.0)

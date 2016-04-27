@@ -11,6 +11,11 @@
         <item name="colorPrimaryDark">@color/colorTheme</item>
     </style>
 
+    <style name="AppThemeTrans" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

@@ -16,6 +16,7 @@ import com.android.volley.NetworkError;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.xbx.client.http.RequestParams;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
@@ -217,5 +218,9 @@ public class Util {
     }
     private static double rad(double d) {
         return d * Math.PI / 180.0;
+    }
+
+    public static void inputParams(RequestParams params){
+        params.getEntity();
     }
 }

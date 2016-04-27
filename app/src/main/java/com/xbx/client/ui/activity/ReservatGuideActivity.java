@@ -51,6 +51,7 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
     private String sexType = "2";
     private String languageType = "0";
     private String destCity = "";//目的地
+    private String guideType = "";
 
 
     @Override
@@ -62,6 +63,8 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
     @Override
     protected void initDatas() {
         super.initDatas();
+        guideType = getIntent().getStringExtra("reservatGuideType");
+        Util.pLog("reservatGuideType:" + guideType);
     }
 
     @Override
@@ -160,8 +163,9 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
                 reservatBean.setLanguageType(languageType);
                 reservatBean.setStartTime(choiceDateList.get(0));
                 reservatBean.setEndTime(choiceDateList.get(choiceDateList.size() - 1));
+                reservatBean.setGuideType(guideType);
                 Intent guideIntent = new Intent(ReservatGuideActivity.this, ChoiceGuideActivity.class);
-                guideIntent.putExtra("ReservatInfo",reservatBean);
+                guideIntent.putExtra("ReservatInfo", reservatBean);
                 startActivity(guideIntent);
                 break;
             case R.id.user_destination_tv:

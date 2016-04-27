@@ -142,9 +142,9 @@ public class Api {
         params.put("guide_type", guideType);
         params.put("number", userNum);
         params.put("guid", guideId);
-        Util.pLog("用户:" + uid + " 用户预约目的:" + startInfo + " 导游id:" + guideType + " 人数:" + userNum + " 导游id:" + guideId);
+        Util.pLog("用户:" + uid + " 用户目的地:" + startInfo + " 导游类型:" + guideType + " 人数:" + userNum + " 导游id:" + guideId);
         String findUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_immediaGuide));
-        IRequest.post(context, findUrl, params, "", new RequestBackLisener(context) {
+        IRequest.post(context, findUrl, params, new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("是否有导游:" + json);
@@ -293,7 +293,7 @@ public class Api {
             return;
         String paramsData = "?server_city_id=" + reservatBean.getCityId() + "&server_addr_lnglat=" + reservatBean.getAddress() + "&sex=" + reservatBean.getSexType()
                 + "&lang_type=" + reservatBean.getLanguageType() + "&server_start_time=" + reservatBean.getStartTime() + "&server_end_time=" + reservatBean.getEndTime()
-                + "&now_page=" + pageIndex + "&page_number=" + pageNum;
+                + "&guide_type=" + reservatBean.getGuideType() + "&now_page=" + pageIndex + "&page_number=" + pageNum;
         String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_guideList)).concat(paramsData);
         Util.pLog(url);
         IRequest.get(context, url, "", new RequestBackLisener(context) {
@@ -311,6 +311,11 @@ public class Api {
         });
     }
 
+    /**
+     * 导游详情
+     *
+     * @param guideId
+     */
     public void getGuideDetail(String guideId) {
         if (context == null)
             return;
@@ -320,6 +325,42 @@ public class Api {
             public void requestSuccess(String json) {
                 Util.pLog("导游详情:" + json);
                 sendShowMsg(TaskFlag.REQUESTSUCCESS, json);
+            }
+        });
+    }
+
+    /**
+     * 评论的标签
+     */
+    public void getGuideTag() {
+        if (context == null)
+            return;
+        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_guideTag));
+        IRequest.get(context, url, "", new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+                Util.pLog("导游评论标签:" + json);
+                sendShowMsg(TaskFlag.PAGEREQUESTWO, json);
+            }
+        });
+    }
+
+    public void submitComment(String uid, String orderNum, String content, String star, String guideTag) {
+        if (context == null)
+            return;
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("order_number", orderNum);
+        params.put("content", content);
+        params.put("star", star);
+        params.put("tag", guideTag);
+        params.inputParams();
+        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_submitComment));
+        IRequest.post(context, url, params, "", new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+                Util.pLog("提交评论:" + json);
+                sendShowMsg(TaskFlag.PAGEREQUESTHREE, json);
             }
         });
     }
@@ -372,6 +413,7 @@ public class Api {
         if (context == null)
             return;
         String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_payOrder)).concat("?order_number=" + orderNum);
+        Util.pLog("支付接口："+url);
         IRequest.get(context, url, "", new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
@@ -403,7 +445,7 @@ public class Api {
             msg.what = flag;
             mHandler.sendMessage(msg);
         } else {
-            mHandler.sendEmptyMessage(TaskFlag.REQUESTERROR);
+            mHandler.sendEmptyMessage(TaskFlag.CODEZERO);
             String showMsg = UtilParse.getRequestMsg(json);
             if (!Util.isNull(showMsg))
                 Util.showToast(context, showMsg);

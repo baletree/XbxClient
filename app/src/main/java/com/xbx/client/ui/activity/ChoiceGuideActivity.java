@@ -79,7 +79,7 @@ public class ChoiceGuideActivity extends BaseActivity implements PullToRefreshLa
                     choice_refresh_plv.setAdapter(choiceAdapter);
                     choiceAdapter.setOnCicks(ChoiceGuideActivity.this);
                     break;
-                case TaskFlag.REQUESTERROR:
+                case TaskFlag.CODEZERO:
                     if (isRefresh) {
                         isRefresh = false;
                         choice_refresh_layout.refreshFinish(choice_refresh_layout.FAIL);
@@ -102,10 +102,10 @@ public class ChoiceGuideActivity extends BaseActivity implements PullToRefreshLa
                         isLoadMore = false;
                     }
                     break;
-                case TaskFlag.PAGEREQUESTHREE://下单成功
+                case TaskFlag.PAGEREQUESTHREE://下单成功,跳入支付订单页面PayOrderActivity
                     String guideData = (String) msg.obj;
                     String orderNum = getOrderNum(guideData);
-                    Intent intent = new Intent(ChoiceGuideActivity.this, ReservatPayActivity.class);
+                    Intent intent = new Intent(ChoiceGuideActivity.this, PayOrderActivity.class);
                     intent.putExtra("GuideOrderNum", orderNum);
                     startActivity(intent);
                     break;
@@ -166,18 +166,18 @@ public class ChoiceGuideActivity extends BaseActivity implements PullToRefreshLa
     }
 
     @Override
-    public void downOrder(int position) {
+    public void downOrder(int position) {//下单
         String guideType = "1";
         String guideId = sList.get(position).getServerId();
         api.reservatGuide(uid, guideId, reservatBean.getCityId(), reservatBean.getAddress(), reservatBean.getStartTime(), reservatBean.getEndTime(), guideType);
     }
 
     @Override
-    public void lookGuide(int position) {
+    public void lookGuide(int position) {//查看详情
         Intent intent = new Intent(ChoiceGuideActivity.this, TourDetailActivity.class);
         String guideId = sList.get(position).getServerId();
-        intent.putExtra("reservatInfo",reservatBean);
-        intent.putExtra("guideId",guideId);
+        intent.putExtra("reservatInfo", reservatBean);
+        intent.putExtra("guideId", guideId);
         startActivity(intent);
     }
 

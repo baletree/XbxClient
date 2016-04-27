@@ -147,4 +147,24 @@ public class GuideParse {
         }
         return guideBean;
     }
+
+    public static List<String> getGuideTags(String json){
+        List<String> tagList = null;
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            if(UtilParse.checkTag(jsonObject,"conf")){
+                JSONArray jArray = jsonObject.getJSONArray("conf");
+                if(jArray.length() > 0){
+                    tagList = new ArrayList<>();
+                    for(int i = 0;i<jArray.length();i++){
+                        String tag = (String) jArray.get(i);
+                        tagList.add(tag);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return tagList;
+    }
 }

@@ -185,7 +185,7 @@
         android:layout_marginLeft="@dimen/dp_sixteen"
         android:layout_marginRight="@dimen/dp_sixteen"
         android:orientation="horizontal"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <Button
             android:id="@+id/oDeatil_cancel_btn"

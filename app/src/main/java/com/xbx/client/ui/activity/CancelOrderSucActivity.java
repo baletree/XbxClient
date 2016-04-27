@@ -1,5 +1,6 @@
 package com.xbx.client.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,8 +11,10 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.xbx.client.R;
+import com.xbx.client.beans.CancelInfoBean;
 import com.xbx.client.beans.OrderDetailBean;
 import com.xbx.client.http.Api;
+import com.xbx.client.jsonparse.OrderParse;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 
@@ -27,6 +30,10 @@ public class CancelOrderSucActivity extends BaseActivity {
 
     private OrderDetailBean detailBean = null;
     private Api api = null;
+    private CancelInfoBean canInfo = null;
+
+    private boolean isFromOrder = false;
+    private String orderNum = "";
 
     private Handler handler = new Handler() {
         @Override
@@ -34,8 +41,17 @@ public class CancelOrderSucActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case TaskFlag.PAGEREQUESFIVE:
+                    Util.showToast(CancelOrderSucActivity.this, "取消金支付成功!");
+                    setResult(RESULT_OK, new Intent());
                     finish();
                     break;
+                /*case TaskFlag.REQUESTSUCCESS:
+                    String dataDetail = (String) msg.obj;
+                    detailBean = OrderParse.getDetailOrder(dataDetail);
+                    if (detailBean == null)
+                        return;
+                    setCancelInfo();
+                    break;*/
             }
         }
     };
@@ -49,8 +65,18 @@ public class CancelOrderSucActivity extends BaseActivity {
     @Override
     protected void initDatas() {
         super.initDatas();
-        detailBean = (OrderDetailBean) getIntent().getSerializableExtra("orderDetailBean");
+        orderNum = getIntent().getStringExtra("GuideOrderNum");
+        isFromOrder = getIntent().getBooleanExtra("isFromOrderDetail", false);
         api = new Api(CancelOrderSucActivity.this, handler);
+        if (isFromOrder)
+            detailBean = (OrderDetailBean) getIntent().getSerializableExtra("orderDetailBean");
+        else {
+            canInfo = (CancelInfoBean) getIntent().getSerializableExtra("cancelSucInfo");
+            detailBean = new OrderDetailBean();
+            detailBean.setOrderNum(canInfo.getOrderNum());
+            detailBean.setOrderPay(Double.parseDouble(canInfo.getCancelPay()));
+            detailBean.setOrderCancelTime(canInfo.getCancelTime());
+        }
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xbx.client.R;
@@ -17,11 +18,13 @@ public class TipsDialog extends Dialog {
     private TextView dialog_msg_tv;
     private TextView cancel_tv;
     private TextView sure_tv;
+    private ImageView reservat_reward_img;
 
     private String title = "";
     private String msg = "";
     private String cancel = "";
     private String submit = "";
+    private boolean isShowReward = false;
 
     private DialogClickListener clickListener;
 
@@ -46,6 +49,7 @@ public class TipsDialog extends Dialog {
         dialog_msg_tv = (TextView) findViewById(R.id.dialog_msg_tv);
         cancel_tv = (TextView) findViewById(R.id.cancel_tv);
         sure_tv = (TextView) findViewById(R.id.sure_tv);
+        reservat_reward_img = (ImageView) findViewById(R.id.reservat_reward_img);
         cancel_tv.setOnClickListener(listener);
         sure_tv.setOnClickListener(listener);
         if (!Util.isNull(title))
@@ -56,6 +60,8 @@ public class TipsDialog extends Dialog {
             cancel_tv.setText(cancel);
         if (!Util.isNull(submit))
             sure_tv.setText(submit);
+        if(isShowReward)
+            reservat_reward_img.setVisibility(View.VISIBLE);
     }
 
     public void setInfo(String title, String msg) {
@@ -66,6 +72,10 @@ public class TipsDialog extends Dialog {
     public void setBtnTxt(String cancel, String submit) {
         this.cancel = cancel;
         this.submit = submit;
+    }
+
+    public void isSHowRewardImg(boolean isShow){
+        this.isShowReward = isShow;
     }
 
     private View.OnClickListener listener = new View.OnClickListener() {

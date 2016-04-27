@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.xbx.client.R;
 import com.xbx.client.adapter.MyViewPagerAdapter;
+import com.xbx.client.beans.CancelInfoBean;
 import com.xbx.client.beans.TogetherBean;
 import com.xbx.client.beans.UserInfo;
 import com.xbx.client.beans.UserStateBean;
@@ -30,6 +31,7 @@ import com.xbx.client.http.Api;
 import com.xbx.client.http.IRequest;
 import com.xbx.client.http.RequestParams;
 import com.xbx.client.jsonparse.MainStateParse;
+import com.xbx.client.jsonparse.OrderParse;
 import com.xbx.client.jsonparse.UserInfoParse;
 import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.ui.fragment.BowenFragment;
@@ -111,7 +113,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             break;
                         case 2:
                             lBManager.sendBroadcast(intent);
-                            startActivity(new Intent(MainActivity.this, CancelOrderSucActivity.class));
+                            CancelInfoBean cancelInfoBean = OrderParse.getCancelInfo(UtilParse.getRequestData(allData));
+                            if (cancelInfoBean == null)
+                                return;
+                            if (Util.isNull(cancelInfoBean.getCancelPay()))
+                                return;
+                            intent.putExtra("cancelSucInfo", cancelInfoBean);
+                            intent.setClass(MainActivity.this, CancelOrderSucActivity.class);
+                            startActivity(intent);
                             break;
                         case 3:
                             break;
@@ -120,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case TaskFlag.REQUESTSUCCESS:
                     String checkData = (String) msg.obj;
-//                    Util.pLog("checkData:" + checkData);
                     if (UtilParse.getRequestCode(checkData) == 0) {
                         Util.showToast(MainActivity.this, getString(R.string.login_fail));
                         SharePrefer.saveUserInfo(MainActivity.this, new UserInfo());
@@ -149,29 +157,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("stateOrderNumber", stateBean.getOrderNum());
         orderNum = stateBean.getOrderNum();
         if (stateKey.equals("unpay")) {
-            /*intent.putExtra("GuideOrderNum", stateBean.getOrderNum());
-            intent.setClass(MainActivity.this, PayOrderActivity.class);*/
             intent.setClass(MainActivity.this, OrderDetailActivity.class);
             startActivity(intent);
         } else if (stateKey.equals("uncomment")) {
+            intent.putExtra("GuideOrderNum", stateBean.getOrderNum());
             intent.setClass(MainActivity.this, SubCommentActivity.class);
             startActivity(intent);
         } else if (stateKey.equals("going")) {
             cancel_order_tv.setVisibility(View.VISIBLE);
+            intent.setAction(Constant.ACTION_GUIDEINORDER);
             switch (stateBean.getGuideType()) {
                 case 1:
-                    cancelType = 1;
-                    intent.setAction(Constant.ACTION_GUIDEINORDER);
+                    tabLayout.getTabAt(0).select();
+                    viewpager.setCurrentItem(0);
                     break;
-                case 2:
-                    cancelType = 2;
-                    intent.setAction(Constant.ACTION_NATIVEINORDER);
-                    viewpager.setCurrentItem(1);
+                case 2://随游
+                    tabLayout.getTabAt(2).select();
+                    viewpager.setCurrentItem(0);
                     break;
-                case 3:
-                    cancelType = 3;
-                    intent.setAction(Constant.ACTION_TOGETHERINORDER);
-                    viewpager.setCurrentItem(2);
+                case 3://土著
+                    tabLayout.getTabAt(1).select();
+                    viewpager.setCurrentItem(0);
                     break;
             }
             lBManager.sendBroadcast(intent);
@@ -188,7 +194,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     protected void initDatas() {
         api = new Api(MainActivity.this, handler);
-//        isFromLogin = getIntent().getBooleanExtra("isFromLoin", false);
         if (!isFromLogin)
             api.checkLoginState();
         lBManager = LocalBroadcastManager.getInstance(this);
@@ -198,7 +203,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tagSet.add(registerId);
         JPushInterface.setTags(this, tagSet, null);
         initViews();
-//        Util.pLog("RegisterId:" + registerId + " uid:" + SharePrefer.getUserInfo(MainActivity.this).getUid());
     }
 
     protected void initViews() {
@@ -249,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()){
+                switch (tab.getPosition()) {
                     case 0:
                         guidesFragment.setPageChange(tab.getPosition());
                         viewpager.setCurrentItem(0);

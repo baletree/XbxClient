@@ -1,5 +1,7 @@
 package com.xbx.client.http;
 
+import com.xbx.client.utils.Util;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -10,7 +12,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -292,6 +296,16 @@ public class RequestParams {
         @Override
         public InputStream getContent() throws IOException, UnsupportedOperationException {
             return new ByteArrayInputStream(out.toByteArray());
+        }
+    }
+
+    public void inputParams() {
+        Iterator iter = urlParams.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            Object key = entry.getKey();
+            Object val = entry.getValue();
+            Util.pLog("key:" + key + "  " + "value:" + val);
         }
     }
 }

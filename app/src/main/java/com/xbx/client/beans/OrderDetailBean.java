@@ -16,7 +16,7 @@ public class OrderDetailBean implements Serializable{
     private String orderEndtTime;
     private String guideTag;
     private String guideCotent;
-    private String guideStart;
+    private String guideStar;
     private String userAddress;
     private String serverDate;
     private double orderOrignalPay;//原始价格
@@ -69,12 +69,12 @@ public class OrderDetailBean implements Serializable{
         this.guideCotent = guideCotent;
     }
 
-    public String getGuideStart() {
-        return guideStart;
+    public String getGuideStar() {
+        return guideStar;
     }
 
-    public void setGuideStart(String guideStart) {
-        this.guideStart = guideStart;
+    public void setGuideStar(String guideStar) {
+        this.guideStar = guideStar;
     }
 
     public String getGuideName() {

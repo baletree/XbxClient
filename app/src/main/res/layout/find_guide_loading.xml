@@ -15,8 +15,7 @@
             android:id="@+id/dialog_loading_icon"
             android:layout_width="@dimen/dp_fifty"
             android:layout_height="@dimen/dp_fifty"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/loading1" />
+            android:layout_gravity="center_horizontal" />
         <ProgressBar
             android:id="@+id/find_loading_bar"
             style="@style/loading_small"

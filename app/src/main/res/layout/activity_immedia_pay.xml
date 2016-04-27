@@ -13,6 +13,68 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_sixteen"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:layout_marginTop="@dimen/dp_thirty_one">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_zero_five"
+                android:layout_centerVertical="true"
+                android:background="@color/colorLine" />
+
+            <TextView
+                style="@style/textView_Hint"
+                android:layout_centerHorizontal="true"
+                android:background="@color/colorBackground"
+                android:paddingLeft="@dimen/dp_sixteen"
+                android:paddingRight="@dimen/dp_sixteen"
+                android:text="@string/order_detail"
+                android:textSize="@dimen/sp_fifteen" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_sixteen"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:layout_marginTop="@dimen/dp_sixteen">
+
+            <TextView
+                style="@style/textView_Black"
+                android:text="@string/order_state"
+                android:textSize="@dimen/sp_fifteen" />
+
+            <TextView
+                android:id="@+id/pay_orderState_tv"
+                style="@style/textView_Black"
+                android:layout_alignParentRight="true"
+                android:text=""
+                android:textSize="@dimen/sp_fifteen" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/pay_serveTime_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_sixteen"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:layout_marginTop="@dimen/dp_ten">
+
+            <TextView
+                style="@style/textView_Black"
+                android:text="@string/service_time"
+                android:textSize="@dimen/sp_fifteen" />
+
+            <TextView
+                android:id="@+id/serveTime_tv"
+                style="@style/textView_Black"
+                android:layout_alignParentRight="true"
+                android:text="4月6日-4月7日"
+                android:textSize="@dimen/sp_fifteen" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_twenty_five"
             android:layout_marginLeft="@dimen/dp_sixteen"
             android:layout_marginRight="@dimen/dp_sixteen"

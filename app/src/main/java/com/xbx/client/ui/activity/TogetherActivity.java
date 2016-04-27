@@ -18,7 +18,6 @@ import java.util.List;
  * Created by EricYuan on 2016/4/18.
  */
 public class TogetherActivity extends Activity {
-
     private Gallery together_gallery;
     private TogetherAdapter adapter;
     private List<TogetherBean> list;
