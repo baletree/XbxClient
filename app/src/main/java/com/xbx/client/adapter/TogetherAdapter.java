@@ -11,7 +11,9 @@ import android.widget.TextView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xbx.client.R;
+import com.xbx.client.beans.GuideBean;
 import com.xbx.client.beans.TogetherBean;
+import com.xbx.client.linsener.AnimateFirstDisplayListener;
 import com.xbx.client.linsener.ImageLoaderConfigFactory;
 import com.xbx.client.utils.Util;
 
@@ -22,15 +24,20 @@ import java.util.List;
  */
 public class TogetherAdapter extends BaseAdapter {
 
-    private List<TogetherBean> list;
+    private List<GuideBean> list;
     private int mSelectTab;
     public ImageLoader imageLoader;
     public ImageLoaderConfigFactory configFactory;
+    private CallListener callListener;
 
-    public TogetherAdapter(List<TogetherBean> list) {
+    public TogetherAdapter(List<GuideBean> list) {
         this.list = list;
         imageLoader = ImageLoader.getInstance();
         configFactory = ImageLoaderConfigFactory.getInstance();
+    }
+
+    public void setCallLisener(CallListener callListener){
+        this.callListener = callListener;
     }
     @Override
     public int getCount() {
@@ -48,7 +55,7 @@ public class TogetherAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if(convertView == null) {
             holder = new ViewHolder();
@@ -71,16 +78,20 @@ public class TogetherAdapter extends BaseAdapter {
         } else {
             holder.bg.setVisibility(View.GONE);
         }
-        final TogetherBean bean = list.get(position);
-        /*imageLoader.displayImage(bean.getHeadImg(), holder.head, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
-        holder.name.setText(bean.getName());
-        holder.score.setText(bean.getScore()+"分");
-        holder.price.setText(bean.getPrice());
-        holder.num.setText(bean.getNum());*/
+        final GuideBean bean = list.get(position);
+        imageLoader.displayImage(bean.getGuideHead(), holder.head, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
+        holder.name.setText(bean.getGuideName());
+        holder.score.setText(bean.getGuideStars()+"分");
+        holder.price.setText(bean.getGuideHourPrice());
+        if(!Util.isNull(bean.getGuideStars())){
+            holder.ratingbar.setRating(Float.valueOf(bean.getGuideStars()));
+        }
         holder.call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(callListener == null)
+                    return;
+                callListener.callClick(position);
             }
         });
         return convertView;
@@ -104,5 +115,9 @@ public class TogetherAdapter extends BaseAdapter {
             mSelectTab = tab;
             notifyDataSetChanged();
         }
+    }
+
+    public interface CallListener{
+        public void callClick(int position);
     }
 }

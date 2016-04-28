@@ -91,6 +91,8 @@ public class OrderParse {
                 oDetailBean.setServerDate(jObject.getString("server_date"));
             if(UtilParse.checkTag(jObject,"cancel_time"))
                 oDetailBean.setOrderCancelTime(jObject.getString("cancel_time"));
+            if(UtilParse.checkTag(jObject,"star"))
+                oDetailBean.setGuideStar(jObject.getString("star"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

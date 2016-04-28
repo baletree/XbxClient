@@ -14,6 +14,7 @@ import com.xbx.client.jsonparse.UserInfoParse;
 import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.linsener.RequestBackLisener;
 import com.xbx.client.ui.activity.LoginActivity;
+import com.xbx.client.utils.Constant;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
@@ -62,7 +63,7 @@ public class Api {
     /**
      * 获取附近的导游
      */
-    public void getNearGuide(LatLng currentLalng, String nearGuideUrl, String guideType) {
+    public void getNearGuide(LatLng currentLalng, String nearGuideUrl, final String guideType) {
         if (currentLalng == null)
             return;
         if (context == null)
@@ -75,8 +76,11 @@ public class Api {
             @Override
             public void requestSuccess(String json) {
                 super.requestSuccess(json);
+                if(guideType.equals(1))
+                    Util.pLog("导游列表:" + json);
+                else
+                    Util.pLog("土著列表:" + json);
                 if (isFirst) {
-                    Util.pLog("MainguideList:" + json);
                     isFirst = false;
                 }
                 sendMsg(TaskFlag.REQUESTSUCCESS, json);
@@ -102,6 +106,10 @@ public class Api {
                 super.requestSuccess(json);
 //                Util.pLog("服务我的导游:" + json);
                 sendShowMsg(TaskFlag.PAGEREQUESTWO, json);
+            }
+
+            @Override
+            public void requestError(VolleyError e) {
             }
         });
     }
@@ -409,11 +417,25 @@ public class Api {
         });
     }
 
+    public void getNearTogether(String togetherLnlat) {
+        if (context == null)
+            return;
+        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_nearTogether)).concat("?server_addr_lnglat="+togetherLnlat);
+        Util.pLog("周边随游url:" + url);
+        IRequest.get(context, url, new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+                Util.pLog("获取周边随游:" + json);
+                sendShowMsg(TaskFlag.REQUESTSUCCESS, json);
+            }
+        });
+    }
+
     public void moniPayOrder(String orderNum) {
         if (context == null)
             return;
         String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_payOrder)).concat("?order_number=" + orderNum);
-        Util.pLog("支付接口："+url);
+        Util.pLog("支付接口：" + url);
         IRequest.get(context, url, "", new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {

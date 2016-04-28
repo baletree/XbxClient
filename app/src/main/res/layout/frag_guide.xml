@@ -26,11 +26,11 @@
             android:id="@+id/guide_center_layout"
             layout="@layout/frag_guide_map"/>
         <include
-            android:id="@+id/guide_fuc_layout"
-            layout="@layout/frag_guide_fuc"/>
-        <include
             android:id="@+id/guide_call_layout"
             layout="@layout/frag_call_guide" />
+        <include
+            android:id="@+id/guide_fuc_layout"
+            layout="@layout/frag_guide_fuc"/>
     </RelativeLayout>
     <include
         android:id="@+id/guide_tOrder_layout"

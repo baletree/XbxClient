@@ -85,7 +85,7 @@ public class SharePrefer {
         UserInfo userInfo = new UserInfo();
         SpHelper spHelper = new SpHelper(context, Constant.SPUSER_INFO);
         if(spHelper == null)
-            return null;
+            return userInfo;
         userInfo.setUid(spHelper.getSP("userUid"));
         userInfo.setUserPhone(spHelper.getSP("userPhone"));
         userInfo.setNickName(spHelper.getSP("userNickname"));

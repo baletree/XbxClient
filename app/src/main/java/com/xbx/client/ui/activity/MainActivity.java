@@ -21,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.makeramen.roundedimageview.RoundedImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xbx.client.R;
 import com.xbx.client.adapter.MyViewPagerAdapter;
 import com.xbx.client.beans.CancelInfoBean;
@@ -34,6 +36,8 @@ import com.xbx.client.jsonparse.MainStateParse;
 import com.xbx.client.jsonparse.OrderParse;
 import com.xbx.client.jsonparse.UserInfoParse;
 import com.xbx.client.jsonparse.UtilParse;
+import com.xbx.client.linsener.AnimateFirstDisplayListener;
+import com.xbx.client.linsener.ImageLoaderConfigFactory;
 import com.xbx.client.ui.fragment.BowenFragment;
 import com.xbx.client.ui.fragment.GuidesFragment;
 import com.xbx.client.ui.fragment.NativesFragment;
@@ -72,6 +76,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView cancel_order_tv;
     private LinearLayout menu_order_layout; //我的订单
     private RelativeLayout menu_userInfo_layout;// 个人中心
+    private ImageView main_back_img;
+    private RoundedImageView menu_head_img;
+    private TextView menu_name_tv;
+    private TextView menu_phone_tv;
 
     private MyViewPagerAdapter viewPagerAdapter = null;
 
@@ -85,6 +93,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LocalBroadcastManager lBManager = null;
     private IntentFilter intentFilter = null;
     private Api api = null;
+    private UserInfo userInfo = null;
+    private ImageLoader imageLoader;
+    private ImageLoaderConfigFactory configFactory;
 
     private TipsDialog tipsDialog = null;
     private boolean isFromLogin = false;
@@ -105,14 +116,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     cancelType = 0;
                     orderNum = "";
                     cancel_order_tv.setVisibility(View.GONE);
-                    intent.setAction(Constant.ACTION_GCANCELUIDEORDSUC);
                     int codes = UtilParse.getRequestCode(allData);
                     switch (codes) {
                         case 1:
-                            lBManager.sendBroadcast(intent);
+                            guidesFragment.cancelOrderSuc(true);
                             break;
                         case 2:
-                            lBManager.sendBroadcast(intent);
+                            guidesFragment.cancelOrderSuc(true);
                             CancelInfoBean cancelInfoBean = OrderParse.getCancelInfo(UtilParse.getRequestData(allData));
                             if (cancelInfoBean == null)
                                 return;
@@ -127,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                     Util.showToast(MainActivity.this, UtilParse.getRequestMsg(allData));
                     break;
-                case TaskFlag.REQUESTSUCCESS:
+                case TaskFlag.REQUESTSUCCESS://验证登录的时候如果有状态就显示状态
                     String checkData = (String) msg.obj;
                     if (UtilParse.getRequestCode(checkData) == 0) {
                         Util.showToast(MainActivity.this, getString(R.string.login_fail));
@@ -145,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             return;
                         if (Util.isNull(stateBean.getOrderNum()))
                             return;
-                        Util.pLog("dataType=" + dataType + " stateBeanOrder:" + stateBean.getOrderNum());
                         dealUserState(intent, stateBean, dataType);
                     }
                     break;
@@ -164,8 +173,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             intent.setClass(MainActivity.this, SubCommentActivity.class);
             startActivity(intent);
         } else if (stateKey.equals("going")) {
+            guidesFragment.setPageInOrder(orderNum);
             cancel_order_tv.setVisibility(View.VISIBLE);
-            intent.setAction(Constant.ACTION_GUIDEINORDER);
             switch (stateBean.getGuideType()) {
                 case 1:
                     tabLayout.getTabAt(0).select();
@@ -180,7 +189,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     viewpager.setCurrentItem(0);
                     break;
             }
-            lBManager.sendBroadcast(intent);
         }
     }
 
@@ -193,13 +201,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     protected void initDatas() {
+        imageLoader = ImageLoader.getInstance();
+        configFactory = ImageLoaderConfigFactory.getInstance();
+        userInfo = SharePrefer.getUserInfo(MainActivity.this);
         api = new Api(MainActivity.this, handler);
-        if (!isFromLogin)
+        if (userInfo != null && !Util.isNull(userInfo.getUid()))
             api.checkLoginState();
         lBManager = LocalBroadcastManager.getInstance(this);
         intentFilter = new IntentFilter();
         String registerId = JPushInterface.getRegistrationID(this);
-        Set<String> tagSet = new LinkedHashSet<String>();
+        Set<String> tagSet = new LinkedHashSet<>();
         tagSet.add(registerId);
         JPushInterface.setTags(this, tagSet, null);
         initViews();
@@ -215,22 +226,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cancel_order_tv = (TextView) findViewById(R.id.cancel_order_tv);
         menu_order_layout = (LinearLayout) findViewById(R.id.menu_order_layout);
         menu_userInfo_layout = (RelativeLayout) findViewById(R.id.menu_userInfo_layout);
+        main_back_img = (ImageView) findViewById(R.id.main_back_img);
+        menu_head_img = (RoundedImageView) findViewById(R.id.menu_head_img);
+        menu_name_tv = (TextView) findViewById(R.id.menu_name_tv);
+        menu_phone_tv = (TextView) findViewById(R.id.menu_phone_tv);
         viewpager.setScrollble(false);
         viewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager(), this);
         findViewById(R.id.menu_setting_layout).setOnClickListener(this);
         findViewById(R.id.menu_recruit_layout).setOnClickListener(this);
         findViewById(R.id.menu_msg_layout).setOnClickListener(this);
         main_menu_img.setOnClickListener(this);
+        main_back_img.setOnClickListener(this);
         cancel_order_tv.setOnClickListener(this);
         menu_order_layout.setOnClickListener(this);
         menu_userInfo_layout.setOnClickListener(this);
+        setUserInfo();
         initControls();
         initBroadcast();
+    }
+
+    private void setUserInfo() {
+        if (userInfo == null)
+            return;
+        imageLoader.displayImage(userInfo.getUserHead(), menu_head_img, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
+        if (!Util.isNull(userInfo.getNickName()))
+            menu_name_tv.setText(userInfo.getNickName());
+        if (!Util.isNull(userInfo.getUserPhone()))
+            menu_phone_tv.setText(userInfo.getUserPhone());
     }
 
     private void initBroadcast() {
         intentFilter.addAction(Constant.ACTION_GCANCELORD);
         intentFilter.addAction(Constant.ACTION_GUIDEOVERSERVER);
+        intentFilter.addAction(Constant.ACTION_CALLGUIDEBTN);
+        intentFilter.addAction(Constant.ACTION_USERINORDER);
+        intentFilter.addAction(Constant.ACTION_DISSMISSBACK);
         localReceiver = new LocalReceiver();
         lBManager.registerReceiver(localReceiver, intentFilter);
     }
@@ -310,12 +340,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode != RESULT_OK)
+            return;
+        if(data == null)
+            return;
+        if(requestCode == 1000)
+            api.checkLoginState();
+    }
 
     @Override
     public void onClick(View v) {
+        userInfo = SharePrefer.getUserInfo(MainActivity.this);
+        String uid = userInfo.getUid();
         switch (v.getId()) {
             case R.id.main_menu_img:
+                if (Util.isNull(uid)) {
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    intent.putExtra("NoLoginAction",true);
+                    startActivityForResult(intent,1000);
+                    return;
+                }
                 toggleLeftLayout();
+                break;
+            case R.id.main_back_img:
+                guidesFragment.cancelOrderSuc(false);
+                main_menu_img.setVisibility(View.VISIBLE);
+                main_back_img.setVisibility(View.GONE);
                 break;
             case R.id.cancel_order_tv://取消订单
                 initDialog();
@@ -337,7 +390,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 toggleLeftLayout();
                 break;
             case R.id.menu_recruit_layout: //导游招募
-
                 toggleLeftLayout();
                 break;
         }
@@ -379,6 +431,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 cancel_order_tv.setVisibility(View.GONE);
                 cancelType = 0;
                 orderNum = "";
+            } else if (Constant.ACTION_CALLGUIDEBTN.equals(action)) {
+                main_back_img.setVisibility(View.VISIBLE);
+                main_menu_img.setVisibility(View.GONE);
+            } else if (Constant.ACTION_USERINORDER.equals(action)) {//用户处在订单当中不能取消订单
+                orderNum = "";
+                cancel_order_tv.setVisibility(View.GONE);
+            } else if (Constant.ACTION_DISSMISSBACK.equals(action)) {
+                main_menu_img.setVisibility(View.VISIBLE);
+                main_back_img.setVisibility(View.GONE);
             }
         }
     }

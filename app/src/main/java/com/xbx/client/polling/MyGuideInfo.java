@@ -30,7 +30,7 @@ public class MyGuideInfo {
             switch (msg.what){
                 case 1:
                     api.getMyGuideInfo(findGuideorderNum);
-                    handler.sendEmptyMessageDelayed(1, 5000);
+                    handler.sendEmptyMessageDelayed(1, 3000);
                     break;
             }
         }

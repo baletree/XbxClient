@@ -25,7 +25,10 @@ public class Constant {
     public static final int destFlag = 101;
     public static final String ACTION_GCANCELORD = "com.xbx.client.guide.cancel.order";
     public static final String ACTION_GCANCELUIDEORDSUC = "com.xbx.client.guide.cancel.order.success";
-    public static final String ACTION_GUIDEOVERSERVER = "com.xbx.client.guide.over.order";
+    public static final String ACTION_GUIDEOVERSERVER = "com.xbx.client.guide.over.order";//结束行程
+    public static final String ACTION_USERINORDER = "com.xbx.client.user.into.order";//用户进入行程取消订单功能不存在
+    public static final String ACTION_CALLGUIDEBTN = "com.xbx.client.call.guide";//用户进入开始点击呼叫按钮之前
+    public static final String ACTION_DISSMISSBACK = "com.xbx.client.dissmiss.back";//用户进入开始点击呼叫按钮之前
     public static final String ACTION_GUIDEINORDER = "com.xbx.client.guide.into.order";
     public static final String ACTION_NATIVEINORDER = "com.xbx.client.native.into.order";
     public static final String ACTION_TOGETHERINORDER = "com.xbx.client.together.into.order";

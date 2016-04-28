@@ -52,7 +52,7 @@
                 android:textColor="@color/codeNoclick"
                 android:textSize="@dimen/sp_sixteen"
                 android:padding="@dimen/dp_ten"
-                android:text="取消订单"/>
+                android:text=""/>
             <TextView
                 android:id="@+id/sure_tv"
                 android:layout_width="wrap_content"

@@ -24,6 +24,7 @@ import com.xbx.client.R;
 import com.xbx.client.linsener.ImageLoaderConfigFactory;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.Util;
+import com.xbx.client.view.TipsDialog;
 
 /**
  * Created by EricYuan on 2016/4/13.
@@ -120,5 +121,26 @@ public class BasedFragment extends Fragment implements View.OnClickListener, BDL
     @Override
     public void onMapStatusChangeFinish(MapStatus mapStatus) {
 
+    }
+    /**
+     * 行程开始的提示
+     */
+    public void notifyUserStartStroke(){
+        final TipsDialog tDialog = new TipsDialog(getActivity());
+        tDialog.setBtnTxt("",getString(R.string.txt_sure));
+        tDialog.setInfo(getString(R.string.title_StartStroke),getString(R.string.msg_StartStroke));
+        tDialog.show();
+        tDialog.setClickListener(new TipsDialog.DialogClickListener(){
+
+            @Override
+            public void cancelDialog() {
+                tDialog.dismiss();
+            }
+
+            @Override
+            public void confirmDialog() {
+                tDialog.dismiss();
+            }
+        });
     }
 }

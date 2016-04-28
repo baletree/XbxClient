@@ -131,7 +131,7 @@
                 android:layout_marginTop="@dimen/dp_ten"
                 android:gravity="center"
                 android:background="@drawable/theme_light_bg"
-                android:text="@string/user_info_nickname_text"
+                android:text="@string/call_immedia"
                 android:textColor="@color/colorWhite"
                 android:layout_marginBottom="@dimen/dp_ten"
                 android:textSize="@dimen/sp_twelve" />

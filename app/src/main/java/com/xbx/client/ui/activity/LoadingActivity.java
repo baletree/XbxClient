@@ -25,10 +25,11 @@ public class LoadingActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    if (userInfo != null && !Util.isNull(userInfo.getUid()))
+                    startActivity(new Intent(LoadingActivity.this, MainActivity.class));
+                    /*if (userInfo != null && !Util.isNull(userInfo.getUid()))
                         startActivity(new Intent(LoadingActivity.this, MainActivity.class));
                     else
-                        startActivity(new Intent(LoadingActivity.this, LoginActivity.class));
+                        startActivity(new Intent(LoadingActivity.this, LoginActivity.class));*/
                     finish();
                     break;
             }

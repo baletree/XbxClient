@@ -49,7 +49,7 @@ public class MapLocate {
         @Override
         public void onReceiveLocation(BDLocation location) {
             if (location != null) {
-                if (isFirstLoc) {
+                if (isFirstLoc && !Util.isNull(location.getAddrStr())) {
                     Util.pLog("XbxLocate：" + location.getLatitude() + " " + location.getLongitude()
                             + "" + location.getCity() + location.getAddrStr()+location.getCityCode());
                     isFirstLoc = false;

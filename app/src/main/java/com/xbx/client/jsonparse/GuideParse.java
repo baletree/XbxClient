@@ -45,6 +45,16 @@ public class GuideParse {
                             guideBean.setLongitude(jsonObject.getDouble("lon"));
                         if (UtilParse.checkTag(jsonObject, "lat"))
                             guideBean.setLatitude(jsonObject.getDouble("lat"));
+                        if (UtilParse.checkTag(jsonObject, "head_image"))
+                            guideBean.setGuideHead(jsonObject.getString("head_image"));
+                        if (UtilParse.checkTag(jsonObject, "realname"))
+                            guideBean.setGuideName(jsonObject.getString("realname"));
+                        if (UtilParse.checkTag(jsonObject, "guide_instant_price"))
+                            guideBean.setGuideHourPrice(jsonObject.getString("guide_instant_price"));
+                        if (UtilParse.checkTag(jsonObject, "server_times"))
+                            guideBean.setGuideTimes(jsonObject.getString("server_times"));
+                        if (UtilParse.checkTag(jsonObject, "stars"))
+                            guideBean.setGuideStars(jsonObject.getString("stars"));
                         guideList.add(guideBean);
                     }
                 }

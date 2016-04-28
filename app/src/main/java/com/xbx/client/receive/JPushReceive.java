@@ -40,17 +40,16 @@ public class JPushReceive extends BroadcastReceiver {
             Log.i(TAG, "[MyReceiver] 接收Registration Id : " + regId);
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
             Log.i(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE) + "\n" + bundle.getString(JPushInterface.EXTRA_EXTRA));
-//            processCustomMessage(context, bundle);
         } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
             String customMsg = bundle.getString(JPushInterface.EXTRA_EXTRA);
             Log.i(TAG, "[MyReceiver] 接收到推送下来的通知携带了msg:" + customMsg + "\n通知ID:" + notifactionId);
             if (Util.isNull(customMsg))
                 return;
+            processCustomMessage(context, bundle,notifactionId);
             lBManager.sendBroadcast(new Intent().setAction(Constant.ACTION_GUIDEOVERSERVER));
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             Log.i(TAG, "[MyReceiver] 用户点击打开了通知");
-            processCustomMessage(context, bundle);
         } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
             Log.i(TAG, "[MyReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
             //在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity， 打开一个网页等..
@@ -95,31 +94,20 @@ public class JPushReceive extends BroadcastReceiver {
     }
 
     //send msg to MainActivity
-    private void processCustomMessage(Context context, Bundle bundle) {
+    private void processCustomMessage(Context context, Bundle bundle,int notificationId) {
         Intent intent = new Intent();
         String customMsg = bundle.getString(JPushInterface.EXTRA_EXTRA);
         Util.pLog("customMsg:" + customMsg);
-        int serverType = -1;
         String ordernum = "";
         try {
             JSONObject jsonObject = new JSONObject(customMsg);
-            /*if (UtilParse.checkTag(jsonObject, "server_type"))
-                serverType = jsonObject.getInt("server_type");*/
             if (UtilParse.checkTag(jsonObject, "order_number"))
                 ordernum = jsonObject.getString("order_number");
             intent.putExtra("GuideOrderNum", ordernum);
-//            if (serverType == 0) {
+            intent.putExtra("JPushNotificationId", bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID));
             intent.setClass(context, PayOrderActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
-            /*} else if (serverType == 1) {
-                intent.setClass(context, PayOrderActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            }*/
-            int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
-            if (notiManaer != null)
-                notiManaer.cancel(notifactionId);
         } catch (JSONException e) {
             e.printStackTrace();
         }

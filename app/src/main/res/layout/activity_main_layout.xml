@@ -48,7 +48,16 @@
                             android:id="@+id/main_menu_img"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:padding="@dimen/dp_two"
                             android:src="@mipmap/main_menu" />
+
+                        <ImageView
+                            android:id="@+id/main_back_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/dp_two"
+                            android:visibility="gone"
+                            android:src="@mipmap/back1" />
 
                         <TextView
                             android:layout_width="wrap_content"

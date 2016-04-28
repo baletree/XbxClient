@@ -1,5 +1,7 @@
 package com.xbx.client.ui.activity;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -61,11 +63,13 @@ public class PayOrderActivity extends FragmentActivity implements View.OnClickLi
     private Api api = null;
     private ImageLoader imageLoader;
     private ImageLoaderConfigFactory configFactory;
+    private NotificationManager notiManaer = null;
 
     private boolean isFromOrder = false;
     private String orderNum = "";
     private int serverType = 0;
     private TipsDialog tipsDialog = null;
+    private int notificationId = 0;
 
     private Handler handler = new Handler() {
         @Override
@@ -89,6 +93,9 @@ public class PayOrderActivity extends FragmentActivity implements View.OnClickLi
                         tipsDialog.setBtnTxt(getString(R.string.to_reward_cancel),getString(R.string.to_reward_sure));
                         tipsDialog.show();
                     }
+                    if(!isFromOrder && notificationId != 0){
+                        notiManaer.cancel(notificationId);
+                    }
                     setResult(RESULT_OK, new Intent());
                     finish();
                     break;
@@ -104,8 +111,10 @@ public class PayOrderActivity extends FragmentActivity implements View.OnClickLi
     }
 
     private void initDatas() {
+        notiManaer = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         api = new Api(PayOrderActivity.this, handler);
         orderNum = getIntent().getStringExtra("GuideOrderNum");
+        notificationId = getIntent().getIntExtra("JPushNotificationId",0);
         isFromOrder = getIntent().getBooleanExtra("isFromOrderDetail", false);
         imageLoader = ImageLoader.getInstance();
         configFactory = ImageLoaderConfigFactory.getInstance();
@@ -185,7 +194,7 @@ public class PayOrderActivity extends FragmentActivity implements View.OnClickLi
                 break;
             case R.id.reward_img:
                 Intent intent = new Intent(PayOrderActivity.this, SubCommentActivity.class);
-                startActivity(intent);
+//                startActivity(intent);
                 break;
             case R.id.immedia_pay_btn:
                 api.moniPayOrder(detailBean.getOrderNum());

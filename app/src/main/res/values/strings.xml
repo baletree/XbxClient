@@ -183,6 +183,8 @@
     <string name="to_reward_tips">感谢您的好评，感觉服务很不错的话就去打赏吧，我们需要您的认可</string>
     <string name="to_reward_sure">豪气打赏</string>
     <string name="to_reward_cancel">不想打赏</string>
+    <string name="title_StartStroke">服务开始</string>
+    <string name="msg_StartStroke">您的即时服务已经开始计时</string>
     <!--土著-->
     <string name="find_Native">正在呼叫土著</string>
     <string name="find_Togeher">正在呼叫随游</string>
@@ -192,6 +194,8 @@
     <string name="immedia_together">呼叫随游</string>
     <string name="reservat_together">预约随游</string>
     <string name="input_star">请评定星级</string>
+    <string name="no_hasTogether">暂无随游</string>
+    <string name="call_immedia">立即呼叫</string>
     <!--LoadingListView-->
     <string name="head">这里是HeadView</string>
     <string name="pull_to_refresh">下拉刷新</string>

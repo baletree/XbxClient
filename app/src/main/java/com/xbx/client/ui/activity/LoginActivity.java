@@ -34,6 +34,7 @@ public class LoginActivity extends BaseActivity {
     private Button login_code_btn;
 
     private int countDown = 60;
+    private boolean isNoLogin = false;
 
     private Handler handler = new Handler() {
         @Override
@@ -60,6 +61,12 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Util.pLog("JPushId：" + JPushInterface.getRegistrationID(this));
+    }
+
+    @Override
+    protected void initDatas() {
+        super.initDatas();
+        isNoLogin = getIntent().getBooleanExtra("isNoLogin",false);
     }
 
     @Override
@@ -153,9 +160,13 @@ public class LoginActivity extends BaseActivity {
                     UserInfo userInfo = UserInfoParse.getUserInfo(UtilParse.getRequestData(json));
                     if (userInfo != null) {
                         SharePrefer.saveUserInfo(LoginActivity.this, userInfo);
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.putExtra("isFromLoin", true);
-                        startActivity(intent);
+                        Intent intent = new Intent();
+                        if(isNoLogin){
+                            intent.setClass(LoginActivity.this,MainActivity.class);
+                            startActivity(intent);
+                        }else {
+                            setResult(RESULT_OK,intent);
+                        }
                         finish();
                     }
                 } else {

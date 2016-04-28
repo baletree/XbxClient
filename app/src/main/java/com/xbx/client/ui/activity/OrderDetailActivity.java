@@ -17,6 +17,7 @@ import com.xbx.client.R;
 import com.xbx.client.beans.OrderDetailBean;
 import com.xbx.client.http.Api;
 import com.xbx.client.jsonparse.OrderParse;
+import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.linsener.AnimateFirstDisplayListener;
 import com.xbx.client.linsener.ImageLoaderConfigFactory;
 import com.xbx.client.utils.StringUtil;
@@ -84,6 +85,16 @@ public class OrderDetailActivity extends BaseActivity {
                         return;
                     setOderInfo();
                     break;
+                case TaskFlag.PAGEREQUESFIVE:
+                    String allData = (String) msg.obj;
+                    if (Util.isNull(allData))
+                        return;
+                    int codes = UtilParse.getRequestCode(allData);
+                    if(codes == 1){
+                        api.getOrderDetail(orderNuber);
+                        Util.showToast(OrderDetailActivity.this, UtilParse.getRequestMsg(allData));
+                    }
+                    break;
             }
         }
     };
@@ -102,13 +113,6 @@ public class OrderDetailActivity extends BaseActivity {
         imageLoader = ImageLoader.getInstance();
         configFactory = ImageLoaderConfigFactory.getInstance();
         tagList = new ArrayList<>();
-        tagList.add("大胆");
-        tagList.add("脾气大");
-        tagList.add("路线熟悉活地图");
-        tagList.add("管吃管住管穿");
-        tagList.add("管吃管住");
-        tagList.add("路线熟悉活地图的能忍");
-        tagList.add("管吃管住");
     }
 
     @Override
@@ -178,8 +182,9 @@ public class OrderDetailActivity extends BaseActivity {
         guide_name_tv.setText(detailBean.getGuideName());
         guide_typed_tv.setText(StringUtil.getGuideType(this, detailBean.getGuideType()));
         guide_code_tv.setText(detailBean.getGuideNumber());
+        Util.pLog("detailBean.getGuideStar():"+detailBean.getGuideStar());
         if (!Util.isNull(detailBean.getGuideStar()))
-            guide_ratingbar.setRating(Float.valueOf(detailBean.getGuideStar()));
+            guide_ratingbar.setRating(Float.valueOf(detailBean.getGuideStar()) / 2);
         user_stroke_tv.setText(detailBean.getUserAddress());
         setStateInfo();
     }
@@ -249,7 +254,8 @@ public class OrderDetailActivity extends BaseActivity {
                 jumpActivity();
                 break;
             case R.id.oDeatil_cancel_btn://取消订单
-                jumpActivity();
+//                jumpActivity();
+                api.cancelOrder(detailBean.getOrderNum());
                 break;
         }
     }
@@ -280,7 +286,7 @@ public class OrderDetailActivity extends BaseActivity {
                 break;
             case 6:
                 intent.setClass(OrderDetailActivity.this, CancelOrderSucActivity.class);
-                intent.putExtra("isFromOrderDetail",true);
+                intent.putExtra("isFromOrderDetail", true);
                 startActivityForResult(intent, 1050);
                 break;
         }
@@ -326,6 +332,7 @@ public class OrderDetailActivity extends BaseActivity {
                 break;
             case 5:
                 orderState_tv.setText("已完成");
+                oDeatil_state_ll.setVisibility(View.GONE);
                 oDeail_comment_ll.setVisibility(View.VISIBLE);
                 break;
             case 6:
@@ -388,9 +395,11 @@ public class OrderDetailActivity extends BaseActivity {
                 break;
             case 6:
                 orderState_tv.setText("退款中");
+                oDeatil_state_ll.setVisibility(View.GONE);
                 break;
             case 7:
                 orderState_tv.setText("已关闭");
+                oDeatil_state_ll.setVisibility(View.GONE);
                 break;
         }
     }

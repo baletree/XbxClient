@@ -1,5 +1,6 @@
 package com.xbx.client.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -80,6 +81,7 @@ public class SubCommentActivity extends BaseActivity {
                     setCommentInfo();
                     break;
                 case TaskFlag.PAGEREQUESTHREE:
+                    setResult(RESULT_OK,new Intent());
                     finish();
                     break;
             }
@@ -194,7 +196,7 @@ public class SubCommentActivity extends BaseActivity {
                 }
                 if (indexList != null && indexList.size() > 0) {
                     for (int k = 0; k < indexList.size(); k++) {
-                        tagStr = indexList.get(k) + ",";
+                        tagStr = tagStr + indexList.get(k) + ",";
                     }
                 }
                 if (!Util.isNull(tagStr)) {
@@ -202,7 +204,7 @@ public class SubCommentActivity extends BaseActivity {
                 }
                 if (detailBean == null)
                     return;
-                api.submitComment(uid, detailBean.getOrderNum(), comment_msg_tv.getText().toString(), String.valueOf(conmment_rtb.getRating()), tagStr);
+                api.submitComment(uid, detailBean.getOrderNum(), comment_msg_tv.getText().toString(), String.valueOf(conmment_rtb.getRating()*2), tagStr);
                 break;
         }
     }
