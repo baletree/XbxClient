@@ -1,6 +1,7 @@
 package com.xbx.client.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.baidu.mapapi.model.LatLng;
 import com.xbx.client.beans.LocationBean;
@@ -109,5 +110,21 @@ public class SharePrefer {
         if (spHelper == null)
             return "";
         return spHelper.getSP("phoneId");
+    }
+
+    /**
+     * 更新清除信息
+     * @param con
+     */
+    public static void clear(Context con) {
+        SharedPreferences sp = con.getSharedPreferences("UpdateState",
+                Context.MODE_PRIVATE);
+        sp.edit().clear().commit();
+    }
+    /*** 版本更新状态 ***/
+    public static void saveState(Context con, boolean state) {
+        SharedPreferences sp = con.getSharedPreferences("UpdateState",
+                Context.MODE_PRIVATE);
+        sp.edit().putBoolean("state", state).commit();
     }
 }

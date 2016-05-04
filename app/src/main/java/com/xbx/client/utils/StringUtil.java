@@ -121,6 +121,9 @@ public class StringUtil {
             case 7:
                 stateStr = "已关闭";
                 break;
+            case 8:
+                stateStr = "拒单";
+                break;
         }
         return stateStr;
     }

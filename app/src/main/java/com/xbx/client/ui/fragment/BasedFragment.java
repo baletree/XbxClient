@@ -32,6 +32,9 @@ import com.xbx.client.view.TipsDialog;
 public class BasedFragment extends Fragment implements View.OnClickListener, BDLocationListener, BaiduMap.OnMapStatusChangeListener, OnGetGeoCoderResultListener, BaiduMap.OnMapLoadedCallback {
     public static final int accuracyCircleFillColor = 0x00000000;
     public static final int accuracyCircleStrokeColor = 0x00000000;
+    public final int outsetReques = 1000;
+    public final int callGuideReques = 1002;
+    public final int choiceTogether = 1005;
 
     public ImageLoader imageLoader;
     public ImageLoaderConfigFactory configFactory;

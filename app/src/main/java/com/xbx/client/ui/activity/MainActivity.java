@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,15 +25,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xbx.client.R;
 import com.xbx.client.adapter.MyViewPagerAdapter;
 import com.xbx.client.beans.CancelInfoBean;
-import com.xbx.client.beans.TogetherBean;
 import com.xbx.client.beans.UserInfo;
 import com.xbx.client.beans.UserStateBean;
+import com.xbx.client.beans.Version;
 import com.xbx.client.http.Api;
-import com.xbx.client.http.IRequest;
-import com.xbx.client.http.RequestParams;
 import com.xbx.client.jsonparse.MainStateParse;
 import com.xbx.client.jsonparse.OrderParse;
-import com.xbx.client.jsonparse.UserInfoParse;
 import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.linsener.AnimateFirstDisplayListener;
 import com.xbx.client.linsener.ImageLoaderConfigFactory;
@@ -44,22 +40,15 @@ import com.xbx.client.ui.fragment.NativesFragment;
 import com.xbx.client.ui.fragment.TogetherFragment;
 import com.xbx.client.ui.fragment.WithtourFragment;
 import com.xbx.client.utils.Constant;
-import com.xbx.client.linsener.RequestBackLisener;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
+import com.xbx.client.utils.updateversion.UpdateUtil;
 import com.xbx.client.view.BanSlideViewpager;
 import com.xbx.client.view.TipsDialog;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.logging.SocketHandler;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -142,8 +131,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (UtilParse.getRequestCode(checkData) == 0) {
                         Util.showToast(MainActivity.this, getString(R.string.login_fail));
                         SharePrefer.saveUserInfo(MainActivity.this, new UserInfo());
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                        finish();
+                        startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), 1000);
+//                        finish();
                     } else if (UtilParse.getRequestCode(checkData) == 1) {
                         UserInfo userInfo = SharePrefer.getUserInfo(MainActivity.this);
                         MainStateParse.resetToken(MainActivity.this, userInfo, UtilParse.getRequestData(checkData));
@@ -157,6 +146,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             return;
                         dealUserState(intent, stateBean, dataType);
                     }
+                    break;
+                case TaskFlag.PAGEREQUESFOUR:
+                    Version version = MainStateParse.getVersion((String) msg.obj);
+                    if (version == null)
+                        return;
+                    if (Util.isNull(version.getVersionCode()))
+                        return;
+                    checkUpdate(version);
                     break;
             }
         }
@@ -205,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         configFactory = ImageLoaderConfigFactory.getInstance();
         userInfo = SharePrefer.getUserInfo(MainActivity.this);
         api = new Api(MainActivity.this, handler);
+        api.checkUpdate();
         if (userInfo != null && !Util.isNull(userInfo.getUid()))
             api.checkLoginState();
         lBManager = LocalBroadcastManager.getInstance(this);
@@ -246,13 +244,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setUserInfo() {
+        userInfo = SharePrefer.getUserInfo(MainActivity.this);
         if (userInfo == null)
             return;
         imageLoader.displayImage(userInfo.getUserHead(), menu_head_img, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
         if (!Util.isNull(userInfo.getNickName()))
             menu_name_tv.setText(userInfo.getNickName());
-        if (!Util.isNull(userInfo.getUserPhone()))
-            menu_phone_tv.setText(userInfo.getUserPhone());
+        if (!Util.isNull(userInfo.getUserPhone())) {
+            String num = userInfo.getUserPhone();
+            String str = num.substring(3, 6);
+            menu_phone_tv.setText(num.replaceAll(str, "****"));
+        }
     }
 
     private void initBroadcast() {
@@ -343,24 +345,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode != RESULT_OK)
+        if (resultCode != RESULT_OK)
             return;
-        if(data == null)
+        if (data == null)
             return;
-        if(requestCode == 1000)
+        if (requestCode == 1000) {
+            setUserInfo();
             api.checkLoginState();
+        }
+        if (requestCode == 1050) {
+            setUserInfo();
+        }
     }
 
     @Override
     public void onClick(View v) {
-        userInfo = SharePrefer.getUserInfo(MainActivity.this);
+        if (userInfo == null) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.putExtra("NoLoginAction", true);
+            startActivityForResult(intent, 1000);
+        }
         String uid = userInfo.getUid();
         switch (v.getId()) {
             case R.id.main_menu_img:
                 if (Util.isNull(uid)) {
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    intent.putExtra("NoLoginAction",true);
-                    startActivityForResult(intent,1000);
+                    intent.putExtra("NoLoginAction", true);
+                    startActivityForResult(intent, 1000);
                     return;
                 }
                 toggleLeftLayout();
@@ -378,7 +389,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 toggleLeftLayout();
                 break;
             case R.id.menu_userInfo_layout:
-                startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
+                startActivityForResult(new Intent(MainActivity.this, UserInfoActivity.class), 1050);
                 toggleLeftLayout();
                 break;
             case R.id.menu_setting_layout: //设置
@@ -397,6 +408,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initDialog() {
         tipsDialog = new TipsDialog(MainActivity.this);
+        tipsDialog.setBtnTxt(getString(R.string.cancel_stroke), getString(R.string.yes_stroke));
         tipsDialog.setClickListener(new TipsDialog.DialogClickListener() {
             @Override
             public void cancelDialog() {
@@ -442,5 +454,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 main_back_img.setVisibility(View.GONE);
             }
         }
+    }
+
+    private void checkUpdate(Version version) {
+        new UpdateUtil(MainActivity.this, version);
     }
 }

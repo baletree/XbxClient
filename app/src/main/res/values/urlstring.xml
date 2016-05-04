@@ -2,6 +2,7 @@
 <resources>
     <string name="url_http">http://naichawaimai.applinzi.com/Takeout/api.php/Users/</string>
     <string name="url_conIp">http://123.56.194.208/yueyou/index.php/Api/</string>
+    <!--<string name="url_conIp">http://demo.xbx121.com/Api/</string>-->
     <!--<string name="url_conIp">http://192.168.1.27/yueyou/Api/</string>-->
     <string name="url_getCode">user/send_verify_code.json</string>
     <string name="url_Login">user/login.json</string>
@@ -20,9 +21,11 @@
     <string name="url_guideList">Order/guide_list.json</string>
     <string name="url_guideDetail">user/guide_main.json</string>
     <string name="url_modifyUserinfo">user/user_update_user_info.json</string>
+    <string name="url_modifyHead">user/change_head_image.json</string>
     <string name="url_feedback">Index/upload_feedback.json</string>
     <string name="url_payOrder">Order/confirm_pay.json</string>
     <string name="url_guideTag">Index/get_comment_tag.json</string>
     <string name="url_submitComment">Index/upload_comment.json</string>
     <string name="url_nearTogether">Order/by_guide_list.json</string>
+    <string name="url_updateUrl">Index/version_update.json</string>
 </resources>

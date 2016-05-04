@@ -1,6 +1,7 @@
 package com.xbx.client.beans;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by EricYuan on 2016/4/18.
@@ -14,9 +15,10 @@ public class OrderDetailBean implements Serializable{
     private String orderPayState;
     private String orderStartTime;
     private String orderEndtTime;
-    private String guideTag;
+    private List<String> guideTagList;
     private String guideCotent;
-    private String guideStar;
+    private String guideStar;//该导游的总评分
+    private String commentStar;//用户对当前订单的评分
     private String userAddress;
     private String serverDate;
     private double orderOrignalPay;//原始价格
@@ -28,6 +30,14 @@ public class OrderDetailBean implements Serializable{
     private int serverType;//服务类型
     private int orderPayType;
     private String orderCancelTime;
+
+    public String getCommentStar() {
+        return commentStar;
+    }
+
+    public void setCommentStar(String commentStar) {
+        this.commentStar = commentStar;
+    }
 
     public String getOrderCancelTime() {
         return orderCancelTime;
@@ -53,12 +63,12 @@ public class OrderDetailBean implements Serializable{
         this.userAddress = userAddress;
     }
 
-    public String getGuideTag() {
-        return guideTag;
+    public List<String> getGuideTagList() {
+        return guideTagList;
     }
 
-    public void setGuideTag(String guideTag) {
-        this.guideTag = guideTag;
+    public void setGuideTagList(List<String> guideTagList) {
+        this.guideTagList = guideTagList;
     }
 
     public String getGuideCotent() {

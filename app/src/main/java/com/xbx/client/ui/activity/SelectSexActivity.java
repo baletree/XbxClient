@@ -19,7 +19,7 @@ public class SelectSexActivity extends Activity implements View.OnClickListener 
         initViews();
     }
 
-    private void initViews(){
+    private void initViews() {
         findViewById(R.id.select_sex_male).setOnClickListener(this);
         findViewById(R.id.select_sex_female).setOnClickListener(this);
         findViewById(R.id.select_sex_cancel).setOnClickListener(this);
@@ -31,12 +31,12 @@ public class SelectSexActivity extends Activity implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.select_sex_male:
                 intent.putExtra("result", getString(R.string.select_sex_male));
-                intent.putExtra("resultCode", 1);
+                intent.putExtra("resultCode", "0");
                 setResult(RESULT_OK, intent);
                 break;
             case R.id.select_sex_female:
                 intent.putExtra("result", getString(R.string.select_sex_female));
-                intent.putExtra("resultCode", 2);
+                intent.putExtra("resultCode", "1");
                 setResult(RESULT_OK, intent);
                 break;
         }

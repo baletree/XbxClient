@@ -45,4 +45,25 @@ public class UserInfoParse {
         }
         return userInfo;
     }
+
+    public static UserInfo modifyUserInfo(UserInfo userInfo,String json){
+        try {
+            JSONObject job = new JSONObject(json);
+            if (UtilParse.checkTag(job, "mobile"))
+                userInfo.setUserPhone(job.getString("mobile"));
+            if (UtilParse.checkTag(job, "nickname"))
+                userInfo.setNickName(job.getString("nickname"));
+            if (UtilParse.checkTag(job, "head_image"))
+                userInfo.setUserHead(job.getString("head_image"));
+            if (UtilParse.checkTag(job, "birthday"))
+                userInfo.setUserBirthday(job.getString("birthday"));
+            if (UtilParse.checkTag(job, "sex"))
+                userInfo.setUserSex(job.getString("sex"));
+            if (UtilParse.checkTag(job, "realname"))
+                userInfo.setUserRealName(job.getString("realname"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return userInfo;
+    }
 }

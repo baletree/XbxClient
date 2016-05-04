@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xbx.client.R;
 import com.xbx.client.beans.UserInfo;
 import com.xbx.client.http.Api;
+import com.xbx.client.jsonparse.UserInfoParse;
 import com.xbx.client.linsener.AnimateFirstDisplayListener;
 import com.xbx.client.utils.Constant;
 import com.xbx.client.linsener.ImageLoaderConfigFactory;
@@ -51,23 +53,35 @@ public class UserInfoActivity extends BaseActivity {
 
     private boolean isModify = false;
     private boolean isModifyHead = false;
-    private String sexType = "";
+    private boolean isUpdate = false;
+    private String sexType = "2";
     private String uid = "";
 
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case TaskFlag.REQUESTSUCCESS:
-                    Util.showToast(UserInfoActivity.this,getString(R.string.modify_success));
-                    if(userInfo != null){
+                    Util.showToast(UserInfoActivity.this, getString(R.string.modify_success));
+                    isModify = false;
+                    if (userInfo != null) {
+                        Util.pLog("save:" + sexType);
                         userInfo.setUserSex(sexType);
                         userInfo.setUserBirthday(user_info_birthday_text.getText().toString());
                         userInfo.setNickName(user_info_nickname_text.getText().toString());
                         userInfo.setUserRealName(user_info_name_text.getText().toString());
-                        SharePrefer.saveUserInfo(UserInfoActivity.this,userInfo);
+                        SharePrefer.saveUserInfo(UserInfoActivity.this, userInfo);
+                        isUpdate = true;
                     }
+                    break;
+                case TaskFlag.PAGEREQUESTWO:
+                    String dataModi = (String) msg.obj;
+                    userInfo = UserInfoParse.modifyUserInfo(userInfo, dataModi);
+                    SharePrefer.saveUserInfo(UserInfoActivity.this, userInfo);
+                    Util.showToast(UserInfoActivity.this, getString(R.string.suc_modify_head));
+                    isModifyHead = false;
+                    isUpdate = true;
                     break;
             }
         }
@@ -103,11 +117,12 @@ public class UserInfoActivity extends BaseActivity {
         if (userInfo == null)
             return;
         sexType = userInfo.getUserSex();
-        Util.pLog("sexType "+sexType);
-        if(Integer.parseInt(sexType) == 1){
-            user_info_sex_text.setText(getString(R.string.select_sex_male));
-        }else if(Integer.parseInt(sexType) == 2){
-            user_info_sex_text.setText(getString(R.string.select_sex_female));
+        Util.pLog("sexType " + sexType);
+        if (!Util.isNull(sexType)) {
+            if (Integer.parseInt(sexType) == 0)
+                user_info_sex_text.setText(getString(R.string.select_sex_male));
+            else if (Integer.parseInt(sexType) == 1)
+                user_info_sex_text.setText(getString(R.string.select_sex_female));
         }
         if (!Util.isNull(userInfo.getNickName())) {
             user_info_nickname_text.setText(userInfo.getNickName());
@@ -117,14 +132,15 @@ public class UserInfoActivity extends BaseActivity {
             user_info_name_text.setText(userInfo.getUserRealName());
             user_info_name_text.setSelection(userInfo.getUserRealName().length());
         }
-        user_info_birthday_text.setText(userInfo.getUserBirthday());
+        if (!Util.isNull(userInfo.getUserBirthday()) && !"0000-00-00".equals(userInfo.getUserBirthday()))
+            user_info_birthday_text.setText(userInfo.getUserBirthday());
         user_info_phone_text.setText(userInfo.getUserPhone());
         imageLoader.displayImage(userInfo.getUserHead(), user_info_head_img, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
     }
 
     @Override
     protected void initDatas() {
-        api = new Api(UserInfoActivity.this,handler);
+        api = new Api(UserInfoActivity.this, handler);
         uid = SharePrefer.getUserInfo(UserInfoActivity.this).getUid();
         imageLoader = ImageLoader.getInstance();
         configFactory = ImageLoaderConfigFactory.getInstance();
@@ -136,20 +152,23 @@ public class UserInfoActivity extends BaseActivity {
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.title_left_img:
+                if (isUpdate)
+                    setResult(RESULT_OK, new Intent());
                 finish();
                 break;
             case R.id.title_rtxt_tv://确定修改
-                if (!Util.isNull(user_info_nickname_text.getText().toString()) && !Util.isNull(userInfo.getNickName()))
-                    if (!user_info_nickname_text.getText().toString().equals(userInfo.getNickName()))
-                        isModify = true;
-                if (!Util.isNull(user_info_name_text.getText().toString()) && !Util.isNull(userInfo.getUserRealName()))
-                    if (!user_info_name_text.getText().toString().equals(userInfo.getUserRealName()))
-                        isModify = true;
+                if (!user_info_nickname_text.getText().toString().equals(userInfo.getNickName()))
+                    isModify = true;
+                if (!user_info_name_text.getText().toString().equals(userInfo.getUserRealName()))
+                    isModify = true;
                 if (!isModify && !isModifyHead) {
                     Util.showToast(UserInfoActivity.this, getString(R.string.not_modify));
                     return;
                 }
-                api.modifyInfo(uid,user_info_name_text.getText().toString(),sexType,"",user_info_nickname_text.getText().toString(),user_info_birthday_text.getText().toString());
+                if (isModifyHead && headFile != null)
+                    api.modifyHead(uid, headFile, user_info_birthday_text.getText().toString());
+                if (isModify)
+                    api.modifyInfo(uid, user_info_name_text.getText().toString(), sexType, "", user_info_nickname_text.getText().toString(), user_info_birthday_text.getText().toString());
                 break;
             case R.id.user_info_head_layout:
                 intent.setClass(this, SelectAlbumActivity.class);
@@ -212,6 +231,7 @@ public class UserInfoActivity extends BaseActivity {
                 case 102:
                     String sex = data.getStringExtra("result");
                     sexType = data.getStringExtra("resultCode");
+                    Util.pLog("sexType102 " + sexType);
                     user_info_sex_text.setText(sex);
                     isModify = true;
                     break;
@@ -219,4 +239,14 @@ public class UserInfoActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            if (isUpdate)
+                setResult(RESULT_OK, new Intent());
+            finish();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

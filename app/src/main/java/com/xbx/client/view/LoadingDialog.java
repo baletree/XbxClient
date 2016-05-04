@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.xbx.client.R;
+import com.xbx.client.ui.activity.LoginActivity;
 import com.xbx.client.utils.Util;
 
 /**
@@ -26,12 +27,15 @@ public class LoadingDialog extends Dialog implements DialogInterface.OnKeyListen
     private ProgressBar find_loading_bar;
     private ProgressBar find_loading_bar2;
     private ImageView dialog_loading_icon;
+    private TextView dialog_count_tv;
 
     private Context context;
+    private Handler pHandler;
 
     private String msg = "";
 
     private int count = 0;
+    private int unCount = 50;
 
     private Handler handler = new Handler() {
         @Override
@@ -44,7 +48,17 @@ public class LoadingDialog extends Dialog implements DialogInterface.OnKeyListen
                         count = 0;
                     else
                         count++;
-                    handler.sendEmptyMessageDelayed(1,50);
+                    handler.sendEmptyMessageDelayed(1, 50);
+                    break;
+                case 2:
+                    if (unCount == 0) {
+                        pHandler.sendEmptyMessage(30);
+                        handler.removeMessages(2);
+                    } else {
+                        dialog_count_tv.setText(unCount + context.getString(R.string.login_minute));
+                        unCount--;
+                    }
+                    handler.sendEmptyMessageDelayed(2, 1000);
                     break;
             }
         }
@@ -68,6 +82,7 @@ public class LoadingDialog extends Dialog implements DialogInterface.OnKeyListen
         find_loading_bar = (ProgressBar) findViewById(R.id.find_loading_bar);
         find_loading_bar2 = (ProgressBar) findViewById(R.id.find_loading_bar2);
         dialog_loading_icon = (ImageView) findViewById(R.id.dialog_loading_icon);
+        dialog_count_tv = (TextView) findViewById(R.id.dialog_count_tv);
         if (!Util.isNull(msg))
             vLoading_text.setText(msg);
     }
@@ -84,6 +99,13 @@ public class LoadingDialog extends Dialog implements DialogInterface.OnKeyListen
         super.dismiss();
         count = 0;
         handler.removeMessages(1);
+        handler.removeMessages(2);
+    }
+
+    public void setCount(Handler pHandler) {
+        this.pHandler = pHandler;
+        unCount = 50;
+        handler.sendEmptyMessage(2);
     }
 
     public void setMessage(String msg) {
@@ -99,7 +121,7 @@ public class LoadingDialog extends Dialog implements DialogInterface.OnKeyListen
     }
 
     private void setLoadingImg() {
-        if(dialog_loading_icon == null)
+        if (dialog_loading_icon == null)
             return;
         switch (count) {
             case 0:

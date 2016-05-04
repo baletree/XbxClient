@@ -66,6 +66,7 @@ public class TogetherActivity extends Activity implements TogetherAdapter.CallLi
     public void callClick(int position) {
         Intent intent = new Intent();
         intent.putExtra("TogetherId",list.get(position).getGuideId());
+        intent.putExtra("TogetherPrice",list.get(position).getGuideHourPrice());
         setResult(RESULT_OK,intent);
         finish();
     }

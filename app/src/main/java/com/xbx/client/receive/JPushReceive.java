@@ -98,9 +98,16 @@ public class JPushReceive extends BroadcastReceiver {
         Intent intent = new Intent();
         String customMsg = bundle.getString(JPushInterface.EXTRA_EXTRA);
         Util.pLog("customMsg:" + customMsg);
+        if(Util.isNull(customMsg))
+            return;
         String ordernum = "";
+        int serverType = 0;
         try {
             JSONObject jsonObject = new JSONObject(customMsg);
+            if (UtilParse.checkTag(jsonObject, "server_type"))
+                serverType = jsonObject.getInt("server_type");
+            if(serverType != 201)
+                return;
             if (UtilParse.checkTag(jsonObject, "order_number"))
                 ordernum = jsonObject.getString("order_number");
             intent.putExtra("GuideOrderNum", ordernum);

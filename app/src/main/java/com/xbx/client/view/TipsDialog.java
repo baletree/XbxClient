@@ -58,6 +58,8 @@ public class TipsDialog extends Dialog {
             dialog_msg_tv.setText(msg);
         if (!Util.isNull(cancel))
             cancel_tv.setText(cancel);
+        else
+            cancel_tv.setVisibility(View.GONE);
         if (!Util.isNull(submit))
             sure_tv.setText(submit);
         if(isShowReward)

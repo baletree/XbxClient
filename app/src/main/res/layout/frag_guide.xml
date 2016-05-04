@@ -2,36 +2,44 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <com.baidu.mapapi.map.TextureMapView
         android:id="@+id/guide_map"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true" />
+
     <ImageView
         android:id="@+id/guide_locatemy_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_eighty"
-        android:layout_marginLeft="@dimen/dp_sixteen"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_ninety_six"
+        android:layout_marginLeft="@dimen/dp_sixteen"
         android:src="@mipmap/main_locself" />
+
     <RelativeLayout
         android:id="@+id/onMap_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <!--出发地选择-->
         <include
             android:id="@+id/guide_locate_layout"
-            layout="@layout/frag_guide_locate"/>
+            layout="@layout/frag_guide_locate" />
+        <!--中心点大头针-->
         <include
-            android:id="@+id/guide_center_layout"
-            layout="@layout/frag_guide_map"/>
-        <include
-            android:id="@+id/guide_call_layout"
-            layout="@layout/frag_call_guide" />
-        <include
-            android:id="@+id/guide_fuc_layout"
-            layout="@layout/frag_guide_fuc"/>
+            android:id="@+id/guide_pin_layout"
+            layout="@layout/frag_guide_map" />
     </RelativeLayout>
+    <!--确认呼叫-->
+    <include
+        android:id="@+id/guide_call_rl"
+        layout="@layout/frag_call_guide" />
+    <!--预约和即时-->
+    <include
+        android:id="@+id/guide_fuc_rl"
+        layout="@layout/frag_guide_fuc" />
+    <!--找到人后的订单-->
     <include
         android:id="@+id/guide_tOrder_layout"
         layout="@layout/frag_take_sucorder" />

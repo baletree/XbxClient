@@ -28,17 +28,16 @@ public class App extends Application {
         super.onCreate();
         mContext = getApplicationContext();
         getPhoneId();
-        SDKInitializer.initialize(mContext);
         initImageLoader();
         JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
         JPushInterface.init(mContext);            // 初始化 JPush
+        SDKInitializer.initialize(mContext);
         toLocate();
     }
 
     private void getPhoneId() {
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-//        Util.encrypt(tm.getDeviceId(),"key123");
-        SharePrefer.savePhoneId(mContext,tm.getDeviceId());
+        SharePrefer.savePhoneId(mContext, tm.getDeviceId());
     }
 
     private void initImageLoader() {

@@ -66,7 +66,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void initDatas() {
         super.initDatas();
-        isNoLogin = getIntent().getBooleanExtra("isNoLogin",false);
+        isNoLogin = getIntent().getBooleanExtra("isNoLogin", false);
     }
 
     @Override
@@ -78,6 +78,7 @@ public class LoginActivity extends BaseActivity {
         login_code_btn = (Button) findViewById(R.id.login_code_btn);
         login_phone_et = (EditText) findViewById(R.id.login_phone_et);
         login_code_et = (EditText) findViewById(R.id.login_code_et);
+        findViewById(R.id.title_left_img).setOnClickListener(this);
         title_txt_tv.setText(R.string.login_title);
         login_agreepact_tv.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);//下划线
         login_btn.setOnClickListener(this);
@@ -121,6 +122,9 @@ public class LoginActivity extends BaseActivity {
                 }
                 getCode(phone);
                 break;
+            case R.id.title_left_img:
+                finish();
+                break;
         }
     }
 
@@ -160,13 +164,7 @@ public class LoginActivity extends BaseActivity {
                     UserInfo userInfo = UserInfoParse.getUserInfo(UtilParse.getRequestData(json));
                     if (userInfo != null) {
                         SharePrefer.saveUserInfo(LoginActivity.this, userInfo);
-                        Intent intent = new Intent();
-                        if(isNoLogin){
-                            intent.setClass(LoginActivity.this,MainActivity.class);
-                            startActivity(intent);
-                        }else {
-                            setResult(RESULT_OK,intent);
-                        }
+                        setResult(RESULT_OK, new Intent());
                         finish();
                     }
                 } else {

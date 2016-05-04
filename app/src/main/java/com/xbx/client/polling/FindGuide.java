@@ -52,7 +52,6 @@ public class FindGuide {
         this.uid = uid;
         this.findGuideorderNum = findGuideorderNum;
         handler.sendEmptyMessage(1);
-        handler.sendEmptyMessage(2);
     }
 
     public void removeFindGuide(){

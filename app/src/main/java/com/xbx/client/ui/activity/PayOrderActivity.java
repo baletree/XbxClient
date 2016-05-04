@@ -35,7 +35,7 @@ import com.xbx.client.view.TipsDialog;
  * 2.订单详情进入
  * 3.首页检测进入
  */
-public class PayOrderActivity extends FragmentActivity implements View.OnClickListener,TipsDialog.DialogClickListener {
+public class PayOrderActivity extends FragmentActivity implements View.OnClickListener {
     private RelativeLayout immedia_pay_rl;
     private ImageView reward_img;//打赏按钮
     //导游信息
@@ -68,7 +68,6 @@ public class PayOrderActivity extends FragmentActivity implements View.OnClickLi
     private boolean isFromOrder = false;
     private String orderNum = "";
     private int serverType = 0;
-    private TipsDialog tipsDialog = null;
     private int notificationId = 0;
 
     private Handler handler = new Handler() {
@@ -85,15 +84,7 @@ public class PayOrderActivity extends FragmentActivity implements View.OnClickLi
                     break;
                 case TaskFlag.PAGEREQUESFIVE:
                     Util.showToast(PayOrderActivity.this, "支付成功!");
-                    if(detailBean.getServerType() == 1 && guide_ratingbar.getRating() > 4.0){//预约服务
-                        tipsDialog = new TipsDialog(PayOrderActivity.this);
-                        tipsDialog.setClickListener(PayOrderActivity.this);
-                        tipsDialog.isSHowRewardImg(true);
-                        tipsDialog.setInfo(getString(R.string.to_reward),getString(R.string.to_reward_tips));
-                        tipsDialog.setBtnTxt(getString(R.string.to_reward_cancel),getString(R.string.to_reward_sure));
-                        tipsDialog.show();
-                    }
-                    if(!isFromOrder && notificationId != 0){
+                    if (!isFromOrder && notificationId != 0) {
                         notiManaer.cancel(notificationId);
                     }
                     setResult(RESULT_OK, new Intent());
@@ -114,7 +105,7 @@ public class PayOrderActivity extends FragmentActivity implements View.OnClickLi
         notiManaer = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         api = new Api(PayOrderActivity.this, handler);
         orderNum = getIntent().getStringExtra("GuideOrderNum");
-        notificationId = getIntent().getIntExtra("JPushNotificationId",0);
+        notificationId = getIntent().getIntExtra("JPushNotificationId", 0);
         isFromOrder = getIntent().getBooleanExtra("isFromOrderDetail", false);
         imageLoader = ImageLoader.getInstance();
         configFactory = ImageLoaderConfigFactory.getInstance();
@@ -160,8 +151,8 @@ public class PayOrderActivity extends FragmentActivity implements View.OnClickLi
 
     private void setPayInfo() {
         immedia_pay_rl.setVisibility(View.VISIBLE);
-        if (detailBean.getServerType() == 0)
-            reward_img.setVisibility(View.VISIBLE);
+        if (detailBean.getServerType() == 0 && detailBean.getOrderState() == 3)
+            reward_img.setVisibility(View.VISIBLE);//当此状态为即时服务并且服务状态时完成
         imageLoader.displayImage(detailBean.getHeadImg(), headImage, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
         guide_name_tv.setText(detailBean.getGuideName());
         guide_typed_tv.setText(StringUtil.getGuideType(this, detailBean.getGuideType()));
@@ -176,7 +167,7 @@ public class PayOrderActivity extends FragmentActivity implements View.OnClickLi
             pay_orderState_tv.setText(orderState);
         serveTime_tv.setText(detailBean.getServerDate());
         if (!Util.isNull(detailBean.getGuideStar()))
-            guide_ratingbar.setRating(Float.valueOf(detailBean.getGuideStar()));
+            guide_ratingbar.setRating(Float.valueOf(detailBean.getGuideStar()) / 2);
         if (detailBean.getRewardMoney() == 0.0)
             rewardMon_rl.setVisibility(View.GONE);
         if (detailBean.getRebateMoney() == 0.0)
@@ -215,15 +206,5 @@ public class PayOrderActivity extends FragmentActivity implements View.OnClickLi
                 }
                 break;
         }
-    }
-
-    @Override
-    public void cancelDialog() {
-        tipsDialog.dismiss();
-    }
-
-    @Override
-    public void confirmDialog() {
-        tipsDialog.dismiss();
     }
 }

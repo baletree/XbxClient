@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.xbx.client.beans.UserInfo;
 import com.xbx.client.beans.UserStateBean;
+import com.xbx.client.beans.Version;
 import com.xbx.client.utils.SharePrefer;
 
 import org.json.JSONException;
@@ -57,5 +58,23 @@ public class MainStateParse {
             e.printStackTrace();
         }
         return stateBean;
+    }
+
+    public static Version getVersion(String json){
+        Version version = new Version();
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            if(UtilParse.checkTag(jsonObject,"version_code"))
+                version.setVersionCode(jsonObject.getString("version_code"));
+            if(UtilParse.checkTag(jsonObject,"version_title"))
+                version.setVersionName(jsonObject.getString("version_title"));
+            if(UtilParse.checkTag(jsonObject,"update_content"))
+                version.setVersionMsg(jsonObject.getString("update_content"));
+            if(UtilParse.checkTag(jsonObject,"version_url"))
+                version.setPath(jsonObject.getString("version_url"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return version;
     }
 }

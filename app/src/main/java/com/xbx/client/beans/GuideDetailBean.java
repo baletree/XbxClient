@@ -1,5 +1,7 @@
 package com.xbx.client.beans;
 
+import java.util.List;
+
 /**
  * Created by EricYuan on 2016/4/25.
  * 导游详情
@@ -15,6 +17,15 @@ public class GuideDetailBean {
     private String guideIntroduce;
     private String guideStandard;
     private String guideStar;
+    private List<String> tagList;
+
+    public List<String> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<String> tagList) {
+        this.tagList = tagList;
+    }
 
     public String getGuideMobile() {
         return guideMobile;

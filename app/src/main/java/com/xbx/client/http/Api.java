@@ -19,6 +19,8 @@ import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 
+import java.io.File;
+
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -357,7 +359,7 @@ public class Api {
         if (context == null)
             return;
         RequestParams params = new RequestParams();
-        params.put("uid", uid);
+        params.put("uuid", uid);
         params.put("order_number", orderNum);
         params.put("content", content);
         params.put("star", star);
@@ -401,6 +403,25 @@ public class Api {
         });
     }
 
+    public void modifyHead(String uid, File headFile, String birthday){
+        if (context == null)
+            return;
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("head_image", headFile);
+        params.put("birthday", birthday);
+        params.put("now_address", "");
+        params.put("server_language", "");
+        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_modifyHead));
+        IRequest.post(context, url, params, new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+                Util.pLog("修改头像:" + json);
+                sendShowMsg(TaskFlag.PAGEREQUESTWO, json);
+            }
+        });
+    }
+
     public void toFeedback(String uid, String content) {
         if (context == null)
             return;
@@ -413,6 +434,23 @@ public class Api {
             public void requestSuccess(String json) {
                 Util.pLog("意见反馈:" + json);
                 sendShowMsg(TaskFlag.REQUESTSUCCESS, json);
+            }
+        });
+    }
+
+    public void checkUpdate(){
+        if (context == null)
+            return;
+        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_updateUrl));
+        IRequest.get(context, url, new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+                Util.pLog("版本更新:" + json);
+                sendShowMsg(TaskFlag.PAGEREQUESFOUR, json);
+            }
+
+            @Override
+            public void requestError(VolleyError e) {
             }
         });
     }

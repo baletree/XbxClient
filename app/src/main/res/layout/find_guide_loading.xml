@@ -11,11 +11,22 @@
         android:background="@drawable/loading_bg"
         android:gravity="center"
         android:orientation="vertical">
-        <ImageView
-            android:id="@+id/dialog_loading_icon"
-            android:layout_width="@dimen/dp_fifty"
-            android:layout_height="@dimen/dp_fifty"
-            android:layout_gravity="center_horizontal" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/dialog_loading_icon"
+                android:layout_width="@dimen/dp_fifty"
+                android:layout_height="@dimen/dp_fifty"
+                android:layout_gravity="center_horizontal" />
+            <TextView
+                android:id="@+id/dialog_count_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_eleven"
+                android:layout_centerInParent="true"
+                android:textColor="@color/colorTheme"/>
+        </RelativeLayout>
         <ProgressBar
             android:id="@+id/find_loading_bar"
             style="@style/loading_small"

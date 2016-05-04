@@ -52,4 +52,11 @@ public class Constant {
      * 从Intent获取图片路径的KEY
      */
     public static final String KEY_PHOTO_PATH = "com.xbb.la.client.photo_path";
+
+    public static String ROOT_PATH = Environment.getExternalStorageDirectory()
+            .getAbsolutePath();
+    /**
+     * 更新apk的存放位置
+     */
+    public static String APK_PATH = ROOT_PATH + "/tutu/apk/xbx.apk";
 }

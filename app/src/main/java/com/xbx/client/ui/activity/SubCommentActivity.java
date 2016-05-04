@@ -81,7 +81,10 @@ public class SubCommentActivity extends BaseActivity {
                     setCommentInfo();
                     break;
                 case TaskFlag.PAGEREQUESTHREE:
-                    setResult(RESULT_OK,new Intent());
+                    Intent intent = new Intent();
+                    if (detailBean.getServerType() == 1 && conmment_rtb.getRating() > 4.0)
+                        intent.putExtra("reservatComment", true);
+                    setResult(RESULT_OK, intent);
                     finish();
                     break;
             }
@@ -204,7 +207,7 @@ public class SubCommentActivity extends BaseActivity {
                 }
                 if (detailBean == null)
                     return;
-                api.submitComment(uid, detailBean.getOrderNum(), comment_msg_tv.getText().toString(), String.valueOf(conmment_rtb.getRating()*2), tagStr);
+                api.submitComment(uid, detailBean.getOrderNum(), comment_msg_tv.getText().toString(), String.valueOf(conmment_rtb.getRating() * 2), tagStr);
                 break;
         }
     }

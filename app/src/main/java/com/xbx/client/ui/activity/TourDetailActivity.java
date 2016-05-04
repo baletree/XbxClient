@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -34,7 +36,6 @@ import java.util.List;
  * Created by EricYuan on 2016/4/20.
  */
 public class TourDetailActivity extends BaseActivity {
-
     private RoundedImageView tour_detail_head_img;
     private TextView tour_detail_name;
     private TextView tour_detail_number;
@@ -82,6 +83,11 @@ public class TourDetailActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //隐藏标题栏
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        int flag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        Window window = this.getWindow();
+        window.setFlags(flag, flag);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tour_detail);
     }
@@ -103,9 +109,6 @@ public class TourDetailActivity extends BaseActivity {
         api.getGuideDetail(guideId);
         findViewById(R.id.tour_detail_back_img).setOnClickListener(this);
         findViewById(R.id.tour_detail_order).setOnClickListener(this);
-        for (int i = 0; i < tagList.size(); i++) {
-            tour_detail_fl.addView(addTextView(tagList.get(i)));
-        }
     }
 
     @Override
@@ -116,15 +119,6 @@ public class TourDetailActivity extends BaseActivity {
         api = new Api(TourDetailActivity.this, handler);
         imageLoader = ImageLoader.getInstance();
         configFactory = ImageLoaderConfigFactory.getInstance();
-
-        tagList = new ArrayList<>();
-        tagList.add("大胆");
-        tagList.add("路线熟悉活地图");
-        tagList.add("脾气大");
-        tagList.add("管吃管住管穿");
-        tagList.add("管吃管住");
-        tagList.add("路线熟悉活地图的能忍");
-        tagList.add("管吃管住");
     }
 
     private void setGuideInfo() {
@@ -135,10 +129,23 @@ public class TourDetailActivity extends BaseActivity {
         tour_detail_price_byhour.setText(guideDetail.getGuideImmediaPrice() + getString(R.string.server_day));
         tour_detail_price_byday.setText(guideDetail.getGuideReservatPrice() + getString(R.string.server_hour));
         tour_detail_num.setText(guideDetail.getGuideTimes() + getString(R.string.server_times));
-        tour_detail_intro.setText(guideDetail.getGuideIntroduce());
-        tour_detail_standard.setText(guideDetail.getGuideStandard());
+        if(!Util.isNull(guideDetail.getGuideIntroduce())){
+            tour_detail_intro.setText(guideDetail.getGuideIntroduce());
+            tour_detail_intro.setVisibility(View.VISIBLE);
+        }
+        if(!Util.isNull(guideDetail.getGuideStandard())){
+            tour_detail_standard.setText(guideDetail.getGuideStandard());
+            tour_detail_standard.setVisibility(View.VISIBLE);
+        }
         if (!Util.isNull(guideDetail.getGuideStar()))
-            tour_detail_ratingbar.setRating(Float.valueOf(guideDetail.getGuideStar()));
+            tour_detail_ratingbar.setRating(Float.valueOf(guideDetail.getGuideStar()) / 2);
+        tagList = guideDetail.getTagList();
+        if (tagList != null && tagList.size() > 0) {
+            for (int i = 0; i < tagList.size(); i++) {
+                tour_detail_fl.addView(addTextView(tagList.get(i)));
+            }
+        } else
+            tour_detail_fl.setVisibility(View.GONE);
     }
 
     @Override

@@ -24,6 +24,7 @@ import com.xbx.client.utils.StringUtil;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.FlowLayout;
+import com.xbx.client.view.TipsDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ import java.util.List;
 /**
  * Created by EricYuan on 2016/4/8.
  */
-public class OrderDetailActivity extends BaseActivity {
+public class OrderDetailActivity extends BaseActivity implements TipsDialog.DialogClickListener {
     private RelativeLayout orderDetail_rl;
     private TextView title_rtxt_tv;
     private ImageView headImage;
@@ -70,6 +71,7 @@ public class OrderDetailActivity extends BaseActivity {
     private OrderDetailBean detailBean = null;
     private ImageLoader imageLoader;
     private ImageLoaderConfigFactory configFactory;
+    private TipsDialog tipsDialog = null;
 
     private String orderNuber = "";
 
@@ -90,10 +92,9 @@ public class OrderDetailActivity extends BaseActivity {
                     if (Util.isNull(allData))
                         return;
                     int codes = UtilParse.getRequestCode(allData);
-                    if(codes == 1){
+                    if (codes == 1)
                         api.getOrderDetail(orderNuber);
-                        Util.showToast(OrderDetailActivity.this, UtilParse.getRequestMsg(allData));
-                    }
+                    Util.showToast(OrderDetailActivity.this, UtilParse.getRequestMsg(allData));
                     break;
             }
         }
@@ -182,7 +183,7 @@ public class OrderDetailActivity extends BaseActivity {
         guide_name_tv.setText(detailBean.getGuideName());
         guide_typed_tv.setText(StringUtil.getGuideType(this, detailBean.getGuideType()));
         guide_code_tv.setText(detailBean.getGuideNumber());
-        Util.pLog("detailBean.getGuideStar():"+detailBean.getGuideStar());
+        Util.pLog("detailBean.getGuideStar():" + detailBean.getGuideStar());
         if (!Util.isNull(detailBean.getGuideStar()))
             guide_ratingbar.setRating(Float.valueOf(detailBean.getGuideStar()) / 2);
         user_stroke_tv.setText(detailBean.getUserAddress());
@@ -197,9 +198,9 @@ public class OrderDetailActivity extends BaseActivity {
         rewardMon_tv.setText("￥" + detailBean.getRewardMoney());
         couponMon_tv.setText("￥" + detailBean.getRebateMoney());
         commentCotent_tv.setText(detailBean.getGuideCotent());
-        if (!Util.isNull(detailBean.getGuideStar())) {
+        if (!Util.isNull(detailBean.getCommentStar())) {
             guideComment_rb.setVisibility(View.VISIBLE);
-            guideComment_rb.setRating(Float.valueOf(detailBean.getGuideStar()));
+            guideComment_rb.setRating(Float.valueOf(detailBean.getCommentStar())/2);
         }
         if (detailBean.getRewardMoney() == 0.0)
             rewardMon_rl.setVisibility(View.GONE);
@@ -210,10 +211,11 @@ public class OrderDetailActivity extends BaseActivity {
         Util.pLog(detailBean.getOrderOrignalPay() + " / " + detailBean.getOrderPay());
         if (detailBean.getOrderOrignalPay() == detailBean.getOrderPay())
             totalMon_rl.setVisibility(View.GONE);
-        if (tagList != null && tagList.size() > 0)
+        if (detailBean.getGuideTagList() != null && detailBean.getGuideTagList().size() > 0) {
             guide_tag_flayout.setVisibility(View.VISIBLE);
-        for (int i = 0; i < tagList.size(); i++) {
-            guide_tag_flayout.addView(addTextView(tagList.get(i)));
+            for (int i = 0; i < detailBean.getGuideTagList().size(); i++) {
+                guide_tag_flayout.addView(addTextView(detailBean.getGuideTagList().get(i)));
+            }
         }
         switch (detailBean.getServerType()) {
             case 0://即时服务
@@ -233,8 +235,17 @@ public class OrderDetailActivity extends BaseActivity {
             return;
         if (data == null)
             return;
-        if (requestCode == 1050)
+        if (requestCode == 1050) {
             api.getOrderDetail(orderNuber);
+            if (data.getBooleanExtra("reservatComment", false)) {
+                tipsDialog = new TipsDialog(OrderDetailActivity.this);
+                tipsDialog.setClickListener(OrderDetailActivity.this);
+                tipsDialog.isSHowRewardImg(true);
+                tipsDialog.setInfo(getString(R.string.to_reward), getString(R.string.to_reward_tips));
+                tipsDialog.setBtnTxt(getString(R.string.to_reward_cancel), getString(R.string.to_reward_sure));
+                tipsDialog.show();
+            }
+        }
     }
 
     @Override
@@ -254,7 +265,6 @@ public class OrderDetailActivity extends BaseActivity {
                 jumpActivity();
                 break;
             case R.id.oDeatil_cancel_btn://取消订单
-//                jumpActivity();
                 api.cancelOrder(detailBean.getOrderNum());
                 break;
         }
@@ -294,14 +304,9 @@ public class OrderDetailActivity extends BaseActivity {
 
     private void getReservatJump(Intent intent) {
         switch (detailBean.getOrderState()) {
-            case 0://同时有取消订单
+            case 0:
                 intent.setClass(OrderDetailActivity.this, PayOrderActivity.class);
                 startActivityForResult(intent, 1050);
-                break;
-            case 1://取消订单
-                break;
-            case 2://取消订单
-
                 break;
             case 4:
                 intent.setClass(OrderDetailActivity.this, SubCommentActivity.class);
@@ -316,14 +321,14 @@ public class OrderDetailActivity extends BaseActivity {
             case 1:
             case 2:
                 orderState_tv.setText("进行中");
-                oDeatil_state_btn.setVisibility(View.GONE);
-                payWay_layout.setVisibility(View.GONE);
+                oDeatil_state_ll.setVisibility(View.GONE);//底部布局按钮
+                payWay_layout.setVisibility(View.GONE);//支付方式
                 break;
-            case 3:
+            case 3://服务结束，待支付
                 orderState_tv.setText("待支付");
                 oDeatil_state_btn.setText("支付");
                 oDeatil_state_ll.setVisibility(View.VISIBLE);
-                payWay_layout.setVisibility(View.GONE);
+                payWay_layout.setVisibility(View.GONE);//支付方式
                 break;
             case 4:
                 orderState_tv.setText("待评价");
@@ -340,11 +345,11 @@ public class OrderDetailActivity extends BaseActivity {
                 oDeatil_state_btn.setText("支付");
                 total_payTip_tv.setText("取消费用");
                 oDeatil_state_ll.setVisibility(View.VISIBLE);
-                serveTime_rl.setVisibility(View.GONE);
-                payWay_layout.setVisibility(View.GONE);
-                payExtrueMon_rl.setVisibility(View.GONE);
+                serveTime_rl.setVisibility(View.GONE);  //服务时间
+                payWay_layout.setVisibility(View.GONE); //支付方式
+                payExtrueMon_rl.setVisibility(View.GONE);//未除掉优惠券和小费的实际价格
                 break;
-            case 7:
+            case 7://取消订单的已关闭，分为支付和违约超时
                 orderState_tv.setText("已关闭");
                 total_payTip_tv.setText("取消费用");
                 if (detailBean.getOrderOrignalPay() == 0.0)
@@ -366,23 +371,25 @@ public class OrderDetailActivity extends BaseActivity {
                 orderState_tv.setText("待支付");
                 oDeatil_state_btn.setText("支付");
                 oDeatil_cancel_btn.setVisibility(View.VISIBLE);
-                oDeatil_state_ll.setVisibility(View.VISIBLE);
-                payWay_layout.setVisibility(View.GONE);
                 findViewById(R.id.od_splite_view).setVisibility(View.VISIBLE);
+                oDeatil_state_ll.setVisibility(View.VISIBLE);//底部按钮布局
+                payWay_layout.setVisibility(View.GONE);//支付方式
                 break;
             case 1:
                 orderState_tv.setText("待确认");
-                oDeatil_state_btn.setText("取消订单");
+                oDeatil_cancel_btn.setVisibility(View.VISIBLE);
+                oDeatil_state_btn.setVisibility(View.GONE);
                 oDeatil_state_ll.setVisibility(View.VISIBLE);
                 break;
             case 2:
                 orderState_tv.setText("已预约");
-                oDeatil_state_btn.setText("取消订单");
+                oDeatil_cancel_btn.setVisibility(View.VISIBLE);//取消按钮
+                oDeatil_state_btn.setVisibility(View.GONE);//支付按钮
                 oDeatil_state_ll.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 orderState_tv.setText("进行中");
-                oDeatil_state_btn.setVisibility(View.GONE);
+                oDeatil_state_ll.setVisibility(View.GONE);//底部操作按钮布局
                 break;
             case 4:
                 orderState_tv.setText("待评论");
@@ -391,7 +398,8 @@ public class OrderDetailActivity extends BaseActivity {
                 break;
             case 5:
                 orderState_tv.setText("已完成");
-                oDeail_comment_ll.setVisibility(View.VISIBLE);
+                oDeail_comment_ll.setVisibility(View.VISIBLE);//评论布局
+                oDeatil_state_ll.setVisibility(View.GONE);
                 break;
             case 6:
                 orderState_tv.setText("退款中");
@@ -401,6 +409,20 @@ public class OrderDetailActivity extends BaseActivity {
                 orderState_tv.setText("已关闭");
                 oDeatil_state_ll.setVisibility(View.GONE);
                 break;
+            case 8:
+                orderState_tv.setText("拒单");
+                oDeatil_state_ll.setVisibility(View.GONE);
+                break;
         }
+    }
+
+    @Override
+    public void cancelDialog() {
+        tipsDialog.dismiss();
+    }
+
+    @Override
+    public void confirmDialog() {
+        tipsDialog.dismiss();
     }
 }
