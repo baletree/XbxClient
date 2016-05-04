@@ -12,14 +12,14 @@ android {
         versionName "1.0"
     }
 
-    /*sourceSets {
+    sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
         }
         instrumentTest.setRoot('tests')
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
-    }*/
+    }
     buildTypes {
         release {
             minifyEnabled false
