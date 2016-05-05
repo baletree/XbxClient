@@ -91,6 +91,7 @@ public class LoadingDialog extends Dialog implements DialogInterface.OnKeyListen
     public void show() {
         super.show();
         count = 0;
+        dialog_count_tv.setText("");
         handler.sendEmptyMessage(1);
     }
 

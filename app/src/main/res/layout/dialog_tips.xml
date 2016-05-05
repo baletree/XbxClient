@@ -6,7 +6,7 @@
         android:id="@+id/reservat_reward_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/reservat_reward"
+        android:src="@mipmap/reservat_rewarded"
         android:layout_alignParentRight="true"
         android:visibility="gone"
         android:layout_marginRight="@dimen/dp_twenty_four"

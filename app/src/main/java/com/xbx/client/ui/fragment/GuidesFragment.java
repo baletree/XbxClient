@@ -539,6 +539,7 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
         guide_tOrder_layout.setVisibility(View.VISIBLE);
         guide_fuc_rl.setVisibility(View.GONE);
         onMap_layout.setVisibility(View.GONE);
+        guide_call_rl.setVisibility(View.GONE);
         lBManager.sendBroadcast(new Intent(Constant.ACTION_DISSMISSBACK));
         if (loadingDialog != null && loadingDialog.isShowing())
             loadingDialog.dismiss();

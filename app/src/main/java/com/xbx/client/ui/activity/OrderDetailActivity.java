@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * Created by EricYuan on 2016/4/8.
  */
-public class OrderDetailActivity extends BaseActivity implements TipsDialog.DialogClickListener {
+public class OrderDetailActivity extends BaseActivity {
     private RelativeLayout orderDetail_rl;
     private TextView title_rtxt_tv;
     private ImageView headImage;
@@ -71,7 +71,6 @@ public class OrderDetailActivity extends BaseActivity implements TipsDialog.Dial
     private OrderDetailBean detailBean = null;
     private ImageLoader imageLoader;
     private ImageLoaderConfigFactory configFactory;
-    private TipsDialog tipsDialog = null;
 
     private String orderNuber = "";
 
@@ -237,14 +236,6 @@ public class OrderDetailActivity extends BaseActivity implements TipsDialog.Dial
             return;
         if (requestCode == 1050) {
             api.getOrderDetail(orderNuber);
-            if (data.getBooleanExtra("reservatComment", false)) {
-                tipsDialog = new TipsDialog(OrderDetailActivity.this);
-                tipsDialog.setClickListener(OrderDetailActivity.this);
-                tipsDialog.isSHowRewardImg(true);
-                tipsDialog.setInfo(getString(R.string.to_reward), getString(R.string.to_reward_tips));
-                tipsDialog.setBtnTxt(getString(R.string.to_reward_cancel), getString(R.string.to_reward_sure));
-                tipsDialog.show();
-            }
         }
     }
 
@@ -414,15 +405,5 @@ public class OrderDetailActivity extends BaseActivity implements TipsDialog.Dial
                 oDeatil_state_ll.setVisibility(View.GONE);
                 break;
         }
-    }
-
-    @Override
-    public void cancelDialog() {
-        tipsDialog.dismiss();
-    }
-
-    @Override
-    public void confirmDialog() {
-        tipsDialog.dismiss();
     }
 }

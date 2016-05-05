@@ -24,6 +24,7 @@ import com.xbx.client.utils.StringUtil;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.FlowLayout;
+import com.xbx.client.view.TipsDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ import java.util.List;
  * Created by EricYuan on 2016/4/13.
  * 提交评价
  */
-public class SubCommentActivity extends BaseActivity {
+public class SubCommentActivity extends BaseActivity implements TipsDialog.DialogClickListener{
     private FlowLayout comment_tag_fl;
     private TextView titleTxt;
     private ImageView backImg;
@@ -53,6 +54,7 @@ public class SubCommentActivity extends BaseActivity {
     private List<Integer> indexList = null;
     private ImageLoader imageLoader;
     private ImageLoaderConfigFactory configFactory;
+    private TipsDialog tipsDialog = null;
 
     private String uid = "";
     private String gorderNum;
@@ -81,10 +83,16 @@ public class SubCommentActivity extends BaseActivity {
                     setCommentInfo();
                     break;
                 case TaskFlag.PAGEREQUESTHREE:
-                    Intent intent = new Intent();
-                    if (detailBean.getServerType() == 1 && conmment_rtb.getRating() > 4.0)
-                        intent.putExtra("reservatComment", true);
-                    setResult(RESULT_OK, intent);
+                    if (detailBean.getServerType() == 1 && conmment_rtb.getRating() > 4.0){
+                        tipsDialog = new TipsDialog(SubCommentActivity.this);
+                        tipsDialog.setClickListener(SubCommentActivity.this);
+                        tipsDialog.isSHowRewardImg(true);
+                        tipsDialog.setInfo(getString(R.string.to_reward), getString(R.string.to_reward_tips));
+                        tipsDialog.setBtnTxt(getString(R.string.to_reward_cancel), getString(R.string.to_reward_sure));
+                        tipsDialog.show();
+                        return;
+                    }
+                    setResult(RESULT_OK, new Intent());
                     finish();
                     break;
             }
@@ -210,5 +218,19 @@ public class SubCommentActivity extends BaseActivity {
                 api.submitComment(uid, detailBean.getOrderNum(), comment_msg_tv.getText().toString(), String.valueOf(conmment_rtb.getRating() * 2), tagStr);
                 break;
         }
+    }
+
+    @Override
+    public void cancelDialog() {
+        setResult(RESULT_OK, new Intent());
+        tipsDialog.dismiss();
+        finish();
+    }
+
+    @Override
+    public void confirmDialog() {
+        setResult(RESULT_OK, new Intent());
+        tipsDialog.dismiss();
+        finish();
     }
 }

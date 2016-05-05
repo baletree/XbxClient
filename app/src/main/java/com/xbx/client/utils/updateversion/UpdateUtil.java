@@ -198,7 +198,7 @@ public class UpdateUtil {
             Log.i("Tag", Constant.APK_PATH);
         } else {
             String apkpath = context.getFilesDir().getAbsolutePath()
-                    + "/XBB.apk";
+                    + "/TutuUser.apk";
             file = new File(apkpath);
             Log.i("Tag", apkpath);
         }
