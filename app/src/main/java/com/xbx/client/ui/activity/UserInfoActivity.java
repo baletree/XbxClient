@@ -1,6 +1,7 @@
 package com.xbx.client.ui.activity;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +12,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -50,6 +52,7 @@ public class UserInfoActivity extends BaseActivity {
     private ImageLoaderConfigFactory configFactory = null;
     private File headFile = null;
     private Api api = null;
+    private InputMethodManager inputMethodManager = null;
 
     private boolean isModify = false;
     private boolean isModifyHead = false;
@@ -62,7 +65,7 @@ public class UserInfoActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case TaskFlag.REQUESTSUCCESS:
+                /*case TaskFlag.REQUESTSUCCESS:
                     Util.showToast(UserInfoActivity.this, getString(R.string.modify_success));
                     isModify = false;
                     if (userInfo != null) {
@@ -74,13 +77,13 @@ public class UserInfoActivity extends BaseActivity {
                         SharePrefer.saveUserInfo(UserInfoActivity.this, userInfo);
                         isUpdate = true;
                     }
-                    break;
-                case TaskFlag.PAGEREQUESTWO:
+                    break;*/
+                case TaskFlag.REQUESTSUCCESS:
                     String dataModi = (String) msg.obj;
                     userInfo = UserInfoParse.modifyUserInfo(userInfo, dataModi);
                     SharePrefer.saveUserInfo(UserInfoActivity.this, userInfo);
-                    Util.showToast(UserInfoActivity.this, getString(R.string.suc_modify_head));
-                    isModifyHead = false;
+                    Util.showToast(UserInfoActivity.this, getString(R.string.modify_success));
+                    isModify = false;
                     isUpdate = true;
                     break;
             }
@@ -140,6 +143,7 @@ public class UserInfoActivity extends BaseActivity {
 
     @Override
     protected void initDatas() {
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         api = new Api(UserInfoActivity.this, handler);
         uid = SharePrefer.getUserInfo(UserInfoActivity.this).getUid();
         imageLoader = ImageLoader.getInstance();
@@ -152,6 +156,8 @@ public class UserInfoActivity extends BaseActivity {
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.title_left_img:
+                boolean isHide = hideKeyboard(user_info_name_text);
+                Util.pLog("isHide = "+isHide);
                 if (isUpdate)
                     setResult(RESULT_OK, new Intent());
                 finish();
@@ -165,10 +171,13 @@ public class UserInfoActivity extends BaseActivity {
                     Util.showToast(UserInfoActivity.this, getString(R.string.not_modify));
                     return;
                 }
-                if (isModifyHead && headFile != null)
-                    api.modifyHead(uid, headFile, user_info_birthday_text.getText().toString());
-                if (isModify)
-                    api.modifyInfo(uid, user_info_name_text.getText().toString(), sexType, "", user_info_nickname_text.getText().toString(), user_info_birthday_text.getText().toString());
+                if (isModify) {
+                    if (headFile != null) {
+                        api.modifyInfo(uid, user_info_name_text.getText().toString(), sexType, "", user_info_nickname_text.getText().toString(), user_info_birthday_text.getText().toString(), headFile);
+                        return;
+                    }
+                    api.modifyInfo(uid, user_info_name_text.getText().toString(), sexType, "", user_info_nickname_text.getText().toString(), user_info_birthday_text.getText().toString(), null);
+                }
                 break;
             case R.id.user_info_head_layout:
                 intent.setClass(this, SelectAlbumActivity.class);
@@ -224,14 +233,13 @@ public class UserInfoActivity extends BaseActivity {
                     Bitmap bitmap = BitmapFactory.decodeFile(picPath);
                     if (bitmap == null)
                         return;
-                    isModifyHead = true;
+                    isModify = true;
                     user_info_head_img.setImageBitmap(bitmap);
                     headFile = new File(picPath);
                     break;
                 case 102:
                     String sex = data.getStringExtra("result");
                     sexType = data.getStringExtra("resultCode");
-                    Util.pLog("sexType102 " + sexType);
                     user_info_sex_text.setText(sex);
                     isModify = true;
                     break;
@@ -244,9 +252,20 @@ public class UserInfoActivity extends BaseActivity {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             if (isUpdate)
                 setResult(RESULT_OK, new Intent());
+            Util.pLog("按键返回");
             finish();
             return false;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean hideKeyboard(EditText editText) {
+        user_info_nickname_text.requestFocus();//使其它view获取焦点.这里因为是在fragment下,所以便用了getView(),可以指定任意其它view
+        if (inputMethodManager.isActive(editText)) {
+            //因为是在fragment下，所以用了getView()获取view，也可以用findViewById（）来获取父控件
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            return true;
+        }
+        return false;
     }
 }

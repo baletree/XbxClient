@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/orderDetail_rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
@@ -11,6 +10,7 @@
         layout="@layout/page_title" />
 
     <ScrollView
+        android:id="@+id/orderDetail_sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/oDeatil_state_ll"

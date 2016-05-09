@@ -24,8 +24,6 @@ import com.xbx.client.utils.Util;
  */
 public class LoadingDialog extends Dialog implements DialogInterface.OnKeyListener {
     private TextView vLoading_text;
-    private ProgressBar find_loading_bar;
-    private ProgressBar find_loading_bar2;
     private ImageView dialog_loading_icon;
     private TextView dialog_count_tv;
 
@@ -79,8 +77,6 @@ public class LoadingDialog extends Dialog implements DialogInterface.OnKeyListen
 
     private void initViews() {
         vLoading_text = (TextView) findViewById(R.id.find_loading_text);
-        find_loading_bar = (ProgressBar) findViewById(R.id.find_loading_bar);
-        find_loading_bar2 = (ProgressBar) findViewById(R.id.find_loading_bar2);
         dialog_loading_icon = (ImageView) findViewById(R.id.dialog_loading_icon);
         dialog_count_tv = (TextView) findViewById(R.id.dialog_count_tv);
         if (!Util.isNull(msg))

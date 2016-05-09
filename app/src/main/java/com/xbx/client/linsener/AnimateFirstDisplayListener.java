@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.xbx.client.utils.Util;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -35,6 +36,7 @@ public class AnimateFirstDisplayListener extends
                 FadeInBitmapDisplayer.animate(imageView, 500);
                 displayedImages.add(imageUri);
             }
+            Util.pLog("onLoadingCompleteId:"+view.getId());
         }
     }
 }

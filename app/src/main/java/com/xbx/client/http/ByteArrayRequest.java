@@ -57,13 +57,10 @@ class ByteArrayRequest extends Request<byte[]> {
     public Map<String, String> getHeaders() throws AuthFailureError {
         Map<String, String> headers = super.getHeaders();
         if (null == headers || headers.equals(Collections.emptyMap())) {
-            headers = new HashMap<String, String>();
+            headers = new HashMap<>();
             String deviceId = SharePrefer.getPhoneId(App.getContext());
-            String uid = SharePrefer.getUserInfo(App.getContext()).getUid();
-            AESCrypt aesCrypt = new AESCrypt(deviceId);
             headers.put("deviceid", deviceId);
-//            headers.put("uuid", aesCrypt.encrypt(uid));
-//            Util.pLog("uuid:"+aesCrypt.encrypt(uid));
+            headers.put("client", "1");
         }
         return headers;
     }

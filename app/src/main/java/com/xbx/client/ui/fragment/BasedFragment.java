@@ -63,8 +63,8 @@ public class BasedFragment extends Fragment implements View.OnClickListener, BDL
         mLocClient.start();
         bdMyself = BitmapDescriptorFactory
                 .fromResource(R.mipmap.myself_locate);
-        guideBdp = BitmapDescriptorFactory
-                .fromResource(R.mipmap.guide_icon);
+        /*guideBdp = BitmapDescriptorFactory
+                .fromResource(R.mipmap.guide_icon);*/
         guideDes = BitmapDescriptorFactory
                 .fromResource(R.mipmap.guide_locate);
     }

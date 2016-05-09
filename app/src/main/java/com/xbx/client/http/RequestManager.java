@@ -1,7 +1,7 @@
 package com.xbx.client.http;
 
 import android.annotation.SuppressLint;
-import android.support.v4.app.FragmentActivity;
+import android.content.Context;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -11,7 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.xbx.client.app.App;
 import com.xbx.client.utils.JsonUtils;
-import com.xbx.client.view.LoadingFragment;
+import com.xbx.client.view.LoadingDialog;
 
 import java.io.UnsupportedEncodingException;
 
@@ -51,10 +51,9 @@ public class RequestManager {
      */
     public static void get(String url, Object tag, String progressTitle,
                            RequestListener listener) {
-        LoadingFragment dialog = new LoadingFragment();
-        dialog.show(((FragmentActivity) tag).getSupportFragmentManager(),
-                "Loading");
-        dialog.setMsg(progressTitle);
+        LoadingDialog dialog = new LoadingDialog((Context) tag);
+        dialog.show();
+        dialog.setMessage(progressTitle);
         ByteArrayRequest request = new ByteArrayRequest(Request.Method.GET,
                 url, null, responseListener(listener, true, dialog),
                 responseError(listener, true, dialog));
@@ -88,15 +87,14 @@ public class RequestManager {
      */
     public static <T> void get(String url, Object tag, Class<T> classOfT,
                                String progressTitle, boolean LoadingShow, RequestJsonListener<T> listener) {
-        LoadingFragment dialog = new LoadingFragment();
+        LoadingDialog lDialog = new LoadingDialog((Context) tag);
         if (LoadingShow) {
-            dialog.show(((FragmentActivity) tag).getSupportFragmentManager(),
-                    "Loading");
-            dialog.setMsg(progressTitle);
+            lDialog.show();
+            lDialog.setMessage(progressTitle);
         }
         ByteArrayRequest request = new ByteArrayRequest(Request.Method.GET,
-                url, null, responseListener(listener, classOfT, LoadingShow, dialog),
-                responseError(listener, LoadingShow, dialog));
+                url, null, responseListener(listener, classOfT, LoadingShow, lDialog),
+                responseError(listener, LoadingShow, lDialog));
         addRequest(request, tag);
     }
 
@@ -127,13 +125,12 @@ public class RequestManager {
      */
     public static void post(String url, Object tag, RequestParams params,
                             String progressTitle, RequestListener listener) {
-        LoadingFragment dialog = new LoadingFragment();
-        dialog.show(((FragmentActivity) tag).getSupportFragmentManager(),
-                "Loading");
-        dialog.setMsg(progressTitle);
+        LoadingDialog lDialog = new LoadingDialog((Context) tag);
+        lDialog.show();
+        lDialog.setMessage(progressTitle);
         ByteArrayRequest request = new ByteArrayRequest(Request.Method.POST,
-                url, params, responseListener(listener, true, dialog),
-                responseError(listener, true, dialog));
+                url, params, responseListener(listener, true, lDialog),
+                responseError(listener, true, lDialog));
         addRequest(request, tag);
     }
 
@@ -151,11 +148,10 @@ public class RequestManager {
     public static <T> void post(String url, Object tag, Class<T> classOfT,
                                 RequestParams params, String progressTitle, boolean LoadingShow,
                                 RequestJsonListener<T> listener) {
-        LoadingFragment dialog = new LoadingFragment();
+        LoadingDialog dialog = new LoadingDialog((Context) tag);
         if (LoadingShow) {
-            dialog.show(((FragmentActivity) tag).getSupportFragmentManager(),
-                    "Loading");
-            dialog.setMsg(progressTitle);
+            dialog.show();
+            dialog.setMessage(progressTitle);
         }
         ByteArrayRequest request = new ByteArrayRequest(Request.Method.POST,
                 url, params,
@@ -172,7 +168,7 @@ public class RequestManager {
      */
     protected static <T> Response.Listener<byte[]> responseListener(
             final RequestJsonListener<T> l, final Class<T> classOfT,
-            final boolean flag, final LoadingFragment p) {
+            final boolean flag, final LoadingDialog p) {
         return new Response.Listener<byte[]>() {
             @Override
             public void onResponse(byte[] arg0) {
@@ -184,7 +180,7 @@ public class RequestManager {
                 }
                 l.requestSuccess(JsonUtils.object(data, classOfT));
                 if (flag) {
-                    if (p.getShowsDialog()) {
+                    if (p.isShowing()) {
                         p.dismiss();
                     }
                 }
@@ -201,15 +197,14 @@ public class RequestManager {
      * @return
      */
     protected static <T> Response.ErrorListener responseError(
-            final RequestJsonListener<T> l, final boolean flag,
-            final LoadingFragment p) {
+            final RequestJsonListener<T> l, final boolean flag, final LoadingDialog p) {
         return new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError e) {
                 l.requestError(e);
                 if (flag) {
-                    if (p.getShowsDialog()) {
+                    if (p.isShowing()) {
                         p.dismiss();
                     }
                 }
@@ -226,7 +221,7 @@ public class RequestManager {
      * @return
      */
     protected static Response.Listener<byte[]> responseListener(
-            final RequestListener l, final boolean flag, final LoadingFragment p) {
+            final RequestListener l, final boolean flag, final LoadingDialog p) {
         return new Response.Listener<byte[]>() {
             @Override
             public void onResponse(byte[] arg0) {
@@ -238,7 +233,7 @@ public class RequestManager {
                 }
                 l.requestSuccess(data);
                 if (flag) {
-                    if (p.getShowsDialog()) {
+                    if (p.isShowing()) {
                         p.dismiss();
                     }
                 }
@@ -255,14 +250,14 @@ public class RequestManager {
      * @return
      */
     protected static Response.ErrorListener responseError(
-            final RequestListener l, final boolean flag, final LoadingFragment p) {
+            final RequestListener l, final boolean flag, final LoadingDialog p) {
         return new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError e) {
                 l.requestError(e);
                 if (flag) {
-                    if (p.getShowsDialog()) {
+                    if (p.isShowing()) {
                         p.dismiss();
                     }
                 }
@@ -284,7 +279,7 @@ public class RequestManager {
         mRequestQueue.add(request);
     }
 
-    /**
+    /**O
      * 当主页面调用协议 在结束该页面调用此方法
      *
      * @param tag

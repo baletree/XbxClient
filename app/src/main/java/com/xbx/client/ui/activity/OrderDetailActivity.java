@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -33,7 +34,7 @@ import java.util.List;
  * Created by EricYuan on 2016/4/8.
  */
 public class OrderDetailActivity extends BaseActivity {
-    private RelativeLayout orderDetail_rl;
+    private ScrollView orderDetail_sv;
     private TextView title_rtxt_tv;
     private ImageView headImage;
     private TextView guide_typed_tv;
@@ -118,8 +119,8 @@ public class OrderDetailActivity extends BaseActivity {
     @Override
     protected void initViews() {
         super.initViews();
-        orderDetail_rl = (RelativeLayout) findViewById(R.id.orderDetail_rl);
-        orderDetail_rl.setVisibility(View.GONE);
+        orderDetail_sv = (ScrollView) findViewById(R.id.orderDetail_sv);
+        orderDetail_sv.setVisibility(View.GONE);
         title_rtxt_tv = (TextView) findViewById(R.id.title_rtxt_tv);
         guide_tag_flayout = (FlowLayout) findViewById(R.id.guide_tag_flayout);
         oDeatil_state_btn = (Button) findViewById(R.id.oDeatil_state_btn);
@@ -177,7 +178,7 @@ public class OrderDetailActivity extends BaseActivity {
     }
 
     private void setOderInfo() {
-        orderDetail_rl.setVisibility(View.VISIBLE);
+        orderDetail_sv.setVisibility(View.VISIBLE);
         imageLoader.displayImage(detailBean.getHeadImg(), headImage, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
         guide_name_tv.setText(detailBean.getGuideName());
         guide_typed_tv.setText(StringUtil.getGuideType(this, detailBean.getGuideType()));

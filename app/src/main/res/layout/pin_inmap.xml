@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/pinBg_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/pin_guide" />
+
+        <ImageView
+            android:layout_width="@dimen/dp_twenty_six"
+            android:layout_height="@dimen/dp_twenty_six"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_two"
+            android:src="@drawable/white_circle_bg" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/pinHeaded_img"
+            android:layout_width="@dimen/dp_twenty_four"
+            android:layout_height="@dimen/dp_twenty_four"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_three"
+            app:riv_oval="true"
+            android:src="@mipmap/user_head" />
+    </RelativeLayout>
+
+</LinearLayout>

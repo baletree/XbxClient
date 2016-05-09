@@ -17,7 +17,7 @@
     <string name="login_protocol">阅读并同意Zack协议</string>
     <string name="login_name">登录</string>
     <string name="main_guide">导游</string>
-    <string name="main_native">土著</string>
+    <string name="main_native">向导</string>
     <string name="main_withTour">随游</string>
     <string name="main_together">旅游</string>
     <string name="main_bowen">博文</string>
@@ -162,7 +162,7 @@
     <string name="about_contact_us">联系我们</string>
     <string name="user_guide_title">用户指南</string>
     <string name="user_guide_about_tour">关于导游</string>
-    <string name="user_guide_about_darky">关于土著</string>
+    <string name="user_guide_about_darky">关于向导</string>
     <string name="user_guide_about_follow">关于随游</string>
     <string name="user_guide_book">即时和预约</string>
     <string name="user_guide_cancel_order">取消订单</string>
@@ -192,14 +192,23 @@
     <string name="yuan_hour">元/小时</string>
     <string name="attation">提醒:</string>
     <string name="attation_one">按小时计费，用时1小时起，不满1小时按1小时收费。</string>
-    <string name="attation_two">平台为用户提供价值10万元意外保险。</string>
+    <string name="attation_two">平台为用户提供价值10万元意外保险</string>
     <string name="suc_modify_head">头像修改成功</string>
-    <!--土著-->
-    <string name="find_Native">正在呼叫土著</string>
+    <string name="accident_insurance">意外险</string>
+    <string name="accident_tip">价值10万元意外保险，请仔细核对填写身份信息</string>
+    <string name="call_name">姓名</string>
+    <string name="call_input_name">请输入您的真实姓名</string>
+    <string name="call_iD">身份证号</string>
+    <string name="call_input_iD">请输入身份证号</string>
+    <string name="call_cal_price">计算方法:</string>
+    <string name="call_travalTime">游玩时间</string>
+    <string name="call_accIns">保险</string>
+    <!--向导-->
+    <string name="find_Native">正在呼叫向导</string>
     <string name="find_Togeher">正在呼叫随游</string>
-    <string name="immedia_native">呼叫土著</string>
-    <string name="no_native">暂无土著接单</string>
-    <string name="success_find_native">已成功为您找到土著</string>
+    <string name="immedia_native">呼叫向导</string>
+    <string name="no_native">暂无向导接单</string>
+    <string name="success_find_native">已成功为您找到向导</string>
     <string name="immedia_together">呼叫随游</string>
     <string name="reservat_together">预约随游</string>
     <string name="input_star">请评定星级</string>

@@ -112,14 +112,14 @@
             <TextView
                 style="@style/textView_Black"
                 android:text="@string/login_pact_tip"
-                android:textSize="@dimen/sp_fourteen" />
+                android:textSize="@dimen/sp_twelve" />
 
             <TextView
                 android:id="@+id/login_agreepact_tv"
                 style="@style/textView_Black"
                 android:text="@string/login_protocol"
                 android:textColor="@color/colorTheme"
-                android:textSize="@dimen/sp_fourteen" />
+                android:textSize="@dimen/sp_twelve" />
         </LinearLayout>
 
         <Button

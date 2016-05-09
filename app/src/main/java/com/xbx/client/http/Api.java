@@ -78,7 +78,7 @@ public class Api {
             @Override
             public void requestSuccess(String json) {
                 super.requestSuccess(json);
-                if(guideType.equals(1))
+                if (guideType.equals("1"))
                     Util.pLog("导游列表:" + json);
                 else
                     Util.pLog("土著列表:" + json);
@@ -375,7 +375,7 @@ public class Api {
         });
     }
 
-    /**
+    /**修改个人信息
      * @param uid
      * @param realname
      * @param sex
@@ -383,7 +383,7 @@ public class Api {
      * @param nickname
      * @param birthday
      */
-    public void modifyInfo(String uid, String realname, String sex, String idcard, String nickname, String birthday) {
+    public void modifyInfo(String uid, String realname, String sex, String idcard, String nickname, String birthday, File file) {
         if (context == null)
             return;
         RequestParams params = new RequestParams();
@@ -393,7 +393,9 @@ public class Api {
         params.put("idcard", idcard);
         params.put("nickname", nickname);
         params.put("birthday", birthday);
-        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_modifyUserinfo));
+        if (file != null)
+            params.put("head_image", file);
+        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_modifyHead));
         IRequest.post(context, url, params, new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
@@ -403,7 +405,7 @@ public class Api {
         });
     }
 
-    public void modifyHead(String uid, File headFile, String birthday){
+    public void modifyHead(String uid, File headFile, String birthday) {
         if (context == null)
             return;
         RequestParams params = new RequestParams();
@@ -438,7 +440,7 @@ public class Api {
         });
     }
 
-    public void checkUpdate(){
+    public void checkUpdate() {
         if (context == null)
             return;
         String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_updateUrl));
@@ -458,7 +460,7 @@ public class Api {
     public void getNearTogether(String togetherLnlat) {
         if (context == null)
             return;
-        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_nearTogether)).concat("?server_addr_lnglat="+togetherLnlat);
+        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_nearTogether)).concat("?server_addr_lnglat=" + togetherLnlat);
         Util.pLog("周边随游url:" + url);
         IRequest.get(context, url, new RequestBackLisener(context) {
             @Override

@@ -7,7 +7,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@android:color/white"
         android:orientation="vertical">
 
         <TextView
@@ -16,6 +15,7 @@
             android:layout_height="@dimen/dp_forty_eight"
             android:text="@string/select_album_take_photo"
             android:textSize="@dimen/sp_fifteen"
+            android:background="@android:color/white"
             android:textColor="@color/colorText"
             android:gravity="center"/>
 
@@ -30,13 +30,14 @@
             android:layout_height="@dimen/dp_forty_eight"
             android:text="@string/select_album_photo_gallery"
             android:textSize="@dimen/sp_fifteen"
+            android:background="@android:color/white"
             android:textColor="@color/colorText"
             android:gravity="center"/>
 
-        <View
+        <!--<View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_eight"
-            android:background="@color/colorLine"/>
+            android:background="@color/colorLine"/>-->
 
         <TextView
             android:id="@+id/select_album_cancel"
@@ -44,6 +45,8 @@
             android:layout_height="@dimen/dp_forty_eight"
             android:text="@string/cancel"
             android:textSize="@dimen/sp_fifteen"
+            android:background="@android:color/white"
+            android:layout_marginTop="@dimen/dp_eight"
             android:textColor="@color/colorTheme"
             android:gravity="center"/>
     </LinearLayout>

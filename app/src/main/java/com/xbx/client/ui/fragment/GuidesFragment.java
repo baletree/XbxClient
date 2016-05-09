@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
@@ -90,6 +93,8 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
     private RelativeLayout guide_phone_rl;
     private TextView price_show_tv;
 
+    private TextView call_phone_tv;//用户手机号码
+
     private GeoCoder geoCoder = null;
     private LoadingDialog loadingDialog = null;
     private LocationMode mCurrentMode;
@@ -99,6 +104,7 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
     private List<GuideBean> guideList = null;
     private Api api = null;
     private MyGuideInfoBean guideInfoBean = null;
+    private View markerView;
 
     private PollUploadLag uploadLag = null; //上传经纬度
     private FindGuide findGuide = null;// 获取为我服务的导游
@@ -161,6 +167,7 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
                         Util.showToast(getActivity(), getString(R.string.no_together));
                     if (loadingDialog != null && loadingDialog.isShowing())
                         loadingDialog.dismiss();
+                    findGuide.removeFindGuide();
                     break;
                 case 99://服务的人开始服务后开始计时
                     user_stroke_tv.setText(getString(R.string.stork_time) + StringUtil.getCountTravel((guideInfoBean.getCurrentTime() * 1000 + countTraval * 1000) - guideInfoBean.getStartTime() * 1000));
@@ -239,12 +246,12 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
     }
 
     protected void initDatas() {
+        api = new Api(getActivity(), handler);
         uploadLag = new PollUploadLag(getActivity());
         findGuide = new FindGuide(getActivity(), handler);
         guideInfo = new MyGuideInfo(getActivity(), handler);
         imageLoader = ImageLoader.getInstance();
         configFactory = ImageLoaderConfigFactory.getInstance();
-        api = new Api(getActivity(), handler);
         geoCoder = GeoCoder.newInstance();
         loadingDialog = new LoadingDialog(getActivity());
         loadingDialog.setMessage(getString(R.string.call_sure_tips));
@@ -280,6 +287,7 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
         guide_phone_rl = (RelativeLayout) view.findViewById(R.id.guide_phone_rl);
         onMap_layout = (RelativeLayout) view.findViewById(R.id.onMap_layout);
         guide_call_rl.setVisibility(View.GONE);
+        call_phone_tv = (TextView) view.findViewById(R.id.call_phone_tv);
 
         mBaiduMap = mapView.getMap();
         mapView.showZoomControls(false); //隐藏缩放控件
@@ -333,10 +341,10 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
                 userNums = data.getStringExtra("userNumType");
                 if (Util.isNull(userNums))
                     return;
-                data.setAction(Constant.ACTION_CALLGUIDEBTN);//告知主页面返回按钮出现
+                /*data.setAction(Constant.ACTION_CALLGUIDEBTN);//告知主页面返回按钮出现
                 lBManager.sendBroadcast(data);
                 guide_fuc_rl.setVisibility(View.GONE);
-                guide_call_rl.setVisibility(View.VISIBLE);
+                guide_call_rl.setVisibility(View.VISIBLE);*/
                 break;
             case choiceTogether://随游选择某个随游后选择人数
                 togetherId = data.getStringExtra("TogetherId");
@@ -344,7 +352,10 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
                 price_show_tv.setText(togetherPrice);
                 if (Util.isNull(togetherId))
                     return;
-                api.getSetoffNum();
+                lBManager.sendBroadcast(new Intent(Constant.ACTION_CALLGUIDEBTN));
+                guide_fuc_rl.setVisibility(View.GONE);
+                guide_call_rl.setVisibility(View.VISIBLE);
+//                api.getSetoffNum();
                 break;
         }
     }
@@ -385,6 +396,7 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                     return;
                 }
+                call_phone_tv.setText("+86 " + SharePrefer.getUserInfo(getActivity()).getUserPhone());
                 if (guideType == Constant.togetherType) {
                     if (guideList != null && guideList.size() > 0) {
                         intent.setClass(getActivity(), TogetherActivity.class);
@@ -392,8 +404,12 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
                         startActivityForResult(intent, choiceTogether);
                     } else
                         Util.showToast(getActivity(), getString(R.string.no_hasTogether));
-                } else
-                    api.getSetoffNum();
+                } else {
+                    lBManager.sendBroadcast(new Intent(Constant.ACTION_CALLGUIDEBTN));
+                    guide_fuc_rl.setVisibility(View.GONE);
+                    guide_call_rl.setVisibility(View.VISIBLE);
+                }
+//                    api.getSetoffNum();
                 break;
             case R.id.confirm_call_btn://确认呼叫导游
                 if (Util.isNull(uid)) {
@@ -443,7 +459,7 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
 
     @Override
     public void onMapStatusChange(MapStatus mapStatus) {
-        if(isChangeTab)
+        if (isChangeTab)
             return;
         main_outset_tv.setText("");
         main_outset_tv.setHint(getString(R.string.loading_locate));
@@ -451,6 +467,9 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
 
     @Override
     public void onMapStatusChangeFinish(MapStatus mapStatus) {
+        if (isChangeTab)
+            return;
+        Util.pLog("onMapStatusChangeFinish...");
         geoCoder.reverseGeoCode(new ReverseGeoCodeOption()
                 .location(mapStatus.target));
     }
@@ -469,19 +488,37 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
             isChangeTab = false;
         }
         for (int i = 0; i < guideList.size(); i++) {
-            GuideBean guideBean = guideList.get(i);
-            LatLng latLng = new LatLng(guideBean.getLatitude(), guideBean.getLongitude());
-            if (guideType == Constant.togetherType) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("showCurrentIndex", i);
-                MarkerOptions mos = new MarkerOptions().position(latLng).icon(guideBdp)
-                        .zIndex(9).draggable(true).extraInfo(bundle);
-                mBaiduMap.addOverlay(mos);
-            } else {
-                MarkerOptions mos = new MarkerOptions().position(latLng).icon(guideBdp)
-                        .zIndex(9).draggable(true);
-                mBaiduMap.addOverlay(mos);
-            }
+            final GuideBean guideBean = guideList.get(i);
+            markerView = LayoutInflater.from(getActivity()).inflate(R.layout.pin_inmap, null);
+            final RoundedImageView markerImg = (RoundedImageView) markerView.findViewById(R.id.pinHeaded_img);
+            final ImageView markerBg = (ImageView) markerView.findViewById(R.id.pinBg_img);
+            markerBg.setImageResource(R.mipmap.pin_together);
+            final int finalI = i;
+            imageLoader.displayImage(guideBean.getGuideHead(), markerImg, configFactory.getHeadImg(), new AnimateFirstDisplayListener() {
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    LatLng latLng = new LatLng(guideBean.getLatitude(), guideBean.getLongitude());
+                    if (guideType == Constant.togetherType) {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("showCurrentIndex", finalI);
+                        markerBg.setImageResource(R.mipmap.pin_together);
+                        guideBdp = BitmapDescriptorFactory.fromBitmap(Util.getBitmapFromView(markerView));
+                        MarkerOptions mos = new MarkerOptions().position(latLng).icon(guideBdp)
+                                .zIndex(9).draggable(true).extraInfo(bundle);
+                        mBaiduMap.addOverlay(mos);
+                    } else {
+                        if (guideType == Constant.guideType)
+                            markerBg.setImageResource(R.mipmap.pin_guide);
+                        else
+                            markerBg.setImageResource(R.mipmap.pin_native);
+                        guideBdp = BitmapDescriptorFactory.fromBitmap(Util.getBitmapFromView(markerView));
+                        MarkerOptions mos = new MarkerOptions().position(latLng).icon(guideBdp)
+                                .zIndex(9).draggable(true);
+                        mBaiduMap.addOverlay(mos);
+                    }
+                    mapView.invalidate();
+                }
+            });
         }
     }
 
@@ -575,13 +612,13 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
      * 取消订单后数据参数和界面重置
      */
     private void resetParams() {
+        countTraval = 0;
         isInOrder = false;
         isFirstInOrder = true;
-        countTraval = 0;
-        guideInfoBean = null;
         getOrderNum = "";
         togetherId = "";
         userNums = "";
+        guideInfoBean = null;
         guideInfoBean = null;
         guide_tOrder_layout.setVisibility(View.GONE);
         guide_fuc_rl.setVisibility(View.VISIBLE);
@@ -592,7 +629,6 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
     /**
      * 定位的监听类
      */
-
     @Override
     public void onReceiveLocation(BDLocation bdLocation) {
         // map view 销毁后不在处理新接收的位置
@@ -622,6 +658,7 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        uid = SharePrefer.getUserInfo(getActivity()).getUid();
         if (Util.isNull(uid)) {
             startActivity(new Intent(getActivity(), LoginActivity.class));
             return false;

@@ -1,66 +1,311 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:visibility="gone"
-    android:layout_alignParentBottom="true">
-    <LinearLayout
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/dp_hundred_four"
+    android:background="@color/colorBackground"
+    android:visibility="visible">
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:layout_marginTop="@dimen/dp_thirty_five"
-        android:paddingLeft="@dimen/dp_sixteen"
-        android:paddingRight="@dimen/dp_sixteen"
-        android:orientation="vertical">
-        <TextView
-            style="@style/textView_Black"
-            android:text="@string/attation"
-            android:textSize="@dimen/sp_twelve"
-            android:layout_marginTop="@dimen/dp_thirty_five"/>
-        <TextView
-            style="@style/textView_Black"
-            android:text="@string/attation_one"
-            android:textSize="@dimen/sp_twelve"/>
-        <TextView
-            style="@style/textView_Black"
-            android:text="@string/attation_two"
-            android:textSize="@dimen/sp_twelve"/>
-        <Button
-            android:id="@+id/confirm_call_btn"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_forty_eight"
-            android:background="@drawable/button_bg"
-            android:layout_marginTop="@dimen/dp_sixteen"
-            android:textSize="@dimen/sp_fourteen"
-            android:text="@string/call_sure"
-            android:textColor="@color/colorWhite"
-            android:layout_marginBottom="@dimen/dp_eight"/>
-    </LinearLayout>
-    <RelativeLayout
-        android:layout_width="@dimen/dp_seventy"
-        android:layout_height="@dimen/dp_seventy"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/btn_circle_bg">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/confirm_call_btn"
+        android:scrollbars="none">
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/price_show_tv"
-                android:layout_width="wrap_content"
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_sixteen"
+                android:background="@color/colorBackground" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_zero_five"
+                android:background="@color/colorLine" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_forty_eight"
+                android:background="@color/colorWhite"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_sixteen">
+
+                <TextView
+                    android:id="@+id/call_realName_tv"
+                    style="@style/textView_Black"
+                    android:layout_width="@dimen/dp_eighty"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="@dimen/sp_fourteen" />
+
+                <TextView
+                    android:id="@+id/call_phone_tv"
+                    style="@style/textView_Black"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="@dimen/sp_fourteen" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_zero_five"
+                android:background="@color/colorLine" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_zero_five"
+                android:layout_marginTop="@dimen/dp_sixteen"
+                android:background="@color/colorLine" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorWhite"
-                android:layout_gravity="center_horizontal"
-                android:text="50"
-                android:textSize="@dimen/sp_eighteen"/>
-            <TextView
-                android:layout_width="wrap_content"
+                android:background="@color/colorWhite"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_forty_eight">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/dp_sixteen">
+
+                            <TextView
+                                android:id="@+id/call_accIns_tv"
+                                style="@style/textView_Black"
+                                android:layout_width="@dimen/dp_eighty"
+                                android:text="@string/accident_insurance"
+                                android:textSize="@dimen/sp_fourteen" />
+
+                            <TextView
+                                android:id="@+id/call_insPrice_tv"
+                                style="@style/textView_Black"
+                                android:layout_width="@dimen/dp_ninety"
+                                android:textSize="@dimen/sp_fourteen" />
+                        </LinearLayout>
+
+                        <TextView
+                            style="@style/textView_Black"
+                            android:paddingLeft="@dimen/dp_sixteen"
+                            android:text="@string/accident_tip"
+                            android:textColor="@color/colorHint"
+                            android:textSize="@dimen/sp_twelve" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_zero_five"
+                    android:layout_marginLeft="@dimen/dp_sixteen"
+                    android:layout_marginRight="@dimen/dp_sixteen"
+                    android:background="@color/colorLine" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_forty_eight"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/dp_sixteen">
+
+                    <TextView
+                        style="@style/textView_Black"
+                        android:layout_width="@dimen/dp_eighty"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/call_name"
+                        android:textSize="@dimen/sp_fourteen" />
+
+                    <EditText
+                        android:id="@+id/call_realName_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/dp_sixteen"
+                        android:background="@color/colorWhite"
+                        android:hint="@string/call_input_name"
+                        android:textSize="@dimen/sp_fourteen" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_zero_five"
+                    android:layout_marginLeft="@dimen/dp_sixteen"
+                    android:layout_marginRight="@dimen/dp_sixteen"
+                    android:background="@color/colorLine" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_forty_eight"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/dp_sixteen">
+
+                    <TextView
+                        style="@style/textView_Black"
+                        android:layout_width="@dimen/dp_eighty"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/call_iD"
+                        android:textSize="@dimen/sp_fourteen" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/dp_sixteen"
+                        android:background="@color/colorWhite"
+                        android:hint="@string/call_input_iD"
+                        android:textSize="@dimen/sp_fourteen" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_zero_five"
+                android:background="@color/colorLine" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorWhite"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/yuan_hour"
-                android:textSize="@dimen/sp_ten"/>
+                android:layout_marginBottom="@dimen/dp_ten"
+                android:layout_marginTop="@dimen/dp_sixteen">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_thirty_five"
+                    android:background="@color/colorWhite"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_zero_five"
+                        android:background="@color/colorLine" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dp_fifty"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/textView_Black"
+                            android:text="@string/call_cal_price"
+                            android:textSize="@dimen/sp_fourteen" />
+
+                        <TextView
+                            android:id="@+id/call_hourPrice_tv"
+                            style="@style/textView_Black"
+                            android:textSize="@dimen/sp_fourteen" />
+
+                        <TextView
+                            style="@style/textView_Black"
+                            android:text="@string/server_hour"
+                            android:textSize="@dimen/sp_fourteen" />
+
+                        <TextView
+                            style="@style/textView_Black"
+                            android:text=" x "
+                            android:textSize="@dimen/sp_fourteen" />
+
+                        <TextView
+                            style="@style/textView_Black"
+                            android:text="@string/call_travalTime"
+                            android:textSize="@dimen/sp_fourteen" />
+
+                        <TextView
+                            style="@style/textView_Black"
+                            android:text=" + "
+                            android:textSize="@dimen/sp_fourteen" />
+
+                        <TextView
+                            android:id="@+id/call_accInsPrice_tv"
+                            style="@style/textView_Black"
+                            android:text=""
+                            android:textSize="@dimen/sp_fourteen" />
+
+                        <TextView
+                            style="@style/textView_Black"
+                            android:text="@string/call_accIns"
+                            android:textSize="@dimen/sp_fourteen" />
+                    </LinearLayout>
+
+                    <TextView
+                        style="@style/textView_Black"
+                        android:layout_marginLeft="@dimen/dp_sixteen"
+                        android:layout_marginTop="@dimen/dp_ten"
+                        android:text="@string/attation"
+                        android:textSize="@dimen/sp_twelve" />
+
+                    <TextView
+                        style="@style/textView_Black"
+                        android:layout_marginLeft="@dimen/dp_sixteen"
+                        android:text="@string/attation_one"
+                        android:textSize="@dimen/sp_twelve" />
+
+                    <TextView
+                        style="@style/textView_Black"
+                        android:layout_marginLeft="@dimen/dp_sixteen"
+                        android:text="@string/attation_two"
+                        android:textSize="@dimen/sp_twelve" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_zero_five"
+                        android:layout_marginTop="@dimen/dp_ten"
+                        android:background="@color/colorLine" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="@dimen/dp_seventy"
+                    android:layout_height="@dimen/dp_seventy"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/btn_circle_bg">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/price_show_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="50"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/sp_eighteen" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="@string/yuan_hour"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/sp_ten" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </RelativeLayout>
         </LinearLayout>
-    </RelativeLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/confirm_call_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_forty_eight"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_eight"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_marginRight="@dimen/dp_sixteen"
+        android:background="@drawable/button_bg"
+        android:text="@string/call_sure"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/sp_fourteen" />
 </RelativeLayout>

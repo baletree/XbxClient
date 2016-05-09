@@ -132,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Util.showToast(MainActivity.this, getString(R.string.login_fail));
                         SharePrefer.saveUserInfo(MainActivity.this, new UserInfo());
                         startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), 1000);
-//                        finish();
                     } else if (UtilParse.getRequestCode(checkData) == 1) {
                         UserInfo userInfo = SharePrefer.getUserInfo(MainActivity.this);
                         MainStateParse.resetToken(MainActivity.this, userInfo, UtilParse.getRequestData(checkData));
@@ -247,6 +246,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userInfo = SharePrefer.getUserInfo(MainActivity.this);
         if (userInfo == null)
             return;
+        Util.pLog("head:"+userInfo.getUserHead());
         imageLoader.displayImage(userInfo.getUserHead(), menu_head_img, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
         if (!Util.isNull(userInfo.getNickName()))
             menu_name_tv.setText(userInfo.getNickName());
@@ -307,6 +307,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         viewpager.setCurrentItem(4);
                         break;
                 }
+                guidesFragment.cancelOrderSuc(false);
+                main_menu_img.setVisibility(View.VISIBLE);
+                main_back_img.setVisibility(View.GONE);
             }
 
             @Override
