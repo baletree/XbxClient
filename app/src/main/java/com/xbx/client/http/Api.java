@@ -50,7 +50,7 @@ public class Api {
         params.put("user_type", "0");//代表用户端
         params.put("push_id", pushId);//代表用户端
         Util.pLog("Login phone=" + userInfo.getUserPhone() + " token:" + userInfo.getLoginToken());
-        IRequest.post(context, postUrl, params, "", new RequestBackLisener(context) {
+        IRequest.post(context, postUrl, params, new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("Login check Result:" + json);
@@ -58,6 +58,10 @@ public class Api {
                 msg.obj = json;
                 msg.what = TaskFlag.REQUESTSUCCESS;
                 mHandler.sendMessage(msg);
+            }
+
+            @Override
+            public void requestError(VolleyError e) {
             }
         });
     }
@@ -140,21 +144,21 @@ public class Api {
      * @param startInfo 用户开始地址Json
      * @param startInfo
      * @param guideType 导游或者伴游和土著
-     * @param userNum
      * @param guideId   导游Id
      */
-    public void hasGuide(String uid, String startInfo, String guideType, String userNum, String guideId) {
+    public void hasGuide(String uid, String startInfo, String guideType, String realname, String idcard, String guideId) {
         if (context == null)
             return;
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("server_addr_lnglat", startInfo);
         params.put("guide_type", guideType);
-        params.put("number", userNum);
+        params.put("realname", realname);
+        params.put("idcard", idcard);
         params.put("guid", guideId);
-        Util.pLog("用户:" + uid + " 用户目的地:" + startInfo + " 导游类型:" + guideType + " 人数:" + userNum + " 导游id:" + guideId);
+        Util.pLog("用户:" + uid + " 用户目的地:" + startInfo + " 导游类型:" + guideType + " 导游id:" + guideId);
         String findUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_immediaGuide));
-        IRequest.post(context, findUrl, params, new RequestBackLisener(context) {
+        IRequest.post(context, findUrl, params, "", new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("是否有导游:" + json);
@@ -375,7 +379,9 @@ public class Api {
         });
     }
 
-    /**修改个人信息
+    /**
+     * 修改个人信息
+     *
      * @param uid
      * @param realname
      * @param sex
@@ -450,14 +456,10 @@ public class Api {
                 Util.pLog("版本更新:" + json);
                 sendShowMsg(TaskFlag.PAGEREQUESFOUR, json);
             }
-
-            @Override
-            public void requestError(VolleyError e) {
-            }
         });
     }
 
-    public void getNearTogether(String togetherLnlat) {
+    public void getNearTogether(String togetherLnlat, String guideType) {
         if (context == null)
             return;
         String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_nearTogether)).concat("?server_addr_lnglat=" + togetherLnlat);
@@ -467,6 +469,10 @@ public class Api {
             public void requestSuccess(String json) {
                 Util.pLog("获取周边随游:" + json);
                 sendShowMsg(TaskFlag.REQUESTSUCCESS, json);
+            }
+
+            @Override
+            public void requestError(VolleyError e) {
             }
         });
     }
@@ -481,6 +487,22 @@ public class Api {
             public void requestSuccess(String json) {
                 Util.pLog("支付结果:" + json);
                 sendShowMsg(TaskFlag.PAGEREQUESFIVE, json);
+            }
+        });
+    }
+
+    public void getPayInfo(String orderNum, String payWay) {
+        if (context == null)
+            return;
+        RequestParams params = new RequestParams();
+        params.put("order_number", orderNum);
+        params.put("pay_channel", payWay);
+        String url = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_pays));
+        IRequest.post(context, url, params, "", new RequestBackLisener(context) {
+            @Override
+            public void requestSuccess(String json) {
+                Util.pLog("支付信息:" + json);
+                sendShowMsg(TaskFlag.PAGEREQUESFOUR, json);
             }
         });
     }

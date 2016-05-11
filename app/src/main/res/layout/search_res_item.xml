@@ -18,7 +18,7 @@
         <TextView
             android:id="@+id/search_address"
             style="@style/textView_Hint"
-            android:layout_marginTop="@dimen/dp_five"
+            android:layout_marginTop="@dimen/dp_two"
             android:textSize="@dimen/sp_eleven"/>
     </LinearLayout>
 </RelativeLayout>

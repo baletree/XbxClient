@@ -13,6 +13,15 @@ public class UserInfo {
     private String userSex;
     private String userBirthday;
     private String userRealName;
+    private String userIdCard;
+
+    public String getUserIdCard() {
+        return userIdCard;
+    }
+
+    public void setUserIdCard(String userIdCard) {
+        this.userIdCard = userIdCard;
+    }
 
     public String getUserSex() {
         return userSex;

@@ -2,14 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/dp_hundred_four"
     android:background="@color/colorBackground"
     android:visibility="visible">
+
+    <include
+        android:id="@+id/call_guide_ll"
+        layout="@layout/page_title" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/confirm_call_btn"
+        android:layout_below="@+id/call_guide_ll"
         android:scrollbars="none">
 
         <LinearLayout
@@ -34,12 +38,20 @@
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/dp_sixteen">
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/dp_twelve"
+                    android:src="@mipmap/call_head" />
+
                 <TextView
                     android:id="@+id/call_realName_tv"
                     style="@style/textView_Black"
                     android:layout_width="@dimen/dp_eighty"
                     android:layout_gravity="center_vertical"
-                    android:textSize="@dimen/sp_fourteen" />
+                    android:textSize="@dimen/sp_fourteen"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/call_phone_tv"
@@ -92,6 +104,7 @@
                                 android:id="@+id/call_insPrice_tv"
                                 style="@style/textView_Black"
                                 android:layout_width="@dimen/dp_ninety"
+                                android:text="￥10"
                                 android:textSize="@dimen/sp_fourteen" />
                         </LinearLayout>
 
@@ -129,6 +142,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginRight="@dimen/dp_sixteen"
+                        android:textColorHint="@color/colorHint"
                         android:background="@color/colorWhite"
                         android:hint="@string/call_input_name"
                         android:textSize="@dimen/sp_fourteen" />
@@ -155,11 +169,14 @@
                         android:textSize="@dimen/sp_fourteen" />
 
                     <EditText
+                        android:id="@+id/call_idCard_et"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginRight="@dimen/dp_sixteen"
                         android:background="@color/colorWhite"
                         android:hint="@string/call_input_iD"
+                        android:maxLength="18"
+                        android:textColorHint="@color/colorHint"
                         android:textSize="@dimen/sp_fourteen" />
                 </LinearLayout>
             </LinearLayout>
@@ -202,6 +219,7 @@
                         <TextView
                             android:id="@+id/call_hourPrice_tv"
                             style="@style/textView_Black"
+                            android:text="￥50"
                             android:textSize="@dimen/sp_fourteen" />
 
                         <TextView
@@ -227,7 +245,7 @@
                         <TextView
                             android:id="@+id/call_accInsPrice_tv"
                             style="@style/textView_Black"
-                            android:text=""
+                            android:text="￥10"
                             android:textSize="@dimen/sp_fourteen" />
 
                         <TextView
@@ -247,12 +265,14 @@
                         style="@style/textView_Black"
                         android:layout_marginLeft="@dimen/dp_sixteen"
                         android:text="@string/attation_one"
+                        android:textColor="@color/colorHint"
                         android:textSize="@dimen/sp_twelve" />
 
                     <TextView
                         style="@style/textView_Black"
                         android:layout_marginLeft="@dimen/dp_sixteen"
                         android:text="@string/attation_two"
+                        android:textColor="@color/colorHint"
                         android:textSize="@dimen/sp_twelve" />
 
                     <View
@@ -263,8 +283,8 @@
                 </LinearLayout>
 
                 <RelativeLayout
-                    android:layout_width="@dimen/dp_seventy"
-                    android:layout_height="@dimen/dp_seventy"
+                    android:layout_width="@dimen/dp_seventy_four"
+                    android:layout_height="@dimen/dp_seventy_four"
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/btn_circle_bg">
 
@@ -272,7 +292,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginBottom="@dimen/dp_one"
+                            android:text="￥"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/sp_twelve" />
 
                         <TextView
                             android:id="@+id/price_show_tv"
@@ -286,8 +315,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:text="@string/yuan_hour"
+                            android:layout_gravity="bottom"
+                            android:layout_marginBottom="@dimen/dp_one"
+                            android:text="@string/server_hour"
                             android:textColor="@color/colorWhite"
                             android:textSize="@dimen/sp_ten" />
                     </LinearLayout>

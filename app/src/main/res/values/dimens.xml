@@ -7,6 +7,7 @@
     <dimen name="dp_zero">0dp</dimen>
     <dimen name="dp_zero_three">0.3dp</dimen>
     <dimen name="dp_zero_five">0.5dp</dimen>
+    <dimen name="dp_zero_eight">0.8dp</dimen>
     <dimen name="dp_one">1dp</dimen>
     <dimen name="dp_two">2dp</dimen>
     <dimen name="dp_three">3dp</dimen>
@@ -38,6 +39,7 @@
     <dimen name="dp_twenty_nine">29dp</dimen>
     <dimen name="dp_thirty">30dp</dimen>
     <dimen name="dp_thirty_one">31dp</dimen>
+    <dimen name="dp_thirty_three">33dp</dimen>
     <dimen name="dp_thirty_five">35dp</dimen>
     <dimen name="dp_thirty_six">36dp</dimen>
     <dimen name="dp_forty">40dp</dimen>
@@ -51,11 +53,13 @@
     <dimen name="dp_seventy_four">74dp</dimen>
     <dimen name="dp_eighty">80dp</dimen>
     <dimen name="dp_eighty_four">84dp</dimen>
+    <dimen name="dp_ninety_two">92dp</dimen>
     <dimen name="dp_ninety_three">93dp</dimen>
     <dimen name="dp_ninety_six">96dp</dimen>
     <dimen name="dp_ninety_eight">98dp</dimen>
     <dimen name="dp_hundred">100dp</dimen>
     <dimen name="dp_hundred_four">104dp</dimen>
+    <dimen name="dp_hundred_eight">108dp</dimen>
     <dimen name="dp_hundred_twele">112dp</dimen>
     <dimen name="dp_hundred_twenty">120dp</dimen>
     <dimen name="dp_hundred_thirty">130dp</dimen>

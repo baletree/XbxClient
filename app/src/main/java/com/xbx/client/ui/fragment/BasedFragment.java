@@ -16,11 +16,14 @@ import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.ta.utdid2.android.utils.SystemUtils;
 import com.xbx.client.R;
+import com.xbx.client.db.DBOpere;
 import com.xbx.client.linsener.ImageLoaderConfigFactory;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.Util;
@@ -35,6 +38,7 @@ public class BasedFragment extends Fragment implements View.OnClickListener, BDL
     public final int outsetReques = 1000;
     public final int callGuideReques = 1002;
     public final int choiceTogether = 1005;
+    public final int confimCall = 1999;
 
     public ImageLoader imageLoader;
     public ImageLoaderConfigFactory configFactory;

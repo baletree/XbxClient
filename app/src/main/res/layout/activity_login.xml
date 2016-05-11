@@ -15,7 +15,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_one"
+            android:layout_height="@dimen/dp_zero_eight"
             android:background="@color/colorLine" />
 
         <LinearLayout
@@ -27,7 +27,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_forty_eight"
-
                 android:orientation="horizontal">
 
                 <TextView
@@ -52,7 +51,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_one"
+                android:layout_height="@dimen/dp_zero_eight"
                 android:layout_marginLeft="@dimen/dp_sixteen"
                 android:layout_marginRight="@dimen/dp_sixteen"
                 android:background="@color/colorLine" />
@@ -98,7 +97,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_one"
+            android:layout_height="@dimen/dp_zero_eight"
             android:background="@color/colorLine" />
 
         <LinearLayout

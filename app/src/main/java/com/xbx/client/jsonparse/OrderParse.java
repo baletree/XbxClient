@@ -3,6 +3,7 @@ package com.xbx.client.jsonparse;
 import com.xbx.client.beans.CancelInfoBean;
 import com.xbx.client.beans.OrderBean;
 import com.xbx.client.beans.OrderDetailBean;
+import com.xbx.client.utils.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,51 +51,65 @@ public class OrderParse {
     public static OrderDetailBean getDetailOrder(String json) {
         OrderDetailBean oDetailBean = new OrderDetailBean();
         try {
-            JSONObject jObject = new JSONObject(json);
-            if (UtilParse.checkTag(jObject, "realname"))
-                oDetailBean.setGuideName(jObject.getString("realname"));
-            if (UtilParse.checkTag(jObject, "head_image"))
-                oDetailBean.setHeadImg(jObject.getString("head_image"));
-            if (UtilParse.checkTag(jObject, "user_type"))
-                oDetailBean.setGuideType(jObject.getInt("user_type"));
-            if (UtilParse.checkTag(jObject, "guide_number"))
-                oDetailBean.setGuideNumber(jObject.getString("guide_number"));
-            if (UtilParse.checkTag(jObject, "mobile"))
-                oDetailBean.setGuidePhone(jObject.getString("mobile"));
-            if (UtilParse.checkTag(jObject, "order_number"))
-                oDetailBean.setOrderNum(jObject.getString("order_number"));
-            if (UtilParse.checkTag(jObject, "order_status"))
-                oDetailBean.setOrderState(jObject.getInt("order_status"));
-            if (UtilParse.checkTag(jObject, "pay_status"))
-                oDetailBean.setOrderPayState(jObject.getString("pay_status"));
-            if (UtilParse.checkTag(jObject, "order_money"))
-                oDetailBean.setOrderOrignalPay(jObject.getDouble("order_money"));
-            if (UtilParse.checkTag(jObject, "rebate_money"))
-                oDetailBean.setRebateMoney(jObject.getDouble("rebate_money"));
-            if (UtilParse.checkTag(jObject, "tip_money"))
-                oDetailBean.setRewardMoney(jObject.getDouble("tip_money"));
-            if (UtilParse.checkTag(jObject, "pay_money"))
-                oDetailBean.setOrderPay(jObject.getDouble("pay_money"));
-            if (UtilParse.checkTag(jObject, "pay_type"))
-                oDetailBean.setOrderPayType(jObject.getInt("pay_type"));
-            if (UtilParse.checkTag(jObject, "server_start_time"))
-                oDetailBean.setOrderStartTime(jObject.getString("server_start_time"));
-            if (UtilParse.checkTag(jObject, "server_end_time"))
-                oDetailBean.setOrderEndtTime(jObject.getString("server_end_time"));
-            if (UtilParse.checkTag(jObject, "server_type"))
-                oDetailBean.setServerType(jObject.getInt("server_type"));
-            if (UtilParse.checkTag(jObject, "content"))
-                oDetailBean.setGuideCotent(jObject.getString("content"));
-            if (UtilParse.checkTag(jObject, "tag"))
-                oDetailBean.setGuideTagList(guideTags(jObject.getString("tag")));
-            if (UtilParse.checkTag(jObject, "server_date"))
-                oDetailBean.setServerDate(jObject.getString("server_date"));
-            if (UtilParse.checkTag(jObject, "cancel_time"))
-                oDetailBean.setOrderCancelTime(jObject.getString("cancel_time"));
-            if (UtilParse.checkTag(jObject, "star"))
-                oDetailBean.setCommentStar(jObject.getString("star"));
-            if (UtilParse.checkTag(jObject, "stars"))
-                oDetailBean.setGuideStar(jObject.getString("stars"));
+            JSONObject jOb = new JSONObject(json);
+            if(UtilParse.checkTag(jOb,"order_info")){
+                JSONObject jObject = jOb.getJSONObject("order_info");
+                if (UtilParse.checkTag(jObject, "realname"))
+                    oDetailBean.setGuideName(jObject.getString("realname"));
+                if (UtilParse.checkTag(jObject, "head_image"))
+                    oDetailBean.setHeadImg(jObject.getString("head_image"));
+                if (UtilParse.checkTag(jObject, "user_type"))
+                    oDetailBean.setGuideType(jObject.getInt("user_type"));
+                if (UtilParse.checkTag(jObject, "guide_number"))
+                    oDetailBean.setGuideNumber(jObject.getString("guide_number"));
+                if (UtilParse.checkTag(jObject, "mobile"))
+                    oDetailBean.setGuidePhone(jObject.getString("mobile"));
+                if (UtilParse.checkTag(jObject, "order_number"))
+                    oDetailBean.setOrderNum(jObject.getString("order_number"));
+                if (UtilParse.checkTag(jObject, "order_status"))
+                    oDetailBean.setOrderState(jObject.getInt("order_status"));
+                if (UtilParse.checkTag(jObject, "pay_status"))
+                    oDetailBean.setOrderPayState(jObject.getString("pay_status"));
+                if (UtilParse.checkTag(jObject, "order_money"))
+                    oDetailBean.setOrderOrignalPay(jObject.getDouble("order_money"));
+                if (UtilParse.checkTag(jObject, "rebate_money"))
+                    oDetailBean.setRebateMoney(jObject.getDouble("rebate_money"));
+                if (UtilParse.checkTag(jObject, "tip_money"))
+                    oDetailBean.setRewardMoney(jObject.getDouble("tip_money"));
+                if (UtilParse.checkTag(jObject, "pay_money"))
+                    oDetailBean.setOrderPay(jObject.getDouble("pay_money"));
+                if (UtilParse.checkTag(jObject, "pay_type"))
+                    oDetailBean.setOrderPayType(jObject.getInt("pay_type"));
+                if (UtilParse.checkTag(jObject, "server_start_time"))
+                    oDetailBean.setOrderStartTime(jObject.getString("server_start_time"));
+                if (UtilParse.checkTag(jObject, "server_end_time"))
+                    oDetailBean.setOrderEndtTime(jObject.getString("server_end_time"));
+                if (UtilParse.checkTag(jObject, "server_type"))
+                    oDetailBean.setServerType(jObject.getInt("server_type"));
+                if (UtilParse.checkTag(jObject, "content"))
+                    oDetailBean.setGuideCotent(jObject.getString("content"));
+                if (UtilParse.checkTag(jObject, "tag"))
+                    oDetailBean.setGuideTagList(guideTags(jObject.getString("tag")));
+                if (UtilParse.checkTag(jObject, "server_date"))
+                    oDetailBean.setServerDate(jObject.getString("server_date"));
+                if (UtilParse.checkTag(jObject, "cancel_time"))
+                    oDetailBean.setOrderCancelTime(jObject.getString("cancel_time"));
+                if (UtilParse.checkTag(jObject, "star"))
+                    oDetailBean.setCommentStar(jObject.getString("star"));
+                if (UtilParse.checkTag(jObject, "stars"))
+                    oDetailBean.setGuideStar(jObject.getString("stars"));
+            }
+            if(UtilParse.checkTag(jOb,"tip")){
+                List<Integer> rewardList = new ArrayList<>();
+                JSONArray jsonArray = jOb.getJSONArray("tip");
+                if(jsonArray!= null && jsonArray.length() > 0){
+                    for(int i = 0;i<jsonArray.length();i++){
+                        int reward = (int) jsonArray.get(i);
+                        rewardList.add(reward);
+                    }
+                    oDetailBean.setRewardList(rewardList);
+                }
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -132,5 +147,17 @@ public class OrderParse {
             e1.printStackTrace();
         }
         return tagList;
+    }
+
+    public static String getPayInfo(String json){
+        String payInfo = "";
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            if(UtilParse.checkTag(jsonObject,"sign"))
+                payInfo = jsonObject.getString("sign");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return payInfo;
     }
 }

@@ -183,9 +183,10 @@ public class OrderDetailActivity extends BaseActivity {
         guide_name_tv.setText(detailBean.getGuideName());
         guide_typed_tv.setText(StringUtil.getGuideType(this, detailBean.getGuideType()));
         guide_code_tv.setText(detailBean.getGuideNumber());
-        Util.pLog("detailBean.getGuideStar():" + detailBean.getGuideStar());
-        if (!Util.isNull(detailBean.getGuideStar()))
+        if (!Util.isNull(detailBean.getGuideStar())) {
             guide_ratingbar.setRating(Float.valueOf(detailBean.getGuideStar()) / 2);
+            ((TextView) findViewById(R.id.guide_star_tv)).setText(detailBean.getGuideStar() + getString(R.string.scole));
+        }
         user_stroke_tv.setText(detailBean.getUserAddress());
         setStateInfo();
     }
@@ -200,7 +201,7 @@ public class OrderDetailActivity extends BaseActivity {
         commentCotent_tv.setText(detailBean.getGuideCotent());
         if (!Util.isNull(detailBean.getCommentStar())) {
             guideComment_rb.setVisibility(View.VISIBLE);
-            guideComment_rb.setRating(Float.valueOf(detailBean.getCommentStar())/2);
+            guideComment_rb.setRating(Float.valueOf(detailBean.getCommentStar()) / 2);
         }
         if (detailBean.getRewardMoney() == 0.0)
             rewardMon_rl.setVisibility(View.GONE);

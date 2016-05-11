@@ -148,7 +148,7 @@ public class ReservatPayActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.reservat_pay_btn:
-                api.moniPayOrder(detailBean.getOrderNum());
+                /*api.moniPayOrder(detailBean.getOrderNum());
                 Util.showToast(ReservatPayActivity.this,"模拟支付："+detailBean.getOrderNum());
                 PayInfoBean payBean = new PayInfoBean();
                 payBean.setPayName("途途导由测试");
@@ -157,7 +157,7 @@ public class ReservatPayActivity extends BaseActivity {
                 payBean.setPayPrice("0.02");
                 String notifyurl = "http://notify.msp.hk/notify.htm";
                 Alipay alipay = new Alipay(ReservatPayActivity.this, notifyurl);
-                alipay.pay(payBean);
+                alipay.pay(payBean);*/
                 break;
             case R.id.guides_call_img:
                 if (detailBean != null && !Util.isNull(detailBean.getGuidePhone())) {

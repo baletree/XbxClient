@@ -90,6 +90,15 @@ public class PayOrderActivity extends FragmentActivity implements View.OnClickLi
                     setResult(RESULT_OK, new Intent());
                     finish();
                     break;
+                case TaskFlag.PAGEREQUESFOUR:
+                    String datas = (String) msg.obj;
+                    if (Util.isNull(datas))
+                        return;
+                    Util.pLog("sign:"+datas);
+                    String payInfo = OrderParse.getPayInfo(datas);
+                    Alipay alipay = new Alipay(PayOrderActivity.this, payInfo);
+                    alipay.pay();
+                    break;
             }
         }
     };
@@ -188,16 +197,7 @@ public class PayOrderActivity extends FragmentActivity implements View.OnClickLi
 //                startActivity(intent);
                 break;
             case R.id.immedia_pay_btn:
-                api.moniPayOrder(detailBean.getOrderNum());
-                Util.showToast(PayOrderActivity.this, "模拟支付：" + detailBean.getOrderNum());
-                PayInfoBean payBean = new PayInfoBean();
-                payBean.setPayName("途途导由测试");
-                payBean.setPayIntro("北京到成都春熙路旅游费用");
-                payBean.setPayOutTradeNum("TTDY20160412101000231");
-                payBean.setPayPrice("0.02");
-                String notifyurl = "http://notify.msp.hk/notify.htm";
-                Alipay alipay = new Alipay(PayOrderActivity.this, notifyurl);
-//                alipay.pay(payBean);
+                api.getPayInfo(detailBean.getOrderNum(), "alipay");
                 break;
             case R.id.guides_call_img:
                 if (detailBean != null && !Util.isNull(detailBean.getGuidePhone())) {

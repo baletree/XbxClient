@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.xbx.client.R;
 import com.xbx.client.beans.UserInfo;
@@ -38,6 +40,10 @@ public class LoadingActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        int flag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        Window window = this.getWindow();
+        window.setFlags(flag, flag);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
     }

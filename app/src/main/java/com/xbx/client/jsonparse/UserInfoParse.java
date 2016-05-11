@@ -26,7 +26,6 @@ public class UserInfoParse {
             }
             if (UtilParse.checkTag(jsonObject, "user_info")) {
                 JSONObject job = jsonObject.getJSONObject("user_info");
-//                Util.pLog("user_info:"+job.toString());
                 if (UtilParse.checkTag(job, "mobile"))
                     userInfo.setUserPhone(job.getString("mobile"));
                 if (UtilParse.checkTag(job, "nickname"))
@@ -39,6 +38,8 @@ public class UserInfoParse {
                     userInfo.setUserSex(job.getString("sex"));
                 if (UtilParse.checkTag(job, "realname"))
                     userInfo.setUserRealName(job.getString("realname"));
+                if (UtilParse.checkTag(job, "idcard"))
+                    userInfo.setUserIdCard(job.getString("idcard"));
             }
         } catch (JSONException e) {
             e.printStackTrace();

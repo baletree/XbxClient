@@ -80,6 +80,7 @@ public class SharePrefer {
         spHelper.setSP("userSexType", userInfo.getUserSex());
         spHelper.setSP("userBirthday", userInfo.getUserBirthday());
         spHelper.setSP("userRealName", userInfo.getUserRealName());
+        spHelper.setSP("userIdCard", userInfo.getUserIdCard());
     }
 
     public static UserInfo getUserInfo(Context context){
@@ -95,6 +96,7 @@ public class SharePrefer {
         userInfo.setUserSex(spHelper.getSP("userSexType"));
         userInfo.setUserBirthday(spHelper.getSP("userBirthday"));
         userInfo.setUserRealName(spHelper.getSP("userRealName"));
+        userInfo.setUserIdCard(spHelper.getSP("userIdCard"));
         return userInfo;
     }
 

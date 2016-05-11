@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import com.xbx.client.http.RequestParams;
 import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.jsonparse.UserInfoParse;
 import com.xbx.client.linsener.RequestBackLisener;
+import com.xbx.client.utils.Constant;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.Util;
 
@@ -32,6 +34,7 @@ public class LoginActivity extends BaseActivity {
     private EditText login_code_et;
     private Button login_btn;
     private Button login_code_btn;
+    private LocalBroadcastManager lBManager = null;
 
     private int countDown = 60;
     private boolean isNoLogin = false;
@@ -67,6 +70,7 @@ public class LoginActivity extends BaseActivity {
     protected void initDatas() {
         super.initDatas();
         isNoLogin = getIntent().getBooleanExtra("isNoLogin", false);
+        lBManager = LocalBroadcastManager.getInstance(this);
     }
 
     @Override
@@ -164,7 +168,7 @@ public class LoginActivity extends BaseActivity {
                     UserInfo userInfo = UserInfoParse.getUserInfo(UtilParse.getRequestData(json));
                     if (userInfo != null) {
                         SharePrefer.saveUserInfo(LoginActivity.this, userInfo);
-                        setResult(RESULT_OK, new Intent());
+                        lBManager.sendBroadcast(new Intent(Constant.ACTION_LOGINSUC));
                         finish();
                     }
                 } else {

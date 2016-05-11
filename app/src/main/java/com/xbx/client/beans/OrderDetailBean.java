@@ -31,6 +31,16 @@ public class OrderDetailBean implements Serializable{
     private int orderPayType;
     private String orderCancelTime;
 
+    private List<Integer> rewardList;
+
+    public List<Integer> getRewardList() {
+        return rewardList;
+    }
+
+    public void setRewardList(List<Integer> rewardList) {
+        this.rewardList = rewardList;
+    }
+
     public String getCommentStar() {
         return commentStar;
     }

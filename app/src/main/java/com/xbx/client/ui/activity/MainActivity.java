@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +29,7 @@ import com.xbx.client.beans.CancelInfoBean;
 import com.xbx.client.beans.UserInfo;
 import com.xbx.client.beans.UserStateBean;
 import com.xbx.client.beans.Version;
+import com.xbx.client.db.DBOpere;
 import com.xbx.client.http.Api;
 import com.xbx.client.jsonparse.MainStateParse;
 import com.xbx.client.jsonparse.OrderParse;
@@ -47,7 +49,10 @@ import com.xbx.client.utils.updateversion.UpdateUtil;
 import com.xbx.client.view.BanSlideViewpager;
 import com.xbx.client.view.TipsDialog;
 
+import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
@@ -90,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean isFromLogin = false;
     private int cancelType = 0; //1-导游 2-土著  3-随游
     private String orderNum = "";
+    private static boolean isExit = false;
 
     private Handler handler = new Handler() {
         @Override
@@ -97,6 +103,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.handleMessage(msg);
             Intent intent = new Intent();
             switch (msg.what) {
+                case 0:
+                    isExit = false;
+                    break;
                 case TaskFlag.PAGEREQUESFIVE: //取消订单成功
                     String allData = (String) msg.obj;
                     if (Util.isNull(allData)) {
@@ -246,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userInfo = SharePrefer.getUserInfo(MainActivity.this);
         if (userInfo == null)
             return;
-        Util.pLog("head:"+userInfo.getUserHead());
+        Util.pLog("head:" + userInfo.getUserHead());
         imageLoader.displayImage(userInfo.getUserHead(), menu_head_img, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
         if (!Util.isNull(userInfo.getNickName()))
             menu_name_tv.setText(userInfo.getNickName());
@@ -263,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intentFilter.addAction(Constant.ACTION_CALLGUIDEBTN);
         intentFilter.addAction(Constant.ACTION_USERINORDER);
         intentFilter.addAction(Constant.ACTION_DISSMISSBACK);
+        intentFilter.addAction(Constant.ACTION_LOGINSUC);
         localReceiver = new LocalReceiver();
         lBManager.registerReceiver(localReceiver, intentFilter);
     }
@@ -275,9 +285,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bowenFragment = BowenFragment.newInstance();
         viewPagerAdapter.addFragment(guidesFragment, getString(R.string.main_guide));
         viewPagerAdapter.addFragment(nativesFragment, getString(R.string.main_native));
-        viewPagerAdapter.addFragment(togetherFragment, getString(R.string.main_withTour));
+        /*viewPagerAdapter.addFragment(togetherFragment, getString(R.string.main_withTour));
         viewPagerAdapter.addFragment(withtourFragment, getString(R.string.main_together));
-        viewPagerAdapter.addFragment(bowenFragment, getString(R.string.main_bowen));
+        viewPagerAdapter.addFragment(bowenFragment, getString(R.string.main_bowen));*/
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         viewpager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewpager);
@@ -363,11 +373,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (userInfo == null) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            intent.putExtra("NoLoginAction", true);
-            startActivityForResult(intent, 1000);
-        }
+        userInfo = SharePrefer.getUserInfo(MainActivity.this);
         String uid = userInfo.getUid();
         switch (v.getId()) {
             case R.id.main_menu_img:
@@ -398,6 +404,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.menu_setting_layout: //设置
                 startActivity(new Intent(MainActivity.this, SettingActivity.class));
                 toggleLeftLayout();
+                DBOpere.getInstance(MainActivity.this).deleteLatlng();
                 break;
             case R.id.menu_msg_layout://消息中心
                 startActivity(new Intent(MainActivity.this, TourDetailActivity.class));
@@ -455,11 +462,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else if (Constant.ACTION_DISSMISSBACK.equals(action)) {
                 main_menu_img.setVisibility(View.VISIBLE);
                 main_back_img.setVisibility(View.GONE);
+            }else if(Constant.ACTION_LOGINSUC.equals(action)){
+                setUserInfo();
             }
         }
     }
 
     private void checkUpdate(Version version) {
         new UpdateUtil(MainActivity.this, version);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() == 0) {
+            exit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void exit() {
+        if (!isExit) {
+            isExit = true;
+            Util.showToast(MainActivity.this, getString(R.string.exit_app));
+            // 利用handler延迟发送更改状态信息
+            handler.sendEmptyMessageDelayed(0, 2000);
+        } else {
+            this.finish();
+        }
     }
 }

@@ -55,6 +55,20 @@ public class Util {
         return false;
     }
 
+    /**
+     * 身份证验证
+     *
+     * @param id
+     * @return
+     */
+    public static boolean isCardID(String id) {
+        Pattern p = Pattern
+                .compile("^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$");
+        Matcher m = p.matcher(id);
+        return m.matches();
+    }
+
+
     public static boolean isNetworkConnected(Context context) {
         if (context != null) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) context
@@ -238,5 +252,12 @@ public class Util {
         view.setDrawingCacheEnabled(true);
         Bitmap bitmap = view.getDrawingCache(true);
         return bitmap;
+    }
+
+    public static String timeToStr(long time){
+        String str = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        str = sdf.format(new Date(time));
+        return str;
     }
 }

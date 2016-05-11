@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/dp_eighteen"
     android:layout_marginRight="@dimen/dp_eighteen"
-    android:layout_marginTop="@dimen/dp_hundred_twele"
+    android:layout_marginTop="@dimen/dp_hundred_eight"
     android:background="@drawable/input_locate_bg"
     android:orientation="vertical">
 

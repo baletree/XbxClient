@@ -196,13 +196,15 @@
     <string name="suc_modify_head">头像修改成功</string>
     <string name="accident_insurance">意外险</string>
     <string name="accident_tip">价值10万元意外保险，请仔细核对填写身份信息</string>
-    <string name="call_name">姓名</string>
+    <string name="call_name">真实姓名</string>
     <string name="call_input_name">请输入您的真实姓名</string>
     <string name="call_iD">身份证号</string>
     <string name="call_input_iD">请输入身份证号</string>
+    <string name="call_input_rightID">请输入正确的身份证号</string>
     <string name="call_cal_price">计算方法:</string>
     <string name="call_travalTime">游玩时间</string>
     <string name="call_accIns">保险</string>
+    <string name="exit_app">再按一次退出程序</string>
     <!--向导-->
     <string name="find_Native">正在呼叫向导</string>
     <string name="find_Togeher">正在呼叫随游</string>
@@ -214,6 +216,7 @@
     <string name="input_star">请评定星级</string>
     <string name="no_hasTogether">暂无随游</string>
     <string name="call_immedia">立即呼叫</string>
+    <string name="call_guide_txt">立即呼叫</string>
     <!--LoadingListView-->
     <string name="head">这里是HeadView</string>
     <string name="pull_to_refresh">下拉刷新</string>

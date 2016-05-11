@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:background="@color/colorWhite"
             android:divider="@color/colorLinePart"
-            android:dividerHeight="@dimen/dp_zero_five" />
+            android:dividerHeight="@dimen/dp_zero_three" />
         <include layout="@layout/load_more" />
     </com.xbx.client.view.pulllistview.PullToRefreshLayout>
 </LinearLayout>

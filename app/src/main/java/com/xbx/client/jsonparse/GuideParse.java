@@ -115,8 +115,8 @@ public class GuideParse {
                 guideInfoBean.setGuideLon(jObject.getDouble("lon"));
             if (UtilParse.checkTag(jObject, "lat"))
                 guideInfoBean.setGuideLat(jObject.getDouble("lat"));
-            if (UtilParse.checkTag(jObject, "guide_number"))
-                guideInfoBean.setGuideNum(jObject.getString("guide_number"));
+            if (UtilParse.checkTag(jObject, "guide_card_number"))
+                guideInfoBean.setGuideNum(jObject.getString("guide_card_number"));
             if (UtilParse.checkTag(jObject, "stars"))
                 guideInfoBean.setGuideStarts(jObject.getString("stars"));
             if (UtilParse.checkTag(jObject, "server_start_time"))

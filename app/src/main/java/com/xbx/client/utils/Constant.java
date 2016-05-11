@@ -32,6 +32,7 @@ public class Constant {
     public static final String ACTION_GUIDEINORDER = "com.xbx.client.guide.into.order";
     public static final String ACTION_NATIVEINORDER = "com.xbx.client.native.into.order";
     public static final String ACTION_TOGETHERINORDER = "com.xbx.client.together.into.order";
+    public static final String ACTION_LOGINSUC = "com.xbx.client.login.suc";
     public static final int guideType = 1;
     public static final int nativeType = 3;
     public static final int togetherType = 2;

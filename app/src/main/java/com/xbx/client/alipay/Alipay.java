@@ -54,6 +54,8 @@ public class Alipay {
 
     private AlipayCallBack callBack;
 
+    private String phpPayInfo = "";
+
     public void setCallBack(AlipayCallBack callBack) {
         this.callBack = callBack;
     }
@@ -103,42 +105,42 @@ public class Alipay {
         }
     };
 
-    public Alipay(Activity context, String notifyUrl) {
+    public Alipay(Activity context, String phpPayInfo) {
         super();
         this.context = context;
-        this.notifyUrl = notifyUrl;
+        this.phpPayInfo = phpPayInfo;
     }
 
     /**
      * call alipay sdk pay. 调用SDK支付
      */
-    public void pay(PayInfoBean payBean) {
-        String orderInfo = getOrderInfo(payBean);
-        /**
+    public void pay() {
+        /*String orderInfo = getOrderInfo(payBean);
+        *//**
          * 特别注意，这里的签名逻辑需要放在服务端，切勿将私钥泄露在代码中！
-         */
+         *//*
         String sign = sign(orderInfo);
         try {
-            /**
+            *//**
              * 仅需对sign 做URL编码
-             */
+             *//*
             sign = URLEncoder.encode(sign, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        /**
+        *//**
          * 完整的符合支付宝参数规范的订单信息
-         */
+         *//*
         final String payInfo = orderInfo + "&sign=\"" + sign + "\"&"
-                + getSignType();
-
+                + getSignType();*/
         Runnable payRunnable = new Runnable() {
             @Override
             public void run() {
                 // 构造PayTask 对象
                 PayTask alipay = new PayTask(context);
                 // 调用支付接口，获取支付结果
-                String result = alipay.pay(payInfo, true);
+//                String result = alipay.pay(payInfo, true);
+                String result = alipay.pay(phpPayInfo, true);
                 Message msg = new Message();
                 msg.what = SDK_PAY_FLAG;
                 msg.obj = result;
@@ -232,6 +234,7 @@ public class Alipay {
     private String sign(String content) {
         return SignUtils.sign(content, RSA_PRIVATE);
     }
+
     /**
      * get the sign type we use. 获取签名方式
      */
