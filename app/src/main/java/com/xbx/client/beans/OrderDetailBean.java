@@ -31,13 +31,13 @@ public class OrderDetailBean implements Serializable{
     private int orderPayType;
     private String orderCancelTime;
 
-    private List<Integer> rewardList;
+    private List<String> rewardList;
 
-    public List<Integer> getRewardList() {
+    public List<String> getRewardList() {
         return rewardList;
     }
 
-    public void setRewardList(List<Integer> rewardList) {
+    public void setRewardList(List<String> rewardList) {
         this.rewardList = rewardList;
     }
 

@@ -28,6 +28,8 @@ import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
 import com.xbx.client.view.TipsDialog;
 
+import java.util.ArrayList;
+
 /**
  * Created by EricYuan on 2016/4/11.
  * 支付订单界面
@@ -193,11 +195,15 @@ public class PayOrderActivity extends FragmentActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.reward_img:
-                Intent intent = new Intent(PayOrderActivity.this, SubCommentActivity.class);
-//                startActivity(intent);
+                if(detailBean.getRewardList() == null)
+                    return;
+                Intent intent = new Intent(PayOrderActivity.this, RewardActivity.class);
+                intent.putStringArrayListExtra("rewardMonList", (ArrayList<String>) detailBean.getRewardList());
+                startActivity(intent);
                 break;
             case R.id.immedia_pay_btn:
-                api.getPayInfo(detailBean.getOrderNum(), "alipay");
+//                api.getPayInfo(detailBean.getOrderNum(), "alipay");
+                api.moniPayOrder(detailBean.getOrderNum());
                 break;
             case R.id.guides_call_img:
                 if (detailBean != null && !Util.isNull(detailBean.getGuidePhone())) {

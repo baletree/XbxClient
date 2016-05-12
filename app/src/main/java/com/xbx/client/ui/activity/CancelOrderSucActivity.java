@@ -33,7 +33,6 @@ public class CancelOrderSucActivity extends BaseActivity {
     private CancelInfoBean canInfo = null;
 
     private boolean isFromOrder = false;
-    private String orderNum = "";
 
     private Handler handler = new Handler() {
         @Override
@@ -42,16 +41,13 @@ public class CancelOrderSucActivity extends BaseActivity {
             switch (msg.what) {
                 case TaskFlag.PAGEREQUESFIVE:
                     Util.showToast(CancelOrderSucActivity.this, "取消金支付成功!");
-                    setResult(RESULT_OK, new Intent());
+                    if (isFromOrder) {
+                        setResult(RESULT_OK, new Intent());
+                    } else {
+                        startActivity(new Intent(CancelOrderSucActivity.this, MainActivity.class));
+                    }
                     finish();
                     break;
-                /*case TaskFlag.REQUESTSUCCESS:
-                    String dataDetail = (String) msg.obj;
-                    detailBean = OrderParse.getDetailOrder(dataDetail);
-                    if (detailBean == null)
-                        return;
-                    setCancelInfo();
-                    break;*/
             }
         }
     };
@@ -65,7 +61,6 @@ public class CancelOrderSucActivity extends BaseActivity {
     @Override
     protected void initDatas() {
         super.initDatas();
-        orderNum = getIntent().getStringExtra("GuideOrderNum");
         isFromOrder = getIntent().getBooleanExtra("isFromOrderDetail", false);
         api = new Api(CancelOrderSucActivity.this, handler);
         if (isFromOrder)

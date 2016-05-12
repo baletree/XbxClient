@@ -2,9 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_ninety_six"
-    android:layout_marginTop="@dimen/dp_ninety_two"
-    android:background="@color/midTrans">
+    android:layout_height="@dimen/dp_ninety_three"
+    android:background="@color/colorWhite">
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/guide_head_img"
@@ -25,13 +24,13 @@
 
         <TextView
             android:id="@+id/guide_name_tv"
-            style="@style/textView_White"
+            style="@style/textView_Black"
             android:text="李晓琪"
-            android:textSize="@dimen/sp_seventeen" />
+            android:textSize="@dimen/sp_fifteen" />
 
         <TextView
             android:id="@+id/guide_code_tv"
-            style="@style/textView_White"
+            style="@style/textView_Black"
             android:text="NA125****1541"
             android:textSize="@dimen/sp_twelve" />
 
@@ -55,7 +54,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/dp_eight"
                 android:text="9.7分"
-                android:textSize="@dimen/sp_twelve" />
+                android:textSize="@dimen/sp_ten" />
         </LinearLayout>
 
         <TextView

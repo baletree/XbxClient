@@ -200,7 +200,7 @@ public class Api {
         if (context == null)
             return;
         String isFindUrl = context.getString(R.string.url_conIp).concat(context.getString(R.string.url_cancelOrder)).concat("?order_number=" + orderNum);
-        IRequest.get(context, isFindUrl, context.getString(R.string.stop_order), new RequestBackLisener(context) {
+        IRequest.get(context, isFindUrl, "", new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("取消订单:" + json);

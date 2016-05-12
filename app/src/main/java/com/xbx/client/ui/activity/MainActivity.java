@@ -11,7 +11,6 @@ import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -29,7 +28,6 @@ import com.xbx.client.beans.CancelInfoBean;
 import com.xbx.client.beans.UserInfo;
 import com.xbx.client.beans.UserStateBean;
 import com.xbx.client.beans.Version;
-import com.xbx.client.db.DBOpere;
 import com.xbx.client.http.Api;
 import com.xbx.client.jsonparse.MainStateParse;
 import com.xbx.client.jsonparse.OrderParse;
@@ -49,15 +47,12 @@ import com.xbx.client.utils.updateversion.UpdateUtil;
 import com.xbx.client.view.BanSlideViewpager;
 import com.xbx.client.view.TipsDialog;
 
-import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseAppCompatActivity implements TipsDialog.DialogClickListener {
     /**
      * 控件名称定义
      */
@@ -88,14 +83,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private IntentFilter intentFilter = null;
     private Api api = null;
     private UserInfo userInfo = null;
-    private ImageLoader imageLoader;
-    private ImageLoaderConfigFactory configFactory;
 
     private TipsDialog tipsDialog = null;
-    private boolean isFromLogin = false;
-    private int cancelType = 0; //1-导游 2-土著  3-随游
     private String orderNum = "";
     private static boolean isExit = false;
+    private int dialogType = 0;
 
     private Handler handler = new Handler() {
         @Override
@@ -107,33 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     isExit = false;
                     break;
                 case TaskFlag.PAGEREQUESFIVE: //取消订单成功
-                    String allData = (String) msg.obj;
-                    if (Util.isNull(allData)) {
-                        return;
-                    }
-                    cancelType = 0;
-                    orderNum = "";
-                    cancel_order_tv.setVisibility(View.GONE);
-                    int codes = UtilParse.getRequestCode(allData);
-                    switch (codes) {
-                        case 1:
-                            guidesFragment.cancelOrderSuc(true);
-                            break;
-                        case 2:
-                            guidesFragment.cancelOrderSuc(true);
-                            CancelInfoBean cancelInfoBean = OrderParse.getCancelInfo(UtilParse.getRequestData(allData));
-                            if (cancelInfoBean == null)
-                                return;
-                            if (Util.isNull(cancelInfoBean.getCancelPay()))
-                                return;
-                            intent.putExtra("cancelSucInfo", cancelInfoBean);
-                            intent.setClass(MainActivity.this, CancelOrderSucActivity.class);
-                            startActivity(intent);
-                            break;
-                        case 3:
-                            break;
-                    }
-                    Util.showToast(MainActivity.this, UtilParse.getRequestMsg(allData));
+
                     break;
                 case TaskFlag.REQUESTSUCCESS://验证登录的时候如果有状态就显示状态
                     String checkData = (String) msg.obj;
@@ -152,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             return;
                         if (Util.isNull(stateBean.getOrderNum()))
                             return;
-                        dealUserState(intent, stateBean, dataType);
+                        dealUserState(stateBean, dataType);
                     }
                     break;
                 case TaskFlag.PAGEREQUESFOUR:
@@ -167,34 +133,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
-    private void dealUserState(Intent intent, UserStateBean stateBean, String stateKey) {
-        intent.putExtra("stateOrderNumber", stateBean.getOrderNum());
+    private void dealUserState(UserStateBean stateBean, String stateKey) {
         orderNum = stateBean.getOrderNum();
         if (stateKey.equals("unpay")) {
-            intent.setClass(MainActivity.this, OrderDetailActivity.class);
-            startActivity(intent);
+            dialogType = 1;
         } else if (stateKey.equals("uncomment")) {
-            intent.putExtra("GuideOrderNum", stateBean.getOrderNum());
-            intent.setClass(MainActivity.this, SubCommentActivity.class);
-            startActivity(intent);
+            dialogType = 2;
         } else if (stateKey.equals("going")) {
-            guidesFragment.setPageInOrder(orderNum);
-            cancel_order_tv.setVisibility(View.VISIBLE);
-            switch (stateBean.getGuideType()) {
-                case 1:
-                    tabLayout.getTabAt(0).select();
-                    viewpager.setCurrentItem(0);
-                    break;
-                case 2://随游
-                    tabLayout.getTabAt(2).select();
-                    viewpager.setCurrentItem(0);
-                    break;
-                case 3://土著
-                    tabLayout.getTabAt(1).select();
-                    viewpager.setCurrentItem(0);
-                    break;
-            }
+            dialogType = 3;
         }
+        initDialog();
     }
 
     @Override
@@ -206,8 +154,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     protected void initDatas() {
-        imageLoader = ImageLoader.getInstance();
-        configFactory = ImageLoaderConfigFactory.getInstance();
         userInfo = SharePrefer.getUserInfo(MainActivity.this);
         api = new Api(MainActivity.this, handler);
         api.checkUpdate();
@@ -255,7 +201,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userInfo = SharePrefer.getUserInfo(MainActivity.this);
         if (userInfo == null)
             return;
-        Util.pLog("head:" + userInfo.getUserHead());
         imageLoader.displayImage(userInfo.getUserHead(), menu_head_img, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
         if (!Util.isNull(userInfo.getNickName()))
             menu_name_tv.setText(userInfo.getNickName());
@@ -267,11 +212,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initBroadcast() {
-        intentFilter.addAction(Constant.ACTION_GCANCELORD);
-        intentFilter.addAction(Constant.ACTION_GUIDEOVERSERVER);
-        intentFilter.addAction(Constant.ACTION_CALLGUIDEBTN);
-        intentFilter.addAction(Constant.ACTION_USERINORDER);
-        intentFilter.addAction(Constant.ACTION_DISSMISSBACK);
         intentFilter.addAction(Constant.ACTION_LOGINSUC);
         localReceiver = new LocalReceiver();
         lBManager.registerReceiver(localReceiver, intentFilter);
@@ -317,9 +257,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         viewpager.setCurrentItem(4);
                         break;
                 }
-                guidesFragment.cancelOrderSuc(false);
-                main_menu_img.setVisibility(View.VISIBLE);
-                main_back_img.setVisibility(View.GONE);
             }
 
             @Override
@@ -362,75 +299,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         if (data == null)
             return;
-        if (requestCode == 1000) {
-            setUserInfo();
-            api.checkLoginState();
-        }
-        if (requestCode == 1050) {
-            setUserInfo();
-        }
     }
 
     @Override
     public void onClick(View v) {
+        super.onClick(v);
         userInfo = SharePrefer.getUserInfo(MainActivity.this);
         String uid = userInfo.getUid();
         switch (v.getId()) {
             case R.id.main_menu_img:
                 if (Util.isNull(uid)) {
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    intent.putExtra("NoLoginAction", true);
-                    startActivityForResult(intent, 1000);
+                    startActivity(intent);
                     return;
                 }
-                toggleLeftLayout();
-                break;
-            case R.id.main_back_img:
-                guidesFragment.cancelOrderSuc(false);
-                main_menu_img.setVisibility(View.VISIBLE);
-                main_back_img.setVisibility(View.GONE);
-                break;
-            case R.id.cancel_order_tv://取消订单
-                initDialog();
-                break;
-            case R.id.menu_order_layout://我的订单
-                startActivity(new Intent(MainActivity.this, MyOrderActivity.class));
-                toggleLeftLayout();
-                break;
-            case R.id.menu_userInfo_layout:
-                startActivityForResult(new Intent(MainActivity.this, UserInfoActivity.class), 1050);
-                toggleLeftLayout();
-                break;
-            case R.id.menu_setting_layout: //设置
-                startActivity(new Intent(MainActivity.this, SettingActivity.class));
-                toggleLeftLayout();
-                DBOpere.getInstance(MainActivity.this).deleteLatlng();
-                break;
-            case R.id.menu_msg_layout://消息中心
-                startActivity(new Intent(MainActivity.this, TourDetailActivity.class));
-                toggleLeftLayout();
-                break;
-            case R.id.menu_recruit_layout: //导游招募
-                toggleLeftLayout();
                 break;
         }
+        toggleLeftLayout();
     }
 
     private void initDialog() {
         tipsDialog = new TipsDialog(MainActivity.this);
-        tipsDialog.setBtnTxt(getString(R.string.cancel_stroke), getString(R.string.yes_stroke));
-        tipsDialog.setClickListener(new TipsDialog.DialogClickListener() {
-            @Override
-            public void cancelDialog() {
-                tipsDialog.dismiss();
-                api.cancelOrder(orderNum);
-            }
-
-            @Override
-            public void confirmDialog() {
-                tipsDialog.dismiss();
-            }
-        });
+        switch (dialogType) {
+            case 1:
+                tipsDialog.setBtnTxt("下次吧", "去支付");
+                tipsDialog.setInfo("提醒", "您有一个未支付的订单，是否去支付该订单？");
+                break;
+            case 2:
+                tipsDialog.setBtnTxt("下次吧", "去评论");
+                tipsDialog.setInfo("提醒", "您有一个未评论的订单，是否去支付该订单？");
+                break;
+            case 3:
+                tipsDialog.setBtnTxt("不进入", "进入");
+                tipsDialog.setInfo("提醒", "您有一个进行中的订单，是否进入该行程？");
+                break;
+        }
+        tipsDialog.setClickListener(this);
         tipsDialog.show();
     }
 
@@ -441,29 +345,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             lBManager.unregisterReceiver(localReceiver);
     }
 
+    @Override
+    public void cancelDialog() {
+        tipsDialog.dismiss();
+    }
+
+    @Override
+    public void confirmDialog() {
+        Intent intent = new Intent();
+        switch (dialogType) {
+            case 1:
+                intent.putExtra("stateOrderNumber", orderNum);
+                intent.setClass(MainActivity.this, OrderDetailActivity.class);
+                startActivity(intent);
+                break;
+            case 2:
+                intent.putExtra("GuideOrderNum", orderNum);
+                intent.setClass(MainActivity.this, SubCommentActivity.class);
+                startActivity(intent);
+                break;
+            case 3:
+                intent.putExtra("theOrderNums", orderNum);
+                intent.setClass(MainActivity.this, IntoServerActivity.class);
+                startActivity(intent);
+                MainActivity.this.finish();
+                break;
+        }
+        tipsDialog.dismiss();
+    }
+
     class LocalReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (Constant.ACTION_GCANCELORD.equals(action)) {
-                cancel_order_tv.setVisibility(View.VISIBLE);
-                cancelType = intent.getIntExtra("cancelType", 0);
-                orderNum = intent.getStringExtra("theOrderNum");
-            } else if (Constant.ACTION_GUIDEOVERSERVER.equals(action)) {
-                cancel_order_tv.setVisibility(View.GONE);
-                cancelType = 0;
-                orderNum = "";
-            } else if (Constant.ACTION_CALLGUIDEBTN.equals(action)) {
-                main_back_img.setVisibility(View.VISIBLE);
-                main_menu_img.setVisibility(View.GONE);
-            } else if (Constant.ACTION_USERINORDER.equals(action)) {//用户处在订单当中不能取消订单
-                orderNum = "";
-                cancel_order_tv.setVisibility(View.GONE);
-            } else if (Constant.ACTION_DISSMISSBACK.equals(action)) {
-                main_menu_img.setVisibility(View.VISIBLE);
-                main_back_img.setVisibility(View.GONE);
-            }else if(Constant.ACTION_LOGINSUC.equals(action)){
+            if (Constant.ACTION_LOGINSUC.equals(action)) {
                 setUserInfo();
+                api.checkLoginState();
             }
         }
     }

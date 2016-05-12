@@ -37,7 +37,6 @@ public class LoginActivity extends BaseActivity {
     private LocalBroadcastManager lBManager = null;
 
     private int countDown = 60;
-    private boolean isNoLogin = false;
 
     private Handler handler = new Handler() {
         @Override
@@ -69,7 +68,6 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void initDatas() {
         super.initDatas();
-        isNoLogin = getIntent().getBooleanExtra("isNoLogin", false);
         lBManager = LocalBroadcastManager.getInstance(this);
     }
 

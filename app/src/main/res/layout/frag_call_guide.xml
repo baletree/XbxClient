@@ -144,6 +144,7 @@
                         android:layout_marginRight="@dimen/dp_sixteen"
                         android:textColorHint="@color/colorHint"
                         android:background="@color/colorWhite"
+                        android:maxLength="10"
                         android:hint="@string/call_input_name"
                         android:textSize="@dimen/sp_fourteen" />
                 </LinearLayout>

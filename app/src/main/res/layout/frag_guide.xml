@@ -31,16 +31,12 @@
             android:id="@+id/guide_pin_layout"
             layout="@layout/frag_guide_map" />
     </RelativeLayout>
-    <!--确认呼叫-->
-    <include
-        android:id="@+id/guide_call_rl"
-        layout="@layout/frag_call_guide" />
     <!--预约和即时-->
     <include
         android:id="@+id/guide_fuc_rl"
         layout="@layout/frag_guide_fuc" />
     <!--找到人后的订单-->
-    <include
+    <!--<include
         android:id="@+id/guide_tOrder_layout"
-        layout="@layout/frag_take_sucorder" />
+        layout="@layout/frag_take_sucorder" />-->
 </RelativeLayout>

@@ -52,7 +52,7 @@ public class OrderParse {
         OrderDetailBean oDetailBean = new OrderDetailBean();
         try {
             JSONObject jOb = new JSONObject(json);
-            if(UtilParse.checkTag(jOb,"order_info")){
+            if (UtilParse.checkTag(jOb, "order_info")) {
                 JSONObject jObject = jOb.getJSONObject("order_info");
                 if (UtilParse.checkTag(jObject, "realname"))
                     oDetailBean.setGuideName(jObject.getString("realname"));
@@ -99,13 +99,13 @@ public class OrderParse {
                 if (UtilParse.checkTag(jObject, "stars"))
                     oDetailBean.setGuideStar(jObject.getString("stars"));
             }
-            if(UtilParse.checkTag(jOb,"tip")){
-                List<Integer> rewardList = new ArrayList<>();
+            if (UtilParse.checkTag(jOb, "tip")) {
+                List<String> rewardList = new ArrayList<>();
                 JSONArray jsonArray = jOb.getJSONArray("tip");
-                if(jsonArray!= null && jsonArray.length() > 0){
-                    for(int i = 0;i<jsonArray.length();i++){
+                if (jsonArray != null && jsonArray.length() > 0) {
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         int reward = (int) jsonArray.get(i);
-                        rewardList.add(reward);
+                        rewardList.add(String.valueOf(reward));
                     }
                     oDetailBean.setRewardList(rewardList);
                 }
@@ -149,11 +149,11 @@ public class OrderParse {
         return tagList;
     }
 
-    public static String getPayInfo(String json){
+    public static String getPayInfo(String json) {
         String payInfo = "";
         try {
             JSONObject jsonObject = new JSONObject(json);
-            if(UtilParse.checkTag(jsonObject,"sign"))
+            if (UtilParse.checkTag(jsonObject, "sign"))
                 payInfo = jsonObject.getString("sign");
         } catch (JSONException e) {
             e.printStackTrace();

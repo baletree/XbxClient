@@ -9,6 +9,7 @@ import com.xbx.client.R;
 import com.xbx.client.view.WheelView;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by EricYuan on 2016/4/12.
@@ -20,7 +21,8 @@ public class RewardActivity extends Activity implements View.OnClickListener{
     private TextView peo_cancel_txt;
     private TextView peo_sure_txt;
 
-    private String[] rewardMoney = null;
+//    private String[] rewardMoney = null;
+    private List<String> rewadMonList = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +31,12 @@ public class RewardActivity extends Activity implements View.OnClickListener{
         initViews();
     }
     private void initViews(){
-        rewardMoney = getResources().getStringArray(R.array.rewardMoney);
+        rewadMonList = getIntent().getStringArrayListExtra("rewardMonList");
         wheelview_title_tv = (TextView) findViewById(R.id.wheelview_title_tv);
         wheelview_title_tv.setText(getString(R.string.reward_money));
         peonum_wheelView = (WheelView) findViewById(R.id.peonum_wheelView);
         peonum_wheelView.setOffset(1);
-        peonum_wheelView.setItems(Arrays.asList(rewardMoney));
+        peonum_wheelView.setItems(rewadMonList);
         peo_cancel_txt = (TextView) findViewById(R.id.peo_cancel_txt);
         peo_sure_txt = (TextView) findViewById(R.id.peo_sure_txt);
         peo_cancel_txt.setOnClickListener(this);

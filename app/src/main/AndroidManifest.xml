@@ -136,6 +136,10 @@
             android:name=".ui.activity.ConfimCallActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeCustorm" />
+        <activity
+            android:name=".ui.activity.IntoServerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeCustorm" />
         <!--作为Dialog-->
         <activity
             android:name=".ui.activity.ChoicePeoNumActivity"

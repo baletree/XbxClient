@@ -2,66 +2,91 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ImageView
         android:id="@+id/reservat_reward_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/reservat_rewarded"
+        android:layout_above="@+id/dialog_bg"
         android:layout_alignParentRight="true"
-        android:visibility="gone"
         android:layout_marginRight="@dimen/dp_twenty_four"
-        android:layout_above="@+id/dialog_bg"/>
+        android:src="@mipmap/reservat_rewarded"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/dialog_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_centerInParent="true"
-        android:background="@drawable/dialog_tip_bg"
         android:layout_marginLeft="@dimen/dp_twenty_four"
-        android:layout_marginRight="@dimen/dp_twenty_four">
+        android:layout_marginRight="@dimen/dp_twenty_four"
+        android:background="@drawable/dialog_tip_bg"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp_twenty_four"
+        android:paddingRight="@dimen/dp_twenty_four">
+
         <TextView
             android:id="@+id/dialog_title_tv"
             style="@style/textView_Black"
-            android:textSize="@dimen/sp_eighteen"
-            android:layout_marginTop="@dimen/dp_twenty_nine"
-            android:layout_marginLeft="@dimen/dp_twenty_four"
-            android:layout_marginRight="@dimen/dp_twenty_four"
-            android:text="取消提醒"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_twenty_five"
+            android:text="取消提醒"
+            android:textSize="@dimen/sp_eighteen" />
+
         <TextView
             android:id="@+id/dialog_msg_tv"
             style="@style/textView_Black"
+            android:layout_marginTop="@dimen/dp_sixteen"
+            android:text="订单形成5分钟内可免费取消订单，超过5分钟需要收取10元取消费用"
             android:textColor="@color/dialog_msg"
-            android:textSize="@dimen/sp_fifteen"
-            android:layout_marginTop="@dimen/dp_twenty_four"
-            android:layout_marginLeft="@dimen/dp_twenty_four"
-            android:layout_marginRight="@dimen/dp_twenty_four"
-            android:text="订单形成5分钟内可免费取消订单，超过5分钟需要收取10元取消费用"/>
+            android:textSize="@dimen/sp_fifteen" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_zero_five"
+            android:layout_marginTop="@dimen/dp_sixteen"
+            android:background="@color/colorLine" />
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/dp_twenty"
             android:layout_marginTop="@dimen/dp_fourteen"
-            android:layout_marginBottom="@dimen/dp_fourteen"
-            android:layout_marginRight="@dimen/dp_fourteen"
-            android:layout_gravity="right">
-            <TextView
-                android:id="@+id/cancel_tv"
-                android:layout_width="wrap_content"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="@dimen/dp_zero"
                 android:layout_height="wrap_content"
-                android:textColor="@color/codeNoclick"
-                android:textSize="@dimen/sp_sixteen"
-                android:padding="@dimen/dp_ten"
-                android:text=""/>
-            <TextView
-                android:id="@+id/sure_tv"
-                android:layout_width="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/cancel_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_forty"
+                    android:gravity="center"
+                    android:background="@drawable/cancel_btn_bg"
+                    android:text="取消订单"
+                    android:textColor="@color/colorText"
+                    android:layout_marginRight="@dimen/dp_sixteen"
+                    android:textSize="@dimen/sp_sixteen" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="@dimen/dp_zero"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorThemeLight"
-                android:textSize="@dimen/sp_sixteen"
-                android:padding="@dimen/dp_ten"
-                android:layout_marginLeft="@dimen/dp_five"
-                android:text="继续行程"/>
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/sure_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_forty"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/dp_sixteen"
+                    android:background="@drawable/confirm_btn_bg"
+                    android:text="继续行程"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/sp_sixteen" />
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
