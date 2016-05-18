@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="@dimen/dp_twelve"
+    android:paddingBottom="@dimen/dp_twelve"
+    android:paddingLeft="@dimen/dp_sixteen"
+    android:paddingRight="@dimen/dp_sixteen"
+    android:visibility="gone"
+    android:background="@color/colorWhite">
+    <TextView
+        style="@style/textView_Black"
+        android:layout_marginTop="@dimen/dp_sixteen"
+        android:layout_marginBottom="@dimen/dp_sixteen"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/sp_fourteen"
+        android:text="@string/guide_assess"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_zero_five"
+        android:background="@color/colorLine"/>
+    <RatingBar
+        android:id="@+id/order_comment_rb"
+        style="@style/roomRatingBar_big"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_twelve"
+        android:isIndicator="false"
+        android:numStars="5"
+        android:rating="0" />
+    <com.xbx.client.view.FlowLayout
+        android:id="@+id/order_Tagfl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_fifty_two"
+        android:layout_marginTop="@dimen/dp_twelve"
+        android:layout_marginRight="@dimen/dp_fifty_two"
+        android:visibility="gone" />
+    <EditText
+        android:id="@+id/order_CommentMsg_et"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_forty_eight"
+        android:layout_marginLeft="@dimen/dp_fifty_two"
+        android:layout_marginRight="@dimen/dp_fifty_two"
+        android:gravity="top"
+        android:textSize="@dimen/dp_fourteen"
+        android:textColorHint="@color/colorHint"
+        android:textColor="@color/colorText"
+        android:padding="@dimen/dp_four"
+        android:maxLength="50"
+        android:visibility="gone"
+        android:hint="@string/order_comement_hint"
+        android:layout_marginTop="@dimen/dp_twelve"
+        android:background="@drawable/guide_tag_nocheckbg" />
+</LinearLayout>

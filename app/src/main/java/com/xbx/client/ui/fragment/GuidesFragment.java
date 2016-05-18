@@ -63,6 +63,7 @@ import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.StringUtil;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
+import com.xbx.client.view.LoadDialog;
 import com.xbx.client.view.LoadingDialog;
 
 import java.io.Serializable;
@@ -85,10 +86,10 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
     private RelativeLayout guide_fuc_rl;//预约和即时呼叫按钮布局
 
     private GeoCoder geoCoder = null;
-    private LoadingDialog loadingDialog = null;
+    private LoadDialog loadDialog = null;
     private LocationMode mCurrentMode;
     private BaiduMap mBaiduMap;
-    private LocalBroadcastManager lBManager = null;
+
     private LatLng currentLalng = null;
     private List<GuideBean> guideList = null;
     private Api api = null;
@@ -99,8 +100,7 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
     private FindGuide findGuide = null;// 获取为我服务的导游
     private MyGuideInfo guideInfo = null;// 获取服务于我的导游信息
     private String[] peopleNum = null;
-    private CancleOrderReceiver canOrderReciver = null;
-    private IntentFilter intentFilter = null;
+
     private Marker mMarkerGuide = null;//服务于我的导游图标
 
     private long countTraval = 0;
@@ -155,8 +155,8 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
                         Util.showToast(getActivity(), getString(R.string.no_native));
                     else
                         Util.showToast(getActivity(), getString(R.string.no_together));
-                    if (loadingDialog != null && loadingDialog.isShowing())
-                        loadingDialog.dismiss();
+                    if (loadDialog != null && loadDialog.isShowing())
+                        loadDialog.dismiss();
                     findGuide.removeFindGuide();
                     break;
                 case 99://服务的人开始服务后开始计时
@@ -181,16 +181,11 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
                     String myGuideData = (String) msg.obj;
                     guideInfoBean = GuideParse.parseMyGuide(myGuideData);
                     Util.pLog("muGuideData:"+myGuideData);
-                    /*if (guideInfoBean != null)
-                        if (isFirstInOrder)
-                            setMyGuideInfo();
-                        else
-                            updateGuide();*/
                     break;
                 case TaskFlag.HTTPERROR:
                 case TaskFlag.CODEZERO:
-                    if (loadingDialog != null && loadingDialog.isShowing())
-                        loadingDialog.dismiss();
+                    if (loadDialog != null && loadDialog.isShowing())
+                        loadDialog.dismiss();
                     break;
             }
         }
@@ -219,13 +214,6 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
         imageLoader = ImageLoader.getInstance();
         configFactory = ImageLoaderConfigFactory.getInstance();
         geoCoder = GeoCoder.newInstance();
-        loadingDialog = new LoadingDialog(getActivity());
-        loadingDialog.setMessage(getString(R.string.call_sure_tips));
-        lBManager = LocalBroadcastManager.getInstance(getActivity());
-        intentFilter = new IntentFilter();
-        intentFilter.addAction(Constant.ACTION_GUIDEOVERSERVER);
-        canOrderReciver = new CancleOrderReceiver();
-        lBManager.registerReceiver(canOrderReciver, intentFilter);
         nearGuideUrl = getString(R.string.url_conIp).concat(getString(R.string.url_nearGuide));
         initViews();
     }
@@ -289,13 +277,9 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
                 break;
             case confimCall:
                 getOrderNum = data.getStringExtra("callConfimOrderNum");
-                loadingDialog = new LoadingDialog(getActivity());
-                if (guideType == Constant.guideType)
-                    loadingDialog.setMessage(getString(R.string.call_sure_tips));
-                else if(guideType == Constant.nativeType)
-                    loadingDialog.setMessage(getString(R.string.find_Native));
-                loadingDialog.show();
-                loadingDialog.setCount(handler);
+                loadDialog = new LoadDialog(getActivity());
+                loadDialog.show();
+                loadDialog.setCount(handler);
                 findGuide.toFindGuide(uid, getOrderNum);
                 break;
         }
@@ -470,9 +454,6 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
             uploadLag.removeUploadLatlng();
             guideInfo.removeGetInfo();
             mBaiduMap.clear();
-            Intent intent = new Intent();
-            intent.setAction(Constant.ACTION_USERINORDER);
-            lBManager.sendBroadcast(intent);
             notifyUserStartStroke();
         }
     }
@@ -482,10 +463,10 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
      */
     private void setPageLayout() {
         findGuide.removeFindGuide();
-        if (loadingDialog != null && loadingDialog.isShowing())
-            loadingDialog.dismiss();
+        if (loadDialog != null && loadDialog.isShowing())
+            loadDialog.dismiss();
         Intent intent = new Intent(getActivity(), IntoServerActivity.class);
-        intent.putExtra("theOrderNums",getOrderNum);
+        intent.putExtra("IntoServerOrderNum",getOrderNum);
         startActivity(intent);
         getActivity().finish();
     }
@@ -576,16 +557,6 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
         return true;
     }
 
-    class CancleOrderReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (Constant.ACTION_GUIDEOVERSERVER.equals(action)) {//结束行程
-
-            }
-        }
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -595,8 +566,6 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
         isInOrder = false;
         isFirstInOrder = true;
         isFirstLoc = true;
-        if (canOrderReciver != null)
-            lBManager.unregisterReceiver(canOrderReciver);
         if (mLocClient != null && mLocClient.isStarted()) {
             mLocClient.unRegisterLocationListener(this);
             mLocClient.stop();
@@ -625,30 +594,23 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
     public void setPageChange(int tabPosition) {
         isChangeTab = true;
         isZoomMap = true;
-        guide_fuc_rl.setVisibility(View.GONE);
         switch (tabPosition) {
             case 0:
                 guideType = Constant.guideType;
                 frag_reservat_tv.setVisibility(View.VISIBLE);
                 frag_immedia_tv.setText(getString(R.string.main_call));
                 frag_reservat_tv.setText(getString(R.string.main_reserve));
-                loadingDialog = new LoadingDialog(getActivity());
-                loadingDialog.setMessage(getString(R.string.call_sure_tips));
                 break;
             case 1:
                 guideType = Constant.nativeType;
                 frag_reservat_tv.setVisibility(View.GONE);
                 frag_immedia_tv.setText(getString(R.string.immedia_native));
-                loadingDialog = new LoadingDialog(getActivity());
-                loadingDialog.setMessage(getString(R.string.find_Native));
                 break;
             case 2:
                 guideType = Constant.togetherType;
                 frag_reservat_tv.setVisibility(View.VISIBLE);
                 frag_immedia_tv.setText(getString(R.string.immedia_together));
                 frag_reservat_tv.setText(getString(R.string.reservat_together));
-                loadingDialog = new LoadingDialog(getActivity());
-                loadingDialog.setMessage(getString(R.string.find_Togeher));
                 break;
         }
         resetMapview();

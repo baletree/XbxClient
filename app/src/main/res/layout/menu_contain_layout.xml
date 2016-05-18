@@ -1,210 +1,254 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="@dimen/dp_thundred_fifty"
     android:layout_height="match_parent"
     android:layout_gravity="left"
-    android:background="@android:color/white"
-    android:orientation="vertical"
-    android:paddingLeft="@dimen/dp_sixteen">
-
-    <RelativeLayout
-        android:id="@+id/menu_userInfo_layout"
+    android:background="@android:color/white">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_hundred">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_eight"
+            android:background="@color/colorTheme">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/tutu_logo"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/menu_userInfo_layout"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/dp_twenty_five"
+            android:layout_height="@dimen/dp_hundred_eight">
 
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/menu_head_img"
-            android:layout_width="@dimen/dp_sixty_four"
-            android:layout_height="@dimen/dp_sixty_four"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_eight"
-            android:src="@mipmap/user_head"
-            app:riv_oval="true" />
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/menu_head_img"
+                android:layout_width="@dimen/dp_sixty_four"
+                android:layout_height="@dimen/dp_sixty_four"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/user_head"
+                app:riv_oval="true" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_fourteen"
+                android:layout_toRightOf="@+id/menu_head_img"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/menu_name_tv"
+                    style="@style/textView_Black"
+                    android:text="李晓琪"
+                    android:textSize="@dimen/sp_fourteen" />
+
+                <TextView
+                    android:id="@+id/menu_phone_tv"
+                    style="@style/textView_Black"
+                    android:layout_marginTop="@dimen/dp_four"
+                    android:text="186****4129"
+                    android:textSize="@dimen/sp_fourteen" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_sixteen"
+                android:src="@mipmap/menu_arrow" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_zero_five"
+            android:layout_marginLeft="@dimen/dp_twenty_five"
+            android:background="@color/colorLine" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_fourteen"
-            android:layout_toRightOf="@+id/menu_head_img"
-            android:orientation="vertical">
+            android:id="@+id/menu_order_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_four"
+            android:paddingLeft="@dimen/dp_twenty_five"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/menu_order" />
 
             <TextView
-                android:id="@+id/menu_name_tv"
                 style="@style/textView_Black"
-                android:text="李晓琪"
-                android:textSize="@dimen/sp_fourteen" />
-
-            <TextView
-                android:id="@+id/menu_phone_tv"
-                style="@style/textView_Black"
-                android:layout_marginTop="@dimen/dp_four"
-                android:text="186****4129"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_fourteen"
+                android:text="@string/menu_order"
                 android:textSize="@dimen/sp_fourteen" />
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dp_eight"
-            android:src="@mipmap/menu_arrow" />
-    </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/menu_money_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_four"
+            android:visibility="gone"
+            android:orientation="horizontal">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_zero_five"
-        android:background="@color/colorLine" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/menu_money" />
 
+            <TextView
+                style="@style/textView_Black"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_fourteen"
+                android:text="@string/menu_money"
+                android:textSize="@dimen/sp_fourteen" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menu_msg_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_four"
+            android:paddingLeft="@dimen/dp_twenty_five"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/menu_msg" />
+
+            <TextView
+                style="@style/textView_Black"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_fourteen"
+                android:text="@string/menu_msg"
+                android:textSize="@dimen/sp_fourteen" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_zero_five"
+            android:visibility="gone"
+            android:background="@color/colorLine" />
+
+        <LinearLayout
+            android:id="@+id/menu_perferen_layout"
+            android:layout_width="match_parent"
+            android:paddingLeft="@dimen/dp_twenty_five"
+            android:layout_height="@dimen/dp_forty_four"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/menu_preferen" />
+
+            <TextView
+                style="@style/textView_Black"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_fourteen"
+                android:text="@string/menu_perferen"
+                android:textSize="@dimen/sp_fourteen" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menu_invite_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_four"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/menu_invite" />
+
+            <TextView
+                style="@style/textView_Black"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_fourteen"
+                android:text="@string/menu_invite"
+                android:textSize="@dimen/sp_fourteen" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menu_recruit_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_four"
+            android:paddingLeft="@dimen/dp_twenty_five"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/menu_recruit" />
+
+            <TextView
+                style="@style/textView_Black"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_fourteen"
+                android:text="@string/menu_recruit"
+                android:textSize="@dimen/sp_fourteen" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_zero_five"
+            android:visibility="gone"
+            android:background="@color/colorLine" />
+
+        <LinearLayout
+            android:id="@+id/menu_setting_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_forty_four"
+            android:paddingLeft="@dimen/dp_twenty_five"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/menu_setting" />
+
+            <TextView
+                style="@style/textView_Black"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_fourteen"
+                android:text="@string/menu_setting"
+                android:textSize="@dimen/sp_fourteen" />
+        </LinearLayout>
+    </LinearLayout>
     <LinearLayout
-        android:id="@+id/menu_order_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_forty_four"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_fifty"
+        android:layout_centerHorizontal="true"
         android:orientation="horizontal">
-
-        <ImageView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@mipmap/menu_order" />
-
+            android:textSize="@dimen/sp_twelve"
+            android:text="@string/phoneSever"
+            android:textColor="@color/colorPhone"/>
         <TextView
-            style="@style/textView_Black"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_fourteen"
-            android:text="@string/menu_order"
-            android:textSize="@dimen/sp_fourteen" />
+            android:id="@+id/severPhone_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_twelve"
+            android:text=" 400 000 0000"
+            android:textColor="@color/colorPhone"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/menu_money_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_forty_four"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@mipmap/menu_money" />
-
-        <TextView
-            style="@style/textView_Black"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_fourteen"
-            android:text="@string/menu_money"
-            android:textSize="@dimen/sp_fourteen" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/menu_msg_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_forty_four"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@mipmap/menu_msg" />
-
-        <TextView
-            style="@style/textView_Black"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_fourteen"
-            android:text="@string/menu_msg"
-            android:textSize="@dimen/sp_fourteen" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_zero_five"
-        android:background="@color/colorLine" />
-
-    <LinearLayout
-        android:id="@+id/menu_perferen_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_forty_four"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@mipmap/menu_preferen" />
-
-        <TextView
-            style="@style/textView_Black"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_fourteen"
-            android:text="@string/menu_perferen"
-            android:textSize="@dimen/sp_fourteen" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/menu_invite_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_forty_four"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@mipmap/menu_invite" />
-
-        <TextView
-            style="@style/textView_Black"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_fourteen"
-            android:text="@string/menu_invite"
-            android:textSize="@dimen/sp_fourteen" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/menu_recruit_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_forty_four"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@mipmap/menu_recruit" />
-
-        <TextView
-            style="@style/textView_Black"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_fourteen"
-            android:text="@string/menu_recruit"
-            android:textSize="@dimen/sp_fourteen" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_zero_five"
-        android:background="@color/colorLine" />
-
-    <LinearLayout
-        android:id="@+id/menu_setting_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_forty_four"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@mipmap/menu_setting" />
-
-        <TextView
-            style="@style/textView_Black"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_fourteen"
-            android:text="@string/menu_setting"
-            android:textSize="@dimen/sp_fourteen" />
-    </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

@@ -12,7 +12,7 @@
     <string name="login_code_hint">请填写六位验证码</string>
     <string name="login_code_get">获取验证码</string>
     <string name="login_code_minute">s后重新获取</string>
-    <string name="login_minute">s</string>
+    <string name="login_minute">S</string>
     <string name="login_pact_tip">登录即代表</string>
     <string name="login_protocol">阅读并同意Zack协议</string>
     <string name="login_name">登录</string>
@@ -28,7 +28,7 @@
     <string name="menu_order">我的订单</string>
     <string name="menu_money">我的钱包</string>
     <string name="menu_msg">消息中心</string>
-    <string name="menu_perferen">优惠活动</string>
+    <string name="menu_perferen">优惠券</string>
     <string name="menu_invite">邀请有奖</string>
     <string name="menu_recruit">导游招募</string>
     <string name="menu_setting">设置</string>
@@ -64,7 +64,7 @@
     <string name="order_time">订单时间</string>
     <string name="service_time">服务时间</string>
     <string name="order_state">订单状态</string>
-    <string name="pay_detail">交易明细:</string>
+    <string name="pay_detail">支付明细:</string>
     <string name="pay_money">消费金额:</string>
     <string name="pay_tip">小费:</string>
     <string name="pay_coupon">优惠:</string>
@@ -205,6 +205,10 @@
     <string name="call_travalTime">游玩时间</string>
     <string name="call_accIns">保险</string>
     <string name="exit_app">再按一次退出程序</string>
+    <string name="provice">省</string>
+    <string name="guide_Personal">导游主页</string>
+    <string name="phoneSever">客服电话</string>
+    <string name="yuan">元</string>
     <!--向导-->
     <string name="find_Native">正在呼叫向导</string>
     <string name="find_Togeher">正在呼叫随游</string>
@@ -217,6 +221,23 @@
     <string name="no_hasTogether">暂无随游</string>
     <string name="call_immedia">立即呼叫</string>
     <string name="call_guide_txt">立即呼叫</string>
+    <string name="pay_need">需要支付</string>
+    <string name="pay_yuan">￥</string>
+    <string name="pay_order_num">订单号</string>
+    <string name="pay_startTime">开始服务</string>
+    <string name="pay_stopTime">结束服务</string>
+    <string name="pay_Times">服务时长</string>
+    <string name="pay_reward">打赏</string>
+    <string name="pay_coupons">优惠券</string>
+    <string name="order_guide">导</string>
+    <string name="order_native">向</string>
+    <string name="order_immedia">即</string>
+    <string name="order_reservat">预</string>
+    <string name="order_comement_hint">其他意见和建议</string>
+    <string name="pay_yes">已支付</string>
+    <string name="order_cancel_tral">您取消了行程</string>
+    <string name="order_free">导游接单5分钟内免费取消</string>
+    <string name="callInNow">正在呼叫,请等待</string>
     <!--LoadingListView-->
     <string name="head">这里是HeadView</string>
     <string name="pull_to_refresh">下拉刷新</string>

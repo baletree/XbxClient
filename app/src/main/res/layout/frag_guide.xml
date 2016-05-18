@@ -35,8 +35,4 @@
     <include
         android:id="@+id/guide_fuc_rl"
         layout="@layout/frag_guide_fuc" />
-    <!--找到人后的订单-->
-    <!--<include
-        android:id="@+id/guide_tOrder_layout"
-        layout="@layout/frag_take_sucorder" />-->
 </RelativeLayout>

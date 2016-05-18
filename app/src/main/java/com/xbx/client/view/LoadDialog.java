@@ -2,7 +2,11 @@ package com.xbx.client.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -13,15 +17,34 @@ import com.xbx.client.utils.Util;
 /**
  * Created by EricYuan on 2016/5/5.
  */
-public class LoadDialog extends Dialog {
+public class LoadDialog extends Dialog implements DialogInterface.OnKeyListener{
     private Context context;
-    private String msg = "";
+    private Handler pHandler;
 
     private TextView vLoading_text;
-    private ImageView dialog_loading_icon;
+    private int unCount = 50;
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 2:
+                    if (unCount == 0) {
+                        pHandler.sendEmptyMessage(30);
+                        handler.removeMessages(2);
+                    } else {
+                        vLoading_text.setText(unCount + context.getString(R.string.login_minute));
+                        unCount--;
+                    }
+                    handler.sendEmptyMessageDelayed(2, 1000);
+                    break;
+            }
+        }
+    };
 
     public LoadDialog(Context context){
-        super(context, R.style.DialogStyleBottom);
+        super(context, R.style.LoadDialogStyle);
         this.context = context;
     }
     @Override
@@ -32,13 +55,28 @@ public class LoadDialog extends Dialog {
     }
 
     private void initViews() {
-        vLoading_text = (TextView) findViewById(R.id.find_loading_text);
-        dialog_loading_icon = (ImageView) findViewById(R.id.dialog_loading_icon);
-        if (!Util.isNull(msg))
-            vLoading_text.setText(msg);
+        vLoading_text = (TextView) findViewById(R.id.vLoading_text);
+        setOnKeyListener(this);
     }
 
-    public void setMessage(String msg) {
-        this.msg = msg;
+    public void setCount(Handler pHandler) {
+        this.pHandler = pHandler;
+        unCount = 50;
+        handler.sendEmptyMessage(2);
+    }
+
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        unCount = 50;
+        handler.removeMessages(2);
+    }
+
+    @Override
+    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            return true;
+        }
+        return false;
     }
 }

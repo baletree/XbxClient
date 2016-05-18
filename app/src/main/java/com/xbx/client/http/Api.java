@@ -49,14 +49,14 @@ public class Api {
         params.put("password", userInfo.getLoginToken());
         params.put("user_type", "0");//代表用户端
         params.put("push_id", pushId);//代表用户端
-        Util.pLog("Login phone=" + userInfo.getUserPhone() + " token:" + userInfo.getLoginToken());
+        Util.pLog("Login phone=" + userInfo.getUserPhone() + " token:" + userInfo.getLoginToken()+" pushId:"+pushId);
         IRequest.post(context, postUrl, params, new RequestBackLisener(context) {
             @Override
             public void requestSuccess(String json) {
                 Util.pLog("Login check Result:" + json);
                 Message msg = mHandler.obtainMessage();
                 msg.obj = json;
-                msg.what = TaskFlag.REQUESTSUCCESS;
+                msg.what = TaskFlag.PAGEREQUESTWO;
                 mHandler.sendMessage(msg);
             }
 

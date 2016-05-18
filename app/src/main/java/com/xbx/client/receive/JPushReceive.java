@@ -10,7 +10,6 @@ import android.util.Log;
 
 import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.ui.activity.PayOrderActivity;
-import com.xbx.client.ui.activity.ReservatPayActivity;
 import com.xbx.client.utils.Constant;
 import com.xbx.client.utils.Util;
 
@@ -31,6 +30,7 @@ public class JPushReceive extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+//        context.get
         Bundle bundle = intent.getExtras();
         notiManaer = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         lBManager = LocalBroadcastManager.getInstance(context);
@@ -108,9 +108,11 @@ public class JPushReceive extends BroadcastReceiver {
                 serverType = jsonObject.getInt("server_type");
             if(serverType != 201)
                 return;
+            if(Util.isTopActivy("com.xbx.client.ui.activity.PayOrderActivity",context))
+                return;
             if (UtilParse.checkTag(jsonObject, "order_number"))
                 ordernum = jsonObject.getString("order_number");
-            intent.putExtra("GuideOrderNum", ordernum);
+            intent.putExtra("PayOrderNum", ordernum);
             intent.putExtra("JPushNotificationId", bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID));
             intent.setClass(context, PayOrderActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

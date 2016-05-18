@@ -61,6 +61,7 @@
             android:id="@+id/user_stroke_tv"
             style="@style/textView_White"
             android:text="行程时间：未开始"
+            android:visibility="gone"
             android:textSize="@dimen/sp_twelve" />
     </LinearLayout>
 

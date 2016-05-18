@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_twelve"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/pay_detail_rl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_fifty_six">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/pay_MonTip_tv"
+                style="@style/textView_Black"
+                android:text="@string/pay_need"
+                android:textSize="@dimen/sp_eighteen" />
+
+            <TextView
+                style="@style/textView_Black"
+                android:layout_marginLeft="@dimen/dp_four"
+                android:text="@string/pay_yuan"
+                android:textSize="@dimen/sp_fourteen" />
+
+            <TextView
+                android:id="@+id/pay_aMony_tv"
+                style="@style/textView_Black"
+                android:text="100"
+                android:textSize="@dimen/sp_thirty" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:src="@mipmap/right_arrow" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_zero_five"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_marginRight="@dimen/dp_sixteen"
+        android:background="@color/colorLine" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_marginRight="@dimen/dp_sixteen"
+        android:layout_marginTop="@dimen/dp_twelve"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/pay_locat_img" />
+
+        <TextView
+            android:id="@+id/pay_locate_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_four"
+            android:text="成都市都江堰青城山成都市都江堰青城山"
+            android:textColor="@color/codeNoclick"
+            android:textSize="@dimen/sp_twelve" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_sixteen"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/dp_sixty"
+                android:layout_height="wrap_content"
+                android:text="@string/pay_order_num"
+                android:textColor="@color/color_pay"
+                android:textSize="@dimen/sp_twelve" />
+
+            <TextView
+                android:id="@+id/pay_orderNum_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="201455555233333322233"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_twelve" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_three"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/dp_sixty"
+                android:layout_height="wrap_content"
+                android:text="@string/pay_startTime"
+                android:textColor="@color/color_pay"
+                android:textSize="@dimen/sp_twelve" />
+
+            <TextView
+                android:id="@+id/pay_startTime_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2016-5-11"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_twelve" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_three"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/dp_sixty"
+                android:layout_height="wrap_content"
+                android:text="@string/pay_stopTime"
+                android:textColor="@color/color_pay"
+                android:textSize="@dimen/sp_twelve" />
+
+            <TextView
+                android:id="@+id/pay_stopTime_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2016-5-11"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_twelve" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_sixteen"
+            android:layout_marginTop="@dimen/dp_three"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/dp_sixty"
+                android:layout_height="wrap_content"
+                android:text="@string/pay_Times"
+                android:textColor="@color/color_pay"
+                android:textSize="@dimen/sp_twelve" />
+
+            <TextView
+                android:id="@+id/pay_serveTime_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1小时"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/sp_twelve" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

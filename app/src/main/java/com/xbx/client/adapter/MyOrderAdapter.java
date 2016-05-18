@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -44,11 +45,14 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         OrderBean orderBean = orderList.get(position);
         holder.order_time_tv.setText(orderBean.getOrderTime());
-        holder.order_type_tv.setText(StringUtil.severType(context, orderBean.getOrderType()));
-        holder.order_guidetype_tv.setText(StringUtil.getGuideType(context, orderBean.getGuideType()));
         holder.order_state_tv.setText(StringUtil.getOrderState(context, orderBean.getOrderType(), orderBean.getOrderState()));
-        holder.order_address_tv.setText(orderBean.getOrderAddress());
-        holder.order_pay_tv.setText("￥" + orderBean.getOrderPay());
+        holder.order_pay_tv.setText(orderBean.getOrderPay());
+        getServerType(holder.order_type_tv,holder.serType_tv,context,orderBean.getOrderType());
+        getGuideType(holder.order_guidetype_tv,holder.guiType_tv,context,orderBean.getGuideType());
+        if (!Util.isNull(orderBean.getOrderAddress()) && orderBean.getOrderAddress().contains(context.getString(R.string.city_Name)))
+            holder.order_address_tv.setText(orderBean.getOrderAddress().split(context.getString(R.string.city_Name))[1]);
+        else
+            holder.order_address_tv.setText(orderBean.getOrderAddress());
         holder.order_item_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,24 +68,62 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private RelativeLayout order_item_layout;
-        private TextView order_time_tv;
-        private TextView order_guidetype_tv;
+        private LinearLayout order_item_layout;
         private TextView order_state_tv;
+        private TextView order_pay_tv;
+        private TextView order_time_tv;
         private TextView order_address_tv;
         private TextView order_type_tv;
-        private TextView order_pay_tv;
+        private TextView order_guidetype_tv;
+        private TextView guiType_tv;
+        private TextView serType_tv;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            order_item_layout = (RelativeLayout) itemView.findViewById(R.id.order_item_layout);
+            order_item_layout = (LinearLayout) itemView.findViewById(R.id.order_item_layout);
             order_time_tv = (TextView) itemView.findViewById(R.id.order_time_tv);
             order_guidetype_tv = (TextView) itemView.findViewById(R.id.order_guidetype_tv);
             order_state_tv = (TextView) itemView.findViewById(R.id.order_state_tv);
             order_address_tv = (TextView) itemView.findViewById(R.id.order_address_tv);
             order_type_tv = (TextView) itemView.findViewById(R.id.order_type_tv);
             order_pay_tv = (TextView) itemView.findViewById(R.id.order_pay_tv);
+            guiType_tv = (TextView) itemView.findViewById(R.id.guiType_tv);
+            serType_tv = (TextView) itemView.findViewById(R.id.serType_tv);
         }
+    }
+
+    private void getServerType(TextView textView, TextView textView1,Context context, int orderType){
+        switch (orderType) {
+            case 0:
+                textView.setText(context.getString(R.string.order_immedia));
+                textView1.setText(context.getString(R.string.immediaServer));
+                textView.setBackgroundResource(R.drawable.immedia_circle);
+                break;
+            case 1:
+                textView.setText(context.getString(R.string.order_reservat));
+                textView1.setText(context.getString(R.string.reserveServer));
+                textView.setBackgroundResource(R.drawable.reservat_circle);
+                break;
+        }
+    }
+
+    private void getGuideType(TextView textView,TextView textView1, Context context, int guideType) {
+        switch (guideType) {
+            case 1:
+                textView.setText(context.getString(R.string.order_guide));
+                textView1.setText(context.getString(R.string.main_guide));
+                textView.setBackgroundResource(R.drawable.guide_circle);
+                break;
+            case 3:
+                textView.setText(context.getString(R.string.order_native));
+                textView1.setText(context.getString(R.string.main_native));
+                textView.setBackgroundResource(R.drawable.native_circle);
+                break;
+        }
+    }
+
+    private void getSeverStr(TextView textView, Context context, int guideType){
+
     }
 
     public interface OnRecyItemClickListener {

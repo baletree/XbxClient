@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_hundred_fourty_three"
+    android:background="@color/colorWhite"
+    android:visibility="gone"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_sixteen"
+        android:src="@mipmap/order_cancels" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_twelve"
+        android:text="@string/order_cancel_tral"
+        android:textColor="@color/color_pay"
+        android:textSize="@dimen/sp_fourteen" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_three"
+        android:text="@string/order_free"
+        android:textColor="@color/color_pay"
+        android:textSize="@dimen/sp_twelve"/>
+</LinearLayout>

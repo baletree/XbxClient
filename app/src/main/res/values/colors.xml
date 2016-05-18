@@ -24,4 +24,11 @@
     <color name="gray_deep">#5c5c5c</color>
     <color name="alpha_gray">#CC646464</color>
     <color name="color_gray">#AAAAAA</color>
+    <color name="color_pay">#666666</color>
+    <color name="color_immedia">#c183e2</color>
+    <color name="color_native">#ffd705</color>
+    <color name="color_reservat">#77D400</color>
+    <color name="color_in_tag">#F7F2FF</color>
+    <color name="colorInLoad">#99000000</color>
+    <color name="colorPhone">#999999</color>
 </resources>

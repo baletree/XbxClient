@@ -11,9 +11,9 @@
         <item name="colorPrimaryDark">@color/colorTheme</item>
     </style>
 
-    <style name="AppThemeTrans" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppThemeOther" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="colorPrimaryDark">@color/codeNoclick</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -58,6 +58,22 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <!-- 背景透明 -->
         <item name="android:backgroundDimEnabled">true</item>
+        <!-- 模糊 -->
+    </style>
+    <!-- Activity作为Dialog对话框-->
+    <style name="LoadDialogStyle" parent="android:Theme.Dialog">
+        <!--<item name="android:windowAnimationStyle">@style/AnimBottom</item>-->
+        <item name="android:windowFrame">@null</item>
+        <!-- 边框 -->
+        <item name="android:windowIsFloating">false</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 无标题 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 背景透明 -->
+        <item name="android:backgroundDimEnabled">false</item>
         <!-- 模糊 -->
     </style>
     <!--星级-->

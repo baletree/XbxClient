@@ -1,12 +1,16 @@
 package com.xbx.client.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.View;
@@ -43,6 +47,7 @@ import com.xbx.client.jsonparse.UtilParse;
 import com.xbx.client.linsener.AnimateFirstDisplayListener;
 import com.xbx.client.polling.MyGuideInfo;
 import com.xbx.client.polling.PollUploadLag;
+import com.xbx.client.utils.Constant;
 import com.xbx.client.utils.SharePrefer;
 import com.xbx.client.utils.TaskFlag;
 import com.xbx.client.utils.Util;
@@ -52,7 +57,7 @@ import com.xbx.client.view.TipsDialog;
  * Created by EricYuan on 2016/5/12.
  * 正在服务的页面
  */
-public class IntoServerActivity extends BaseAppCompatActivity implements BDLocationListener ,TipsDialog.DialogClickListener{
+public class IntoServerActivity extends BaseAppCompatActivity implements BDLocationListener, TipsDialog.DialogClickListener {
     private ImageView title_left_img;
     private TextView rightTxt;
     private DrawerLayout drawerLayout;
@@ -80,6 +85,9 @@ public class IntoServerActivity extends BaseAppCompatActivity implements BDLocat
     private PollUploadLag uploadLag = null; //上传经纬度
     private MyGuideInfo guideInfo = null;// 获取服务于我的导游信息
     private TipsDialog tipsDialog = null;
+    private LocalBroadcastManager lBManager = null;
+    private OrderReceiver canOrderReciver = null;
+    private IntentFilter intentFilter = null;
 
     private boolean isFirstInOrder = true;
     private boolean isFirstLoc = true;
@@ -106,7 +114,7 @@ public class IntoServerActivity extends BaseAppCompatActivity implements BDLocat
                     Intent intent = new Intent();
                     switch (codes) {
                         case 1:
-                            intent.setClass(IntoServerActivity.this,MainActivity.class);
+                            intent.setClass(IntoServerActivity.this, MainActivity.class);
                             startActivity(intent);
                             break;
                         case 2:
@@ -123,6 +131,7 @@ public class IntoServerActivity extends BaseAppCompatActivity implements BDLocat
                             break;
                     }
                     Util.showToast(IntoServerActivity.this, UtilParse.getRequestMsg(allData));
+                    finish();
                     break;
             }
         }
@@ -137,8 +146,15 @@ public class IntoServerActivity extends BaseAppCompatActivity implements BDLocat
 
     private void initDatas() {
         api = new Api(this, handler);
-        orderNums = getIntent().getStringExtra("theOrderNums");
-        api.getMyGuideInfo(orderNums);
+        orderNums = getIntent().getStringExtra("IntoServerOrderNum");
+//        api.getMyGuideInfo(orderNums);
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(Constant.ACTION_GUIDEOVERSERVER);
+        lBManager = LocalBroadcastManager.getInstance(this);
+        canOrderReciver = new OrderReceiver();
+        lBManager.registerReceiver(canOrderReciver, intentFilter);
+        guideInfo = new MyGuideInfo(IntoServerActivity.this, handler);
+        guideInfo.getMyGuideInfo(orderNums);
         initBDinfo();
         initViews();
     }
@@ -213,20 +229,36 @@ public class IntoServerActivity extends BaseAppCompatActivity implements BDLocat
     }
 
     private void setGuideInfo() {
-        imageLoader.displayImage(guideInfoBean.getGuideHeadImg(), guide_head_img, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
-        guide_name_tv.setText(guideInfoBean.getGuideName());
-        guide_code_tv.setText(guideInfoBean.getGuideNum());
-        guide_star_tv.setText(guideInfoBean.getGuideStarts() + getString(R.string.scole));
-        if (!Util.isNull(guideInfoBean.getGuideStarts()))
-            guide_ratingbar.setRating(Float.valueOf(guideInfoBean.getGuideStarts()));
+        Util.pLog("getStartTime:" + guideInfoBean.getStartTime());
         LatLng guideLl = new LatLng(guideInfoBean.getGuideLat(), guideInfoBean.getGuideLon());
-        MarkerOptions ooA = new MarkerOptions().position(guideLl).icon(guideDes)
-                .zIndex(9).draggable(true);
-        mMarkerGuide = (Marker) mBaiduMap.addOverlay(ooA);
-        if(guideInfoBean.getStartTime() != 0)
+        if (isFirstInOrder) {
+            imageLoader.displayImage(guideInfoBean.getGuideHeadImg(), guide_head_img, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
+            guide_name_tv.setText(guideInfoBean.getGuideName());
+            guide_code_tv.setText(guideInfoBean.getGuideNum());
+            guide_star_tv.setText(guideInfoBean.getGuideStarts() + getString(R.string.scole));
+            if (!Util.isNull(guideInfoBean.getGuideStarts()))
+                guide_ratingbar.setRating(Float.valueOf(guideInfoBean.getGuideStarts()));
+            if (guideInfoBean.getStartTime() != 0) {
+                rightTxt.setVisibility(View.GONE);
+                guideInfo.removeGetInfo();
+                mBaiduMap.clear();
+            } else {
+                rightTxt.setVisibility(View.VISIBLE);
+                MarkerOptions ooA = new MarkerOptions().position(guideLl).icon(guideDes)
+                        .zIndex(9).draggable(true);
+                mMarkerGuide = (Marker) mBaiduMap.addOverlay(ooA);
+            }
+            isFirstInOrder = false;
+        } else {
+            if (mMarkerGuide != null) {
+                mMarkerGuide.setPosition(guideLl);
+            }
+        }
+        if (guideInfoBean.getStartTime() != 0) {
             rightTxt.setVisibility(View.GONE);
-        else
-            rightTxt.setVisibility(View.VISIBLE);
+            guideInfo.removeGetInfo();
+            mBaiduMap.clear();
+        }
     }
 
     @Override
@@ -299,17 +331,35 @@ public class IntoServerActivity extends BaseAppCompatActivity implements BDLocat
         }
     }
 
-    private void initCancelDialog(){
+    private void initCancelDialog() {
         tipsDialog = new TipsDialog(this);
         tipsDialog.setBtnTxt(getString(R.string.cancel_stroke), getString(R.string.yes_stroke));
         tipsDialog.setClickListener(this);
         tipsDialog.show();
     }
 
+    class OrderReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Constant.ACTION_GUIDEOVERSERVER.equals(action)) {//结束行程
+                finish();
+            }
+        }
+    }
+
     @Override
     public void cancelDialog() {
         api.cancelOrder(orderNums);
         tipsDialog.dismiss();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (canOrderReciver != null)
+            lBManager.unregisterReceiver(canOrderReciver);
+        mapView.onDestroy();
     }
 
     @Override

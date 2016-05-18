@@ -13,8 +13,8 @@
         android:id="@+id/orderDetail_sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/oDeatil_state_ll"
         android:layout_below="@+id/or_detail_title"
+        android:layout_above="@+id/order_Confirm_btn"
         android:scrollbars="none">
 
         <LinearLayout
@@ -22,200 +22,38 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_sixteen" />
+
             <include layout="@layout/order_guide_info" />
+            <!--默认显示-->
+            <include
+                android:id="@+id/order_SeverInfo_ll"
+                layout="@layout/order_server_info" />
+            <!--默认隐藏-->
+            <include
+                android:id="@+id/order_CancelInfo_ll"
+                layout="@layout/item_cancel_order" />
+            <!--默认隐藏-->
+            <include
+                android:id="@+id/order_Comment_ll"
+                layout="@layout/item_comment" />
+            <!--默认隐藏-->
+            <include
+                android:id="@+id/order_CommentShow_ll"
+                layout="@layout/item_comment_show" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_sixteen"
-                android:layout_marginRight="@dimen/dp_sixteen"
-                android:layout_marginTop="@dimen/dp_thirty_one">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_zero_five"
-                    android:layout_centerVertical="true"
-                    android:background="@color/colorLine" />
-
-                <TextView
-                    style="@style/textView_Hint"
-                    android:layout_centerHorizontal="true"
-                    android:background="@color/colorBackground"
-                    android:paddingLeft="@dimen/dp_sixteen"
-                    android:paddingRight="@dimen/dp_sixteen"
-                    android:text="@string/order_detail"
-                    android:textSize="@dimen/sp_fifteen" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_sixteen"
-                android:layout_marginRight="@dimen/dp_sixteen"
-                android:layout_marginTop="@dimen/dp_sixteen">
-
-                <TextView
-                    style="@style/textView_Black"
-                    android:text="@string/order_state"
-                    android:textSize="@dimen/sp_fifteen" />
-
-                <TextView
-                    android:id="@+id/orderState_tv"
-                    style="@style/textView_Black"
-                    android:layout_alignParentRight="true"
-                    android:text="已完成"
-                    android:textSize="@dimen/sp_fifteen" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/serveTime_rl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_sixteen"
-                android:layout_marginRight="@dimen/dp_sixteen"
-                android:layout_marginTop="@dimen/dp_ten">
-
-                <TextView
-                    style="@style/textView_Black"
-                    android:text="@string/service_time"
-                    android:textSize="@dimen/sp_fifteen" />
-
-                <TextView
-                    android:id="@+id/serveTime_tv"
-                    style="@style/textView_Black"
-                    android:layout_alignParentRight="true"
-                    android:text="4月6日-4月7日"
-                    android:textSize="@dimen/sp_fifteen" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp_sixteen">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_zero_five"
-                    android:layout_centerVertical="true"
-                    android:background="@color/colorLine" />
-
-                <TextView
-                    style="@style/textView_Hint"
-                    android:layout_centerHorizontal="true"
-                    android:background="@color/colorBackground"
-                    android:paddingLeft="@dimen/dp_sixteen"
-                    android:paddingRight="@dimen/dp_sixteen"
-                    android:text="@string/pay_detail"
-                    android:textSize="@dimen/sp_fifteen" />
-            </RelativeLayout>
-
-            <include layout="@layout/order_transact_details" />
-
-            <LinearLayout
-                android:id="@+id/oDeail_comment_ll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_sixteen"
-                    android:layout_marginRight="@dimen/dp_sixteen"
-                    android:layout_marginTop="@dimen/dp_sixteen">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_zero_five"
-                        android:layout_centerVertical="true"
-                        android:background="@color/colorLine" />
-
-                    <TextView
-                        style="@style/textView_Hint"
-                        android:layout_centerHorizontal="true"
-                        android:background="@color/colorBackground"
-                        android:paddingLeft="@dimen/dp_sixteen"
-                        android:paddingRight="@dimen/dp_sixteen"
-                        android:text="@string/guide_assess"
-                        android:textSize="@dimen/sp_fifteen" />
-                </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/commentCotent_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_sixteen"
-                    android:layout_marginRight="@dimen/dp_sixteen"
-                    android:layout_marginTop="@dimen/dp_twelve"
-                    android:background="@color/colorTitle"
-                    android:gravity="center"
-                    android:padding="@dimen/dp_four"
-                    android:text="该导游很棒，我喜欢！" />
-
-                <com.xbx.client.view.FlowLayout
-                    android:id="@+id/guide_tag_flayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/dp_ten"
-                    android:layout_marginLeft="@dimen/dp_sixteen"
-                    android:layout_marginRight="@dimen/dp_sixteen"
-                    android:visibility="gone" />
-
-                <RatingBar
-                    android:id="@+id/guideComment_rb"
-                    style="@style/roomRatingBar_big"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="@dimen/dp_thirty"
-                    android:layout_marginTop="@dimen/dp_eight"
-                    android:isIndicator="true"
-                    android:numStars="5"
-                    android:rating="0" />
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/oDeatil_state_ll"
+    <Button
+        android:id="@+id/order_Confirm_btn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_forty_eight"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/dp_eight"
-        android:layout_marginLeft="@dimen/dp_sixteen"
-        android:layout_marginRight="@dimen/dp_sixteen"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/oDeatil_cancel_btn"
-            android:layout_width="@dimen/dp_zero"
-            android:layout_height="@dimen/dp_forty_eight"
-            android:layout_marginRight="@dimen/dp_eight"
-            android:layout_weight="1"
-            android:background="@drawable/button_bg"
-            android:text="@string/user_guide_cancel_order"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/sp_fifteen"
-            android:visibility="gone" />
-
-        <View
-            android:id="@+id/od_splite_view"
-            android:layout_width="@dimen/dp_eight"
-            android:layout_height="@dimen/dp_forty_eight"
-            android:background="@color/colorBackground" />
-
-        <Button
-            android:id="@+id/oDeatil_state_btn"
-            android:layout_width="@dimen/dp_zero"
-            android:layout_height="@dimen/dp_forty_eight"
-            android:layout_weight="1"
-            android:width="@dimen/dp_zero"
-            android:background="@drawable/button_bg"
-            android:text="@string/submit_to_pay"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/sp_fifteen" />
-    </LinearLayout>
+        android:background="@color/colorTheme"
+        android:text="@string/submit_comment"
+        android:visibility="gone"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/sp_seventeen" />
 </RelativeLayout>

@@ -106,7 +106,7 @@ public class ChoiceGuideActivity extends BaseActivity implements PullToRefreshLa
                     String guideData = (String) msg.obj;
                     String orderNum = getOrderNum(guideData);
                     Intent intent = new Intent(ChoiceGuideActivity.this, PayOrderActivity.class);
-                    intent.putExtra("GuideOrderNum", orderNum);
+                    intent.putExtra("PayOrderNum", orderNum);
                     startActivity(intent);
                     break;
             }

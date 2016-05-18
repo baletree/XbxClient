@@ -22,18 +22,12 @@ import com.xbx.client.utils.Util;
 /**
  * Created by EricYuan on 2016/4/20.
  */
-public class LoadingDialog extends Dialog implements DialogInterface.OnKeyListener {
-    private TextView vLoading_text;
+public class LoadingDialog extends Dialog {
     private ImageView dialog_loading_icon;
-    private TextView dialog_count_tv;
-
     private Context context;
-    private Handler pHandler;
 
     private String msg = "";
-
     private int count = 0;
-    private int unCount = 50;
 
     private Handler handler = new Handler() {
         @Override
@@ -48,16 +42,6 @@ public class LoadingDialog extends Dialog implements DialogInterface.OnKeyListen
                         count++;
                     handler.sendEmptyMessageDelayed(1, 50);
                     break;
-                case 2:
-                    if (unCount == 0) {
-                        pHandler.sendEmptyMessage(30);
-                        handler.removeMessages(2);
-                    } else {
-                        dialog_count_tv.setText(unCount + context.getString(R.string.login_minute));
-                        unCount--;
-                    }
-                    handler.sendEmptyMessageDelayed(2, 1000);
-                    break;
             }
         }
     };
@@ -70,24 +54,19 @@ public class LoadingDialog extends Dialog implements DialogInterface.OnKeyListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.find_guide_loading);
+        setContentView(R.layout.fragment_loading);
         initViews();
-        setOnKeyListener(this);
+
     }
 
     private void initViews() {
-        vLoading_text = (TextView) findViewById(R.id.find_loading_text);
         dialog_loading_icon = (ImageView) findViewById(R.id.dialog_loading_icon);
-        dialog_count_tv = (TextView) findViewById(R.id.dialog_count_tv);
-        if (!Util.isNull(msg))
-            vLoading_text.setText(msg);
     }
 
     @Override
     public void show() {
         super.show();
         count = 0;
-        dialog_count_tv.setText("");
         handler.sendEmptyMessage(1);
     }
 
@@ -96,25 +75,10 @@ public class LoadingDialog extends Dialog implements DialogInterface.OnKeyListen
         super.dismiss();
         count = 0;
         handler.removeMessages(1);
-        handler.removeMessages(2);
-    }
-
-    public void setCount(Handler pHandler) {
-        this.pHandler = pHandler;
-        unCount = 50;
-        handler.sendEmptyMessage(2);
     }
 
     public void setMessage(String msg) {
         this.msg = msg;
-    }
-
-    @Override
-    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            return true;
-        }
-        return false;
     }
 
     private void setLoadingImg() {

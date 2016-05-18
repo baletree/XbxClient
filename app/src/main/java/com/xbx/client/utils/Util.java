@@ -1,5 +1,6 @@
 package com.xbx.client.utils;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
@@ -26,6 +27,7 @@ import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -231,13 +233,15 @@ public class Util {
         s = Math.round(s * 10000) / 10000;
         return s;
     }
+
     private static double rad(double d) {
         return d * Math.PI / 180.0;
     }
 
-    public static void inputParams(RequestParams params){
+    public static void inputParams(RequestParams params) {
         params.getEntity();
     }
+
     /**
      * 从view获取bitmap
      *
@@ -254,10 +258,24 @@ public class Util {
         return bitmap;
     }
 
-    public static String timeToStr(long time){
+    public static String timeToStr(long time) {
         String str = "";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         str = sdf.format(new Date(time));
         return str;
+    }
+
+    public static boolean isTopActivy(String cmdName, Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> runningTaskInfos = manager.getRunningTasks(Integer.MAX_VALUE);
+        String cmpNameTemp = null;
+        if (null != runningTaskInfos) {
+            cmpNameTemp = (runningTaskInfos.get(0).topActivity).getClassName();
+        }
+
+        if (null == cmpNameTemp) {
+            return false;
+        }
+        return cmpNameTemp.equals(cmdName);
     }
 }

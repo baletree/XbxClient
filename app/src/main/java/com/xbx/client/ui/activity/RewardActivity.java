@@ -1,6 +1,7 @@
 package com.xbx.client.ui.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import java.util.List;
  * 打赏
  */
 public class RewardActivity extends Activity implements View.OnClickListener{
+    public static final int rewardResult = 1000;
     private TextView wheelview_title_tv;
     private WheelView peonum_wheelView;
     private TextView peo_cancel_txt;
@@ -23,6 +25,7 @@ public class RewardActivity extends Activity implements View.OnClickListener{
 
 //    private String[] rewardMoney = null;
     private List<String> rewadMonList = null;
+    private int selectIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,13 @@ public class RewardActivity extends Activity implements View.OnClickListener{
         peo_sure_txt = (TextView) findViewById(R.id.peo_sure_txt);
         peo_cancel_txt.setOnClickListener(this);
         peo_sure_txt.setOnClickListener(this);
+        peonum_wheelView.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+            @Override
+            public void onSelected(int selectedIndex, String item) {
+                super.onSelected(selectedIndex, item);
+                selectIndex = selectedIndex - 1;
+            }
+        });
     }
 
     @Override
@@ -50,6 +60,11 @@ public class RewardActivity extends Activity implements View.OnClickListener{
                 finish();
                 break;
             case R.id.peo_sure_txt:
+                if(rewadMonList != null){
+                    Intent intent = new Intent();
+                    intent.putExtra("RewardMoney",rewadMonList.get(selectIndex));
+                    setResult(RESULT_OK,intent);
+                }
                 finish();
                 break;
         }

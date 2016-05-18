@@ -32,7 +32,8 @@ public class CancelOrderSucActivity extends BaseActivity {
     private Api api = null;
     private CancelInfoBean canInfo = null;
 
-    private boolean isFromOrder = false;
+    private boolean isFromOrderList = false;
+    private String orderNum = "";
 
     private Handler handler = new Handler() {
         @Override
@@ -41,12 +42,17 @@ public class CancelOrderSucActivity extends BaseActivity {
             switch (msg.what) {
                 case TaskFlag.PAGEREQUESFIVE:
                     Util.showToast(CancelOrderSucActivity.this, "取消金支付成功!");
-                    if (isFromOrder) {
+                    if (isFromOrderList) {
                         setResult(RESULT_OK, new Intent());
                     } else {
                         startActivity(new Intent(CancelOrderSucActivity.this, MainActivity.class));
                     }
                     finish();
+                    break;
+                case TaskFlag.REQUESTSUCCESS://订单详情
+                    String dataDetail = (String) msg.obj;
+                    detailBean = OrderParse.getDetailOrder(dataDetail);
+                    setCancelData();
                     break;
             }
         }
@@ -61,11 +67,12 @@ public class CancelOrderSucActivity extends BaseActivity {
     @Override
     protected void initDatas() {
         super.initDatas();
-        isFromOrder = getIntent().getBooleanExtra("isFromOrderDetail", false);
+        isFromOrderList = getIntent().getBooleanExtra("isFromOrderList", false);
         api = new Api(CancelOrderSucActivity.this, handler);
-        if (isFromOrder)
-            detailBean = (OrderDetailBean) getIntent().getSerializableExtra("orderDetailBean");
-        else {
+        if (isFromOrderList){
+            orderNum = getIntent().getStringExtra("CancelOrderNum");
+            api.getOrderDetail(orderNum);
+        } else {
             canInfo = (CancelInfoBean) getIntent().getSerializableExtra("cancelSucInfo");
             detailBean = new OrderDetailBean();
             detailBean.setOrderNum(canInfo.getOrderNum());
@@ -87,6 +94,9 @@ public class CancelOrderSucActivity extends BaseActivity {
         wchat_pay_rb.setChecked(true);
         canOrderTime_tv = (TextView) findViewById(R.id.canOrderTime_tv);
         canOrderPay_tv = (TextView) findViewById(R.id.canOrderPay_tv);
+    }
+
+    private void setCancelData(){
         if (detailBean == null)
             return;
         canOrderTime_tv.setText(detailBean.getOrderCancelTime());

@@ -1,246 +1,324 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.xbx.client.view.PullScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/personal_title_rl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_forty_eight"
+        android:background="@color/colorWhite">
 
-    <LinearLayout
+        <ImageView
+            android:id="@+id/title_left_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_eight"
+            android:padding="@dimen/dp_eight"
+            android:src="@mipmap/back1" />
+
+        <TextView
+            android:id="@+id/tourDetail_txt_tv"
+            style="@style/textView_White"
+            android:layout_centerInParent="true"
+            android:text="@string/guide_Personal"
+            android:textColor="@color/colorTheme"
+            android:textSize="@dimen/sp_eighteen" />
+    </RelativeLayout>
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white">
-
-            <ImageView
-                android:id="@+id/tour_detail_top_img"
-                android:layout_width="match_parent"
-                android:layout_height="230dp"
-                android:layout_marginBottom="@dimen/dp_forty_four"
-                android:layout_marginTop="-50dp"
-                android:scaleType="fitXY"
-                android:src="@mipmap/tour_detail_top_img" />
-
-            <ImageView
-                android:id="@+id/tour_detail_back_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/dp_sixteen"
-                android:scaleType="fitXY"
-                android:src="@mipmap/back1" />
-
-            <com.makeramen.roundedimageview.RoundedImageView
-                android:id="@+id/tour_detail_head_img"
-                android:layout_width="@dimen/dp_ninety"
-                android:layout_height="@dimen/dp_ninety"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center_horizontal|bottom"
-                android:src="@mipmap/user_head"
-                app:riv_oval="true" />
-        </FrameLayout>
-
+        android:layout_below="@+id/personal_title_rl"
+        android:layout_above="@+id/personal_Reservat_btn"
+        android:scrollbars="none">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
+            android:background="@color/colorBackground"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tour_detail_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_twelve"
-                android:text="@string/user_info_name_text"
-                android:textColor="@color/colorText"
-                android:textSize="@dimen/sp_eighteen" />
-
-            <TextView
-                android:id="@+id/tour_detail_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_eight"
-                android:text="@string/user_info_name_text"
-                android:textColor="@color/colorText"
-                android:textSize="@dimen/sp_twelve" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_eight"
-                android:orientation="horizontal">
-
-                <RatingBar
-                    android:id="@+id/tour_detail_ratingbar"
-                    style="@style/roomRatingBar_small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:isIndicator="true"
-                    android:numStars="5"
-                    android:rating="3" />
-
-                <TextView
-                    android:id="@+id/tour_detail_score"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/dp_eight"
-                    android:text="@string/user_info_nickname_text"
-                    android:textColor="@color/colorText"
-                    android:textSize="@dimen/sp_ten" />
-
-            </LinearLayout>
-
-            <View
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_one"
+                android:layout_height="@dimen/dp_hundred_thirty"
+                android:background="@color/colorTheme">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="@dimen/dp_ninety_one"
+                        android:layout_height="@dimen/dp_ninety_one"
+                        android:background="@drawable/white_circle_bg">
+
+                        <com.makeramen.roundedimageview.RoundedImageView
+                            android:id="@+id/personal_head_img"
+                            android:layout_width="@dimen/dp_ninety"
+                            android:layout_height="@dimen/dp_ninety"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/user_head"
+                            app:riv_oval="true" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/dp_thirty_one"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/person_name_tv"
+                            style="@style/textView_White"
+                            android:text="李晓琪"
+                            android:textSize="@dimen/sp_seventeen" />
+
+                        <TextView
+                            android:id="@+id/person_code_tv"
+                            style="@style/textView_White"
+                            android:layout_marginTop="@dimen/dp_eight"
+                            android:text="NA125****1541"
+                            android:textSize="@dimen/sp_twelve" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RatingBar
+                                android:id="@+id/person_ratingbar"
+                                style="@style/roomRatingBar_small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:isIndicator="true"
+                                android:numStars="5"
+                                android:rating="3" />
+
+                            <TextView
+                                android:id="@+id/person_star_tv"
+                                style="@style/textView_White"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/dp_eight"
+                                android:text="9.7分"
+                                android:textSize="@dimen/sp_twelve" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_eighty"
+                android:background="@color/colorWhite"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="@dimen/dp_zero"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/textView_Black"
+                            android:layout_gravity="center_horizontal"
+                            android:text="服务时长"
+                            android:textSize="@dimen/dp_fifteen" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="@dimen/dp_seven"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/personal_time_tv"
+                                style="@style/textView_Black"
+                                android:text="148"
+                                android:textColor="@color/colorTheme"
+                                android:textSize="@dimen/sp_twenty_four" />
+
+                            <TextView
+                                style="@style/textView_Black"
+                                android:text="天"
+                                android:textSize="@dimen/sp_fifteen" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="@dimen/dp_one"
+                    android:layout_height="@dimen/dp_forty_five"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/colorLinePart" />
+
+                <RelativeLayout
+                    android:layout_width="@dimen/dp_zero"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/textView_Black"
+                            android:layout_gravity="center_horizontal"
+                            android:text="价格"
+                            android:textSize="@dimen/dp_fifteen" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="@dimen/dp_seven"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/personal_price_tv"
+                                style="@style/textView_Black"
+                                android:text="500"
+                                android:textColor="@color/colorTheme"
+                                android:textSize="@dimen/sp_twenty_four" />
+
+                            <TextView
+                                style="@style/textView_Black"
+                                android:text="/天"
+                                android:textSize="@dimen/sp_fifteen" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="@dimen/dp_one"
+                    android:layout_height="@dimen/dp_forty_five"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/colorLinePart" />
+
+                <RelativeLayout
+                    android:layout_width="@dimen/dp_zero"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/textView_Black"
+                            android:layout_gravity="center_horizontal"
+                            android:text="服务次数"
+                            android:textSize="@dimen/dp_fifteen" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="@dimen/dp_seven"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/personal_count_tv"
+                                style="@style/textView_Black"
+                                android:text="32"
+                                android:textColor="@color/colorTheme"
+                                android:textSize="@dimen/sp_twenty_four" />
+
+                            <TextView
+                                style="@style/textView_Black"
+                                android:text="次"
+                                android:textSize="@dimen/sp_fifteen" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/personal_showTag_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_twelve"
-                android:background="@drawable/div_line" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_thirteen"
-                android:orientation="horizontal">
+                android:background="@color/colorWhite"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="@dimen/dp_sixteen">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/together_price"
-                    android:textColor="@color/colorText"
-                    android:textSize="@dimen/sp_twelve" />
+                    style="@style/textView_Black"
+                    android:text="他的印象"
+                    android:textSize="@dimen/sp_fifteen" />
 
-                <TextView
-                    android:id="@+id/tour_detail_price_byhour"
+                <com.xbx.client.view.FlowLayout
+                    android:id="@+id/personal_showTag_fl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/dp_fifteen"
-                    android:text="@string/user_info_nickname_text"
-                    android:textColor="@color/colorText"
-                    android:textSize="@dimen/sp_twelve" />
-
-                <TextView
-                    android:id="@+id/tour_detail_price_byday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/dp_fifteen"
-                    android:text="@string/user_info_nickname_text"
-                    android:textColor="@color/colorText"
-                    android:textSize="@dimen/sp_twelve" />
+                    android:layout_marginTop="@dimen/dp_twelve" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/personal_intro_ll"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/dp_ten"
-                android:layout_marginTop="@dimen/dp_eight"
-                android:orientation="horizontal">
+                android:layout_marginTop="@dimen/dp_twelve"
+                android:background="@color/colorWhite"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="@dimen/dp_sixteen">
+                <TextView
+                    style="@style/textView_Black"
+                    android:text="自我介绍"
+                    android:textSize="@dimen/sp_fifteen" />
 
                 <TextView
+                    android:id="@+id/personal_intro_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/together_num"
-                    android:textColor="@color/colorText"
-                    android:textSize="@dimen/sp_twelve" />
-
-                <TextView
-                    android:id="@+id/tour_detail_num"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/dp_fifteen"
-                    android:text="@string/user_info_nickname_text"
-                    android:textColor="@color/colorText"
-                    android:textSize="@dimen/sp_twelve" />
+                    android:layout_marginTop="@dimen/dp_twelve" />
             </LinearLayout>
-
-            <com.xbx.client.view.FlowLayout
-                android:id="@+id/tour_detail_fl"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/personal_stantat_ll"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="@dimen/dp_fifteen"
-                android:layout_marginRight="@dimen/dp_fifteen" />
+                android:layout_marginTop="@dimen/dp_twelve"
+                android:background="@color/colorWhite"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="@dimen/dp_sixteen">
+                <TextView
+                    style="@style/textView_Black"
+                    android:text="服务标准"
+                    android:textSize="@dimen/sp_fifteen" />
+
+                <TextView
+                    android:id="@+id/personal_stantat_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_twelve" />
+            </LinearLayout>
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_zero_five"
-            android:background="@color/colorLine" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_zero_five"
-            android:layout_marginTop="@dimen/dp_four"
-            android:background="@color/colorLine" />
-
-        <TextView
-            android:id="@+id/tour_detail_intro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:paddingBottom="@dimen/dp_eight"
-            android:paddingLeft="@dimen/dp_sixteen"
-            android:paddingRight="@dimen/dp_sixteen"
-            android:paddingTop="@dimen/dp_eight"
-            android:text=""
-            android:visibility="gone"
-            android:textColor="@color/colorText"
-            android:textSize="@dimen/sp_fourteen" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_zero_five"
-            android:background="@color/colorLine" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_zero_five"
-            android:layout_marginTop="@dimen/dp_four"
-            android:background="@color/colorLine" />
-
-        <TextView
-            android:id="@+id/tour_detail_standard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:paddingBottom="@dimen/dp_eight"
-            android:paddingLeft="@dimen/dp_sixteen"
-            android:paddingRight="@dimen/dp_sixteen"
-            android:paddingTop="@dimen/dp_eight"
-            android:text=""
-            android:visibility="gone"
-            android:textColor="@color/colorText"
-            android:textSize="@dimen/sp_fourteen" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_zero_five"
-            android:background="@color/colorLine" />
-
-        <TextView
-            android:id="@+id/tour_detail_order"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_forty_eight"
-            android:layout_margin="@dimen/dp_sixteen"
-            android:background="@drawable/theme_light_bg"
-            android:gravity="center"
-            android:text="@string/tour_detail_order"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/sp_fifteen" />
-    </LinearLayout>
-
-</com.xbx.client.view.PullScrollView>
+    </ScrollView>
+    <Button
+        android:id="@+id/personal_Reservat_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_forty_eight"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorTheme"
+        android:text="预约"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/sp_seventeen" />
+</RelativeLayout>

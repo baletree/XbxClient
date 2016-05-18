@@ -29,24 +29,23 @@ import com.xbx.client.view.FlowLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by EricYuan on 2016/4/20.
  */
 public class TourDetailActivity extends BaseActivity {
-    private RoundedImageView tour_detail_head_img;
-    private TextView tour_detail_name;
-    private TextView tour_detail_number;
-    private RatingBar tour_detail_ratingbar;
-    private TextView tour_detail_score;
-    private TextView tour_detail_price_byhour;
-    private TextView tour_detail_price_byday;
-    private TextView tour_detail_num;
-    private FlowLayout tour_detail_fl;
-    private TextView tour_detail_intro;
-    private TextView tour_detail_standard;
+    private RoundedImageView personal_head_img;
+    private TextView person_name_tv;
+    private TextView person_code_tv;
+    private RatingBar person_ratingbar;
+    private TextView person_star_tv;
+
+    private TextView personal_price_tv;
+    private TextView personal_count_tv;
+    private TextView personal_intro_tv;
+    private TextView personal_stantat_tv;
+    private FlowLayout personal_showTag_fl;
 
     private List<String> tagList = null;
     private Api api = null;
@@ -74,7 +73,7 @@ public class TourDetailActivity extends BaseActivity {
                     String guideDatas = (String) msg.obj;
                     String orderNum = getOrderNum(guideDatas);
                     Intent intent = new Intent(TourDetailActivity.this, PayOrderActivity.class);
-                    intent.putExtra("GuideOrderNum", orderNum);
+                    intent.putExtra("PayOrderNum", orderNum);
                     startActivity(intent);
                     break;
             }
@@ -83,11 +82,6 @@ public class TourDetailActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //隐藏标题栏
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        int flag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
-        Window window = this.getWindow();
-        window.setFlags(flag, flag);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tour_detail);
     }
@@ -95,20 +89,22 @@ public class TourDetailActivity extends BaseActivity {
     @Override
     protected void initViews() {
         super.initViews();
-        tour_detail_head_img = (RoundedImageView) findViewById(R.id.tour_detail_head_img);
-        tour_detail_name = (TextView) findViewById(R.id.tour_detail_name);
-        tour_detail_number = (TextView) findViewById(R.id.tour_detail_number);
-        tour_detail_ratingbar = (RatingBar) findViewById(R.id.tour_detail_ratingbar);
-        tour_detail_score = (TextView) findViewById(R.id.tour_detail_score);
-        tour_detail_price_byhour = (TextView) findViewById(R.id.tour_detail_price_byhour);
-        tour_detail_price_byday = (TextView) findViewById(R.id.tour_detail_price_byday);
-        tour_detail_num = (TextView) findViewById(R.id.tour_detail_num);
-        tour_detail_fl = (FlowLayout) findViewById(R.id.tour_detail_fl);
-        tour_detail_intro = (TextView) findViewById(R.id.tour_detail_intro);
-        tour_detail_standard = (TextView) findViewById(R.id.tour_detail_standard);
+        personal_head_img = (RoundedImageView) findViewById(R.id.personal_head_img);
+        person_name_tv = (TextView) findViewById(R.id.person_name_tv);
+        person_code_tv = (TextView) findViewById(R.id.person_code_tv);
+        person_ratingbar = (RatingBar) findViewById(R.id.person_ratingbar);
+        person_star_tv = (TextView) findViewById(R.id.person_star_tv);
+
+        personal_price_tv = (TextView) findViewById(R.id.personal_price_tv);
+        personal_count_tv = (TextView) findViewById(R.id.personal_count_tv);
+
+        personal_intro_tv = (TextView) findViewById(R.id.personal_intro_tv);
+        personal_stantat_tv = (TextView) findViewById(R.id.personal_stantat_tv);
+        personal_showTag_fl = (FlowLayout) findViewById(R.id.personal_showTag_fl);
+
         api.getGuideDetail(guideId);
-        findViewById(R.id.tour_detail_back_img).setOnClickListener(this);
-        findViewById(R.id.tour_detail_order).setOnClickListener(this);
+        findViewById(R.id.title_left_img).setOnClickListener(this);
+        findViewById(R.id.personal_Reservat_btn).setOnClickListener(this);
     }
 
     @Override
@@ -122,39 +118,40 @@ public class TourDetailActivity extends BaseActivity {
     }
 
     private void setGuideInfo() {
-        imageLoader.displayImage(guideDetail.getGuideHead(), tour_detail_head_img, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
-        tour_detail_name.setText(guideDetail.getGuideName());
-        tour_detail_number.setText(guideDetail.getGuideNumber());
-        tour_detail_score.setText(guideDetail.getGuideStar() + getString(R.string.scole));
-        tour_detail_price_byhour.setText(guideDetail.getGuideImmediaPrice() + getString(R.string.server_day));
-        tour_detail_price_byday.setText(guideDetail.getGuideReservatPrice() + getString(R.string.server_hour));
-        tour_detail_num.setText(guideDetail.getGuideTimes() + getString(R.string.server_times));
+        imageLoader.displayImage(guideDetail.getGuideHead(), personal_head_img, configFactory.getHeadImg(), new AnimateFirstDisplayListener());
+        person_name_tv.setText(guideDetail.getGuideName());
+        person_code_tv.setText(guideDetail.getGuideNumber());
+        person_star_tv.setText(guideDetail.getGuideStar() + getString(R.string.scole));
+        personal_price_tv.setText(guideDetail.getGuideReservatPrice());
+        personal_count_tv.setText(guideDetail.getGuideTimes());
+
         if(!Util.isNull(guideDetail.getGuideIntroduce())){
-            tour_detail_intro.setText(guideDetail.getGuideIntroduce());
-            tour_detail_intro.setVisibility(View.VISIBLE);
+            personal_intro_tv.setText(guideDetail.getGuideIntroduce());
+            findViewById(R.id.personal_intro_ll).setVisibility(View.VISIBLE);
         }
         if(!Util.isNull(guideDetail.getGuideStandard())){
-            tour_detail_standard.setText(guideDetail.getGuideStandard());
-            tour_detail_standard.setVisibility(View.VISIBLE);
+            personal_stantat_tv.setText(guideDetail.getGuideStandard());
+            findViewById(R.id.personal_stantat_ll).setVisibility(View.VISIBLE);
         }
         if (!Util.isNull(guideDetail.getGuideStar()))
-            tour_detail_ratingbar.setRating(Float.valueOf(guideDetail.getGuideStar()) / 2);
+            person_ratingbar.setRating(Float.valueOf(guideDetail.getGuideStar()) / 2);
+
         tagList = guideDetail.getTagList();
         if (tagList != null && tagList.size() > 0) {
+            findViewById(R.id.personal_showTag_ll).setVisibility(View.VISIBLE);
             for (int i = 0; i < tagList.size(); i++) {
-                tour_detail_fl.addView(addTextView(tagList.get(i)));
+                personal_showTag_fl.addView(addTextView(tagList.get(i)));
             }
-        } else
-            tour_detail_fl.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tour_detail_back_img:
+            case R.id.title_left_img:
                 finish();
                 break;
-            case R.id.tour_detail_order:
+            case R.id.personal_Reservat_btn:
                 if (reservatInfo == null)
                     return;
                 Util.pLog("详情中下单导游类型：" + reservatInfo.getGuideType());
@@ -169,9 +166,9 @@ public class TourDetailActivity extends BaseActivity {
         TextView textView = new TextView(this);
         textView.setText(txt);
         textView.setPadding(20, 8, 20, 8);
-        txtLp.rightMargin = 10;
-        txtLp.bottomMargin = 8;
-        textView.setBackgroundResource(R.drawable.guide_tag_bg);
+        txtLp.rightMargin = 8;
+        txtLp.bottomMargin = 12;
+        textView.setBackgroundResource(R.drawable.guide_tag_nocheckbg);
         textView.setLayoutParams(txtLp);
         return textView;
     }

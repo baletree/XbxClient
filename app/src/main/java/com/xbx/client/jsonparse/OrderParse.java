@@ -35,8 +35,8 @@ public class OrderParse {
                         orderBean.setOrderAddress(jObject.getString("end_addr"));
                     if (UtilParse.checkTag(jObject, "server_type"))
                         orderBean.setOrderType(jObject.getInt("server_type"));
-                    if (UtilParse.checkTag(jObject, "user_type"))
-                        orderBean.setGuideType(jObject.getInt("user_type"));
+                    if (UtilParse.checkTag(jObject, "guide_type"))
+                        orderBean.setGuideType(jObject.getInt("guide_type"));
                     if (UtilParse.checkTag(jObject, "order_status"))
                         orderBean.setOrderState(jObject.getInt("order_status"));
                     orderList.add(orderBean);
@@ -58,10 +58,10 @@ public class OrderParse {
                     oDetailBean.setGuideName(jObject.getString("realname"));
                 if (UtilParse.checkTag(jObject, "head_image"))
                     oDetailBean.setHeadImg(jObject.getString("head_image"));
-                if (UtilParse.checkTag(jObject, "user_type"))
-                    oDetailBean.setGuideType(jObject.getInt("user_type"));
-                if (UtilParse.checkTag(jObject, "guide_number"))
-                    oDetailBean.setGuideNumber(jObject.getString("guide_number"));
+                if (UtilParse.checkTag(jObject, "guide_type"))
+                    oDetailBean.setGuideType(jObject.getInt("guide_type"));
+                if (UtilParse.checkTag(jObject, "guide_card_number"))
+                    oDetailBean.setGuideNumber(jObject.getString("guide_card_number"));
                 if (UtilParse.checkTag(jObject, "mobile"))
                     oDetailBean.setGuidePhone(jObject.getString("mobile"));
                 if (UtilParse.checkTag(jObject, "order_number"))

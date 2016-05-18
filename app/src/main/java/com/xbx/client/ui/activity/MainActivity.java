@@ -25,6 +25,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xbx.client.R;
 import com.xbx.client.adapter.MyViewPagerAdapter;
 import com.xbx.client.beans.CancelInfoBean;
+import com.xbx.client.beans.OrderDetailBean;
 import com.xbx.client.beans.UserInfo;
 import com.xbx.client.beans.UserStateBean;
 import com.xbx.client.beans.Version;
@@ -83,6 +84,7 @@ public class MainActivity extends BaseAppCompatActivity implements TipsDialog.Di
     private IntentFilter intentFilter = null;
     private Api api = null;
     private UserInfo userInfo = null;
+    private OrderDetailBean oDetailBean = null;
 
     private TipsDialog tipsDialog = null;
     private String orderNum = "";
@@ -93,15 +95,11 @@ public class MainActivity extends BaseAppCompatActivity implements TipsDialog.Di
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            Intent intent = new Intent();
             switch (msg.what) {
                 case 0:
                     isExit = false;
                     break;
-                case TaskFlag.PAGEREQUESFIVE: //取消订单成功
-
-                    break;
-                case TaskFlag.REQUESTSUCCESS://验证登录的时候如果有状态就显示状态
+                case TaskFlag.PAGEREQUESTWO://验证登录的时候如果有状态就显示状态
                     String checkData = (String) msg.obj;
                     if (UtilParse.getRequestCode(checkData) == 0) {
                         Util.showToast(MainActivity.this, getString(R.string.login_fail));
@@ -128,6 +126,22 @@ public class MainActivity extends BaseAppCompatActivity implements TipsDialog.Di
                     if (Util.isNull(version.getVersionCode()))
                         return;
                     checkUpdate(version);
+                    break;
+                case TaskFlag.REQUESTSUCCESS:
+                    String dataDetail = (String) msg.obj;
+                    oDetailBean = OrderParse.getDetailOrder(dataDetail);
+                    if (oDetailBean == null)
+                        return;
+                    Intent intent = new Intent();
+                    if (oDetailBean.getServerType() == 0 && oDetailBean.getOrderState() == 6) {//订单取消超过5分钟付款
+                        intent.putExtra("CancelOrderNum", orderNum);
+                        intent.putExtra("isFromOrderList", true);
+                        intent.setClass(MainActivity.this, CancelOrderSucActivity.class);
+                    } else {
+                        intent.putExtra("PayOrderNum", orderNum);
+                        intent.setClass(MainActivity.this, PayOrderActivity.class);
+                    }
+                    startActivity(intent);
                     break;
             }
         }
@@ -355,17 +369,16 @@ public class MainActivity extends BaseAppCompatActivity implements TipsDialog.Di
         Intent intent = new Intent();
         switch (dialogType) {
             case 1:
-                intent.putExtra("stateOrderNumber", orderNum);
-                intent.setClass(MainActivity.this, OrderDetailActivity.class);
-                startActivity(intent);
-                break;
+                tipsDialog.dismiss();
+                api.getOrderDetail(orderNum);
+                return;
             case 2:
-                intent.putExtra("GuideOrderNum", orderNum);
+                intent.putExtra("SubCommentOrderNum", orderNum);
                 intent.setClass(MainActivity.this, SubCommentActivity.class);
                 startActivity(intent);
                 break;
             case 3:
-                intent.putExtra("theOrderNums", orderNum);
+                intent.putExtra("IntoServerOrderNum", orderNum);
                 intent.setClass(MainActivity.this, IntoServerActivity.class);
                 startActivity(intent);
                 MainActivity.this.finish();

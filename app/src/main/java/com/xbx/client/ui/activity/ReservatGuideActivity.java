@@ -93,7 +93,7 @@ public class ReservatGuideActivity extends BaseActivity implements DateShowAdapt
         dateList = new ArrayList<>();
         Calendar rightNow = Calendar.getInstance();
         Date date = new Date();
-        nowWeek = rightNow.get(Calendar.DAY_OF_WEEK) - 1;
+        nowWeek = rightNow.get(Calendar.DAY_OF_WEEK);
         maxDay = 8;
         for (int i = 1; i < maxDay; i++) {
             rightNow.setTime(date);

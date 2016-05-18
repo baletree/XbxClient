@@ -123,11 +123,7 @@
         <activity
             android:name=".ui.activity.TourDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".ui.activity.ReservatPayActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeCustorm" />
+            android:theme="@style/AppThemeOther" />
         <activity
             android:name=".ui.activity.FeedBackActivity"
             android:screenOrientation="portrait"
@@ -138,6 +134,10 @@
             android:theme="@style/AppThemeCustorm" />
         <activity
             android:name=".ui.activity.IntoServerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeCustorm" />
+        <activity
+            android:name=".ui.activity.PayDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeCustorm" />
         <!--作为Dialog-->

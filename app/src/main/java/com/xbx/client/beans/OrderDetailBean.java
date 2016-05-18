@@ -20,7 +20,7 @@ public class OrderDetailBean implements Serializable{
     private String guideStar;//该导游的总评分
     private String commentStar;//用户对当前订单的评分
     private String userAddress;
-    private String serverDate;
+    private String serverDate;//服务时长
     private double orderOrignalPay;//原始价格
     private double rebateMoney;// 优惠价格
     private double rewardMoney;//打赏

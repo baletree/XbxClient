@@ -11,7 +11,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/submit_comm_btn"
+        android:layout_above="@+id/sub_Comment_btn"
         android:layout_below="@+id/comment_title_layout"
         android:scrollbars="none">
 
@@ -22,109 +22,24 @@
 
             <include layout="@layout/order_guide_info" />
 
-            <RelativeLayout
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_sixteen"
-                android:layout_marginRight="@dimen/dp_sixteen"
-                android:layout_marginTop="@dimen/dp_thirty_one">
+                android:layout_height="@dimen/dp_twelve"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_zero_five"
-                    android:layout_centerVertical="true"
-                    android:background="@color/colorLine" />
-
-                <TextView
-                    style="@style/textView_Hint"
-                    android:layout_centerHorizontal="true"
-                    android:background="@color/colorBackground"
-                    android:paddingLeft="@dimen/dp_sixteen"
-                    android:paddingRight="@dimen/dp_sixteen"
-                    android:text="@string/pays_money"
-                    android:textSize="@dimen/sp_fifteen" />
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="@dimen/dp_twenty"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/comment_pay_tv"
-                    style="@style/textView_Black"
-                    android:text="888"
-                    android:textSize="@dimen/sp_thirty" />
-
-                <TextView
-                    style="@style/textView_Black"
-                    android:text="元"
-                    android:textSize="@dimen/sp_fifteen" />
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_sixteen"
-                android:layout_marginRight="@dimen/dp_sixteen">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_zero_five"
-                    android:layout_centerVertical="true"
-                    android:background="@color/colorLine" />
-
-                <TextView
-                    style="@style/textView_Hint"
-                    android:layout_centerHorizontal="true"
-                    android:background="@color/colorBackground"
-                    android:paddingLeft="@dimen/dp_sixteen"
-                    android:paddingRight="@dimen/dp_sixteen"
-                    android:text="@string/guide_assess"
-                    android:textSize="@dimen/sp_fifteen" />
-            </RelativeLayout>
-
-            <RatingBar
-                android:id="@+id/conmment_rtb"
-                style="@style/roomRatingBar_big"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_sixteen"
-                android:isIndicator="false"
-                android:numStars="5"
-                android:rating="0" />
-
-            <com.xbx.client.view.FlowLayout
-                android:id="@+id/comment_tag_fl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:visibility="gone"
-                android:layout_marginLeft="@dimen/dp_fourteen"
-                android:layout_marginRight="@dimen/dp_ten"
-                android:layout_marginTop="@dimen/dp_ten" />
-
-            <EditText
-                android:id="@+id/comment_msg_tv"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_sixty"
-                android:layout_marginBottom="@dimen/dp_thirty"
-                android:layout_marginLeft="@dimen/dp_fifteen"
-                android:layout_marginRight="@dimen/dp_fifteen"
-                android:layout_marginTop="@dimen/dp_eight"
-                android:background="@color/colorWhite"
-                android:gravity="top"
-                android:hint="@string/comment_txt"
-                android:padding="@dimen/dp_five"
-                android:textSize="@dimen/sp_fifteen" />
+            <!--默认隐藏-->
+            <include
+                android:id="@+id/sub_Comment_ll"
+                layout="@layout/item_comment" />
         </LinearLayout>
     </ScrollView>
     <Button
-        android:id="@+id/submit_comm_btn"
-        style="@style/submit_btn"
+        android:id="@+id/sub_Comment_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_forty_eight"
         android:layout_alignParentBottom="true"
-        android:text="@string/submit_comment" />
+        android:background="@color/colorTheme"
+        android:text="@string/submit_comment"
+        android:visibility="gone"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/sp_seventeen" />
 </RelativeLayout>

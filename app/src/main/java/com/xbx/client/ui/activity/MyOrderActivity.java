@@ -1,5 +1,6 @@
 package com.xbx.client.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,7 +31,7 @@ import java.util.List;
  * Created by EricYuan on 2016/4/6.
  * 我的订单
  */
-public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRecyItemClickListener,SwipeRefreshLayout.OnRefreshListener{
+public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRecyItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     private ImageView title_left_img;
     private TextView title_txt_tv;
     private RecyclerView order_rv;
@@ -43,15 +44,15 @@ public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRe
 
     private String uid = "";
 
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case TaskFlag.REQUESTSUCCESS:
                     String data = (String) msg.obj;
                     orderList = OrderParse.orderListParse(data);
-                    myOrderAdapter = new MyOrderAdapter(MyOrderActivity.this,orderList);
+                    myOrderAdapter = new MyOrderAdapter(MyOrderActivity.this, orderList);
                     order_rv.setAdapter(myOrderAdapter);
                     myOrderAdapter.setOnItemClickListener(MyOrderActivity.this);
                     od_refresh_lay.setRefreshing(false);
@@ -72,7 +73,7 @@ public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRe
         uid = SharePrefer.getUserInfo(this).getUid();
         layoutManager = new LinearLayoutManager(this);
         orderList = new ArrayList<>();
-        api = new Api(MyOrderActivity.this,handler);
+        api = new Api(MyOrderActivity.this, handler);
     }
 
     @Override
@@ -87,16 +88,14 @@ public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRe
         title_left_img.setOnClickListener(this);
         order_rv.setLayoutManager(layoutManager);
         order_rv.addItemDecoration(new RecycleViewDivider(this, R.drawable.spitline_bg));
-        RecyclerViewHeader recyclerHeader = (RecyclerViewHeader) findViewById(R.id.order_head_layout);
-        recyclerHeader.attachTo(order_rv, true);
         order_rv.setItemAnimator(new DefaultItemAnimator());
-        api.getMyOrderList(uid,true);
+        api.getMyOrderList(uid, true);
     }
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.title_left_img:
                 finish();
                 break;
@@ -105,13 +104,47 @@ public class MyOrderActivity extends BaseActivity implements MyOrderAdapter.OnRe
 
     @Override
     public void onItemClick(View v, int position) {
-        Intent intent = new Intent(MyOrderActivity.this,OrderDetailActivity.class);
-        intent.putExtra("stateOrderNumber",orderList.get(position).getOrderNum());
+        intoStateAct(position);
+    }
+
+    private void intoStateAct(int position) {
+        Intent intent = new Intent();
+        switch (orderList.get(position).getOrderType()) {
+            case 0://即时服务
+                switch (orderList.get(position).getOrderState()) {
+                    case 3://PayOrderActivity
+                        intent.setClass(MyOrderActivity.this, PayOrderActivity.class);
+                        intent.putExtra("PayOrderNum", orderList.get(position).getOrderNum());
+                        break;
+                    case 6://CancelOrderSucActivity
+                        intent.putExtra("CancelOrderNum", orderList.get(position).getOrderNum());
+                        intent.putExtra("isFromOrderList", true);
+                        intent.setClass(MyOrderActivity.this, CancelOrderSucActivity.class);
+                        break;
+                    default:
+                        intent.putExtra("DetailOrderNumber", orderList.get(position).getOrderNum());
+                        intent.setClass(MyOrderActivity.this, OrderDetailActivity.class);
+                        break;
+                }
+                break;
+            case 1://预约服务
+                switch (orderList.get(position).getOrderState()) {
+                    case 0://PayOrderActivity
+                        intent.setClass(MyOrderActivity.this, PayOrderActivity.class);
+                        intent.putExtra("PayOrderNum", orderList.get(position).getOrderNum());
+                        break;
+                    default:
+                        intent.putExtra("DetailOrderNumber", orderList.get(position).getOrderNum());
+                        intent.setClass(MyOrderActivity.this, OrderDetailActivity.class);
+                        break;
+                }
+                break;
+        }
         startActivity(intent);
     }
 
     @Override
     public void onRefresh() {
-        api.getMyOrderList(uid,false);
+        api.getMyOrderList(uid, false);
     }
 }

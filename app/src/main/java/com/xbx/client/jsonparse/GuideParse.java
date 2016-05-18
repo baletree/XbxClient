@@ -140,8 +140,8 @@ public class GuideParse {
                 guideBean.setGuideName(jsonObject.getString("realname"));
             if (UtilParse.checkTag(jsonObject, "head_image"))
                 guideBean.setGuideHead(jsonObject.getString("head_image"));
-            if (UtilParse.checkTag(jsonObject, "guide_number"))
-                guideBean.setGuideNumber(jsonObject.getString("guide_number"));
+            if (UtilParse.checkTag(jsonObject, "guide_card_number"))
+                guideBean.setGuideNumber(jsonObject.getString("guide_card_number"));
             if (UtilParse.checkTag(jsonObject, "guide_instant_price"))
                 guideBean.setGuideImmediaPrice(jsonObject.getString("guide_instant_price"));
             if (UtilParse.checkTag(jsonObject, "guide_reserve_price"))

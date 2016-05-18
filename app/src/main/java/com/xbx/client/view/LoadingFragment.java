@@ -19,8 +19,6 @@ import com.xbx.client.utils.Util;
 
 public class LoadingFragment extends DialogFragment {
     private TextView vLoading_text;
-    private ProgressBar loading_bar;
-    private ProgressBar loading_bar2;
     private ImageView dialog_loading_icon;
 
     private String mMsg = "";
@@ -33,8 +31,6 @@ public class LoadingFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_loading, null);
         vLoading_text = (TextView) view.findViewById(R.id.loading_text);
-        loading_bar = (ProgressBar) view.findViewById(R.id.loading_bar);
-        loading_bar2 = (ProgressBar) view.findViewById(R.id.loading_bar2);
         dialog_loading_icon = (ImageView) view.findViewById(R.id.dialog_loading_icon);
         refreshingAnimation = (RotateAnimation) AnimationUtils.loadAnimation(
                 getActivity(), R.anim.rotating);

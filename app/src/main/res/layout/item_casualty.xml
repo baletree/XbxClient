@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_forty_eight">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_sixteen">
+
+                <TextView
+                    android:id="@+id/call_accIns_tv"
+                    style="@style/textView_Black"
+                    android:layout_width="@dimen/dp_eighty"
+                    android:text="@string/accident_insurance"
+                    android:textSize="@dimen/sp_fourteen" />
+
+                <TextView
+                    android:id="@+id/call_insPrice_tv"
+                    style="@style/textView_Black"
+                    android:layout_width="@dimen/dp_ninety"
+                    android:text="￥10"
+                    android:textSize="@dimen/sp_fourteen" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/textView_Black"
+                android:paddingLeft="@dimen/dp_sixteen"
+                android:text="@string/accident_tip"
+                android:textColor="@color/colorHint"
+                android:textSize="@dimen/sp_twelve" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_zero_five"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_marginRight="@dimen/dp_sixteen"
+        android:background="@color/colorLine" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_forty_eight"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_sixteen">
+
+        <TextView
+            style="@style/textView_Black"
+            android:layout_width="@dimen/dp_eighty"
+            android:layout_gravity="center_vertical"
+            android:text="@string/call_name"
+            android:textSize="@dimen/sp_fourteen" />
+
+        <EditText
+            android:id="@+id/call_realName_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:background="@color/colorWhite"
+            android:hint="@string/call_input_name"
+            android:maxLength="10"
+            android:textColorHint="@color/colorHint"
+            android:textSize="@dimen/sp_fourteen" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_zero_five"
+        android:layout_marginLeft="@dimen/dp_sixteen"
+        android:layout_marginRight="@dimen/dp_sixteen"
+        android:background="@color/colorLine" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_forty_eight"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_sixteen">
+
+        <TextView
+            style="@style/textView_Black"
+            android:layout_width="@dimen/dp_eighty"
+            android:layout_gravity="center_vertical"
+            android:text="@string/call_iD"
+            android:textSize="@dimen/sp_fourteen" />
+
+        <EditText
+            android:id="@+id/call_idCard_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/dp_sixteen"
+            android:background="@color/colorWhite"
+            android:hint="@string/call_input_iD"
+            android:maxLength="18"
+            android:textColorHint="@color/colorHint"
+            android:textSize="@dimen/sp_fourteen" />
+    </LinearLayout>
+</LinearLayout>
