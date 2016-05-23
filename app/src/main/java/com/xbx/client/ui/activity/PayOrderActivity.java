@@ -208,7 +208,7 @@ public class PayOrderActivity extends FragmentActivity implements View.OnClickLi
             return;
         if (data == null)
             return;
-        if (resultCode == RewardActivity.rewardResult) {
+        if (requestCode == RewardActivity.rewardResult) {
             String rewarMon = data.getStringExtra("RewardMoney");
             if (!Util.isNull(rewarMon)) {
                 rewardMoney = Integer.parseInt(rewarMon);
@@ -231,7 +231,7 @@ public class PayOrderActivity extends FragmentActivity implements View.OnClickLi
                 startActivityForResult(intent, RewardActivity.rewardResult);
                 break;
             case R.id.pay_confirm_btn:
-//                api.getPayInfo(detailBean.getOrderNum(), "alipay");
+                api.getPayInfo(detailBean.getOrderNum(), "alipay");
                 api.moniPayOrder(detailBean.getOrderNum());
                 break;
             case R.id.pay_detail_rl://订单明细

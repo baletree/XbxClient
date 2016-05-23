@@ -360,6 +360,7 @@ public class IntoServerActivity extends BaseAppCompatActivity implements BDLocat
         if (canOrderReciver != null)
             lBManager.unregisterReceiver(canOrderReciver);
         mapView.onDestroy();
+        guideInfo.removeGetInfo();
     }
 
     @Override

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -180,7 +181,7 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
                 case TaskFlag.PAGEREQUESTWO://服务我的导游信息
                     String myGuideData = (String) msg.obj;
                     guideInfoBean = GuideParse.parseMyGuide(myGuideData);
-                    Util.pLog("muGuideData:"+myGuideData);
+                    Util.pLog("muGuideData:" + myGuideData);
                     break;
                 case TaskFlag.HTTPERROR:
                 case TaskFlag.CODEZERO:
@@ -392,7 +393,7 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
             isZoomMap = false;
         }
         for (int i = 0; i < guideList.size(); i++) {
-            if(getActivity() == null)
+            if (getActivity() == null)
                 return;
             final View markerView = LayoutInflater.from(getActivity()).inflate(R.layout.pin_inmap, null);
             final GuideBean guideBean = guideList.get(i);
@@ -466,7 +467,7 @@ public class GuidesFragment extends BasedFragment implements BaiduMap.OnMarkerCl
         if (loadDialog != null && loadDialog.isShowing())
             loadDialog.dismiss();
         Intent intent = new Intent(getActivity(), IntoServerActivity.class);
-        intent.putExtra("IntoServerOrderNum",getOrderNum);
+        intent.putExtra("IntoServerOrderNum", getOrderNum);
         startActivity(intent);
         getActivity().finish();
     }

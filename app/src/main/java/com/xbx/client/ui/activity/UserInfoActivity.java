@@ -35,20 +35,20 @@ import java.util.Calendar;
 
 /**
  * Created by EricYuan on 2016/4/17.
- * 个人中心
- */
-public class UserInfoActivity extends BaseActivity {
-    private TextView title_txt_tv;
-    private TextView title_rtxt_tv;
-    private EditText user_info_nickname_text;
-    private TextView user_info_sex_text;
-    private TextView user_info_birthday_text;
-    private EditText user_info_name_text;
-    private TextView user_info_phone_text;
-    private ImageView user_info_head_img;
+            * 个人中心
+    */
+    public class UserInfoActivity extends BaseActivity {
+        private TextView title_txt_tv;
+        private TextView title_rtxt_tv;
+        private EditText user_info_nickname_text;
+        private TextView user_info_sex_text;
+        private TextView user_info_birthday_text;
+        private EditText user_info_name_text;
+        private TextView user_info_phone_text;
+        private ImageView user_info_head_img;
 
-    private UserInfo userInfo = null;
-    private ImageLoader imageLoader = null;
+        private UserInfo userInfo = null;
+        private ImageLoader imageLoader = null;
     private ImageLoaderConfigFactory configFactory = null;
     private File headFile = null;
     private Api api = null;

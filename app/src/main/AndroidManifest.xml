@@ -140,6 +140,10 @@
             android:name=".ui.activity.PayDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeCustorm" />
+        <activity
+            android:name=".ui.activity.ModifyNameActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeCustorm" />
         <!--作为Dialog-->
         <activity
             android:name=".ui.activity.ChoicePeoNumActivity"
